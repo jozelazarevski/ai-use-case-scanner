@@ -1,0 +1,11 @@
+customer_id,first_name,last_name,email,registration_date,age,gender,country,city,premium_member
+1001,John,Smith,john.smith@email.com,2023-01-15,34,M,USA,New York,TRUE
+1002,Emma,Johnson,emma.j@email.com,2023-02-03,29,F,Canada,Toronto,FALSE
+1003,Michael,Brown,mbrown@email.com,2022-11-20,42,M,UK,London,TRUE
+1004,Sophia,Garcia,sophia.g@email.com,2023-03-10,26,F,Spain,Madrid,FALSE
+1005,David,Wilson,david.w@email.com,2022-10-05,38,M,Australia,Sydney,TRUE
+1006,Olivia,Martinez,olivia.m@email.com,2023-04-22,31,F,USA,Los Angeles,FALSE
+1007,James,Taylor,jtaylor@email.com,2022-12-18,45,M,Canada,Vancouver,TRUE
+1008,Ava,Anderson,ava.a@email.com,2023-01-30,27,F,USA,Chicago,FALSE
+1009,William,Thomas,will.t@email.com,2022-09-12,36,M,UK,Manchester,TRUE
+1010,Isabella,Jackson,isabella.j@email.com,2023-02-28,33,F,France,Paris,TRUE
