@@ -48,4 +48,5 @@ python-docx>=0.8.0  # For DOCX file support
 
 # Logging and debugging
 traceback>=0.4.0
-logging>=0.5.0python-dotenv==0.19.1
+logging>=0.5.0
+python-dotenv==0.19.1
