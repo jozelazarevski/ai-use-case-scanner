@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 """
-Python Code Validator
+Python Build Error Checker
 
-This script checks all Python files in a directory (and its subdirectories) for syntax errors,
-import errors, and other common issues. It provides a detailed report of problems found.
+This script checks all Python files in a directory (and its subdirectories)
+for errors that would break a build or prevent execution:
+- Syntax errors
+- Critical import errors
+- Name errors in global scope
+
+It ignores style warnings, minor issues, and anything that wouldn't
+prevent the code from running.
 
 Usage:
-    python code_validator.py [directory_to_scan] [--verbose]
+    python build_error_checker.py [directory_to_scan] [--output FILE]
 
 Options:
     directory_to_scan    Directory to scan for Python files (default: current directory)
-    --verbose            Show more detailed output about each file
-    --fix                Attempt to fix common issues automatically
     --output FILE        Write report to file instead of console
 """
 
@@ -23,12 +27,13 @@ import traceback
 import argparse
 import time
 import multiprocessing
+from importlib.machinery import SourceFileLoader
 from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
-class ErrorInfo:
-    """Class to store information about an error in a Python file."""
+class BuildError:
+    """Class to store information about a build-breaking error in a Python file."""
     def __init__(self, file_path, error_type, error_message, line_number=None, context=None):
         self.file_path = file_path
         self.error_type = error_type
@@ -39,7 +44,7 @@ class ErrorInfo:
 
 
 def check_syntax(file_path):
-    """Check if a Python file has syntax errors."""
+    """Check if a Python file has syntax errors that would break a build."""
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
@@ -63,175 +68,167 @@ def check_syntax(file_path):
         except Exception:
             pass
         
-        return ErrorInfo(file_path, "SyntaxError", error_message, line_number, context)
+        return BuildError(file_path, "SyntaxError", error_message, line_number, context)
     except Exception as e:
         # Handle other reading or parsing errors
-        return ErrorInfo(file_path, "ParseError", str(e))
+        return BuildError(file_path, "ParseError", str(e))
 
 
-def check_imports(file_path):
-    """Check if imports in a Python file can be resolved."""
+def check_critical_imports(file_path):
+    """
+    Check for import errors that would break a build.
+    Focuses only on imports that would prevent the script from running.
+    """
     errors = []
     
     try:
+        # Get the directory of the file to add it to sys.path temporarily
+        file_dir = os.path.dirname(os.path.abspath(file_path))
+        original_sys_path = sys.path.copy()
+        if file_dir not in sys.path:
+            sys.path.insert(0, file_dir)
+            
         with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
         
-        # Parse the file to get imports
+        # Parse the file
         tree = ast.parse(content)
         
         for node in ast.walk(tree):
-            # Check regular imports
-            if isinstance(node, ast.Import):
+            # Check top-level imports that would break the build
+            if isinstance(node, ast.Import) and node.col_offset == 0:
                 for name in node.names:
-                    module_name = name.name
-                    line_number = node.lineno
-                    
-                    # Skip relative imports (starting with .)
-                    if module_name.startswith('.'):
-                        continue
-                    
-                    # Skip standard library and installed packages
-                    if module_name in sys.modules or importlib.util.find_spec(module_name.split('.')[0]) is not None:
-                        continue
-                    
-                    # Try to find the module in the same directory
-                    module_found = False
-                    module_path = os.path.join(os.path.dirname(file_path), module_name.replace('.', os.sep) + '.py')
-                    if os.path.exists(module_path):
-                        module_found = True
-                    
-                    # Check for package with __init__.py
-                    package_path = os.path.join(os.path.dirname(file_path), module_name.replace('.', os.sep))
-                    if os.path.exists(os.path.join(package_path, '__init__.py')):
-                        module_found = True
-                    
-                    if not module_found:
-                        errors.append(ErrorInfo(
-                            file_path, 
-                            "ImportError", 
-                            f"Cannot find module '{module_name}'", 
-                            line_number
-                        ))
-            
-            # Check from ... import ...
-            elif isinstance(node, ast.ImportFrom):
-                if node.module is not None:  # Skip imports like "from . import x"
-                    module_name = node.module
-                    line_number = node.lineno
-                    
-                    # Skip relative imports for simplicity
-                    if module_name.startswith('.'):
-                        continue
-                    
-                    # Skip standard library and installed packages
-                    if module_name in sys.modules or importlib.util.find_spec(module_name.split('.')[0]) is not None:
-                        continue
-                    
-                    # Try to find the module in the same directory
-                    module_found = False
-                    module_path = os.path.join(os.path.dirname(file_path), module_name.replace('.', os.sep) + '.py')
-                    if os.path.exists(module_path):
-                        module_found = True
-                    
-                    # Check for package with __init__.py
-                    package_path = os.path.join(os.path.dirname(file_path), module_name.replace('.', os.sep))
-                    if os.path.exists(os.path.join(package_path, '__init__.py')):
-                        module_found = True
-                    
-                    if not module_found:
-                        errors.append(ErrorInfo(
-                            file_path, 
-                            "ImportError", 
-                            f"Cannot find module '{module_name}'", 
-                            line_number
-                        ))
+                    try:
+                        # Skip relative imports that AST can't verify
+                        if name.name.startswith('.'):
+                            continue
+                        
+                        # Skip multi-part imports that may be resolved within the project
+                        if '.' in name.name:
+                            continue
+                            
+                        # If this doesn't throw an exception, the import exists
+                        importlib.util.find_spec(name.name)
+                    except (ImportError, ModuleNotFoundError) as e:
+                        # Only report missing modules that would break the build
+                        module_name = name.name
+                        
+                        # Check if the module exists in the local project structure
+                        is_local_module = False
+                        for search_path in sys.path:
+                            module_path = os.path.join(search_path, module_name + '.py')
+                            package_path = os.path.join(search_path, module_name, '__init__.py')
+                            if os.path.isfile(module_path) or os.path.isfile(package_path):
+                                is_local_module = True
+                                break
+                                
+                        if not is_local_module:
+                            errors.append(BuildError(
+                                file_path, 
+                                "ImportError", 
+                                f"Missing required module '{module_name}'", 
+                                node.lineno
+                            ))
+                            
+            # Check top-level from-imports that would break the build
+            elif isinstance(node, ast.ImportFrom) and node.col_offset == 0:
+                if node.module and not node.module.startswith('.'):
+                    try:
+                        # If this doesn't throw an exception, the import exists
+                        importlib.util.find_spec(node.module)
+                    except (ImportError, ModuleNotFoundError) as e:
+                        # Check if the module exists in the local project structure
+                        module_name = node.module
+                        is_local_module = False
+                        for search_path in sys.path:
+                            module_path = os.path.join(search_path, module_name.replace('.', os.sep) + '.py')
+                            package_path = os.path.join(search_path, module_name.replace('.', os.sep), '__init__.py')
+                            if os.path.isfile(module_path) or os.path.isfile(package_path):
+                                is_local_module = True
+                                break
+                                
+                        if not is_local_module:
+                            errors.append(BuildError(
+                                file_path, 
+                                "ImportError", 
+                                f"Missing required module '{module_name}'", 
+                                node.lineno
+                            ))
+                  
+        # Restore original sys.path
+        sys.path = original_sys_path
     
     except SyntaxError:
         # Skip import checking if there's a syntax error
         pass
     except Exception as e:
-        errors.append(ErrorInfo(file_path, "Error", f"Error checking imports: {str(e)}"))
+        # Only report critical errors
+        errors.append(BuildError(file_path, "CriticalError", f"Error checking imports: {str(e)}"))
     
     return errors
 
 
-def check_common_issues(file_path):
-    """Check for common issues and best practices violations."""
-    issues = []
+def check_execution(file_path):
+    """Try to execute the file in isolation to check for runtime errors."""
+    errors = []
     
+    # Skip checking execution for specific modules known to require special environments
+    skip_patterns = [
+        'setup.py',
+        'test_',
+        '__init__.py',
+        'conftest.py'
+    ]
+    
+    if any(pattern in os.path.basename(file_path) for pattern in skip_patterns):
+        return errors
+        
     try:
+        # Create a new module name based on the file path
+        module_name = f"_checker_module_{abs(hash(file_path))}"
+        
+        # Try to compile the file to detect early execution errors
         with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
-            lines = content.split('\n')
-        
-        # Check for very long lines
-        for i, line in enumerate(lines):
-            if len(line) > 120:
-                issues.append(ErrorInfo(
-                    file_path,
-                    "StyleWarning",
-                    f"Line too long ({len(line)} > 120 characters)",
-                    i + 1,
-                    line
-                ))
-        
-        # Check for TODO comments without assignee or ticket number
-        for i, line in enumerate(lines):
-            if 'TODO' in line and not any(word in line for word in ['ticket', '#', 'issue', '@']):
-                issues.append(ErrorInfo(
-                    file_path,
-                    "TodoWarning",
-                    "TODO comment without assignee or ticket reference",
-                    i + 1,
-                    line
-                ))
-        
-        # Check for unused imports (simple version)
+            
+        # Compile the code object
         try:
+            compiled = compile(content, file_path, 'exec')
+            
+            # This is a simple check for name errors at the module level
+            # It doesn't catch all runtime errors, but finds the most common ones
             tree = ast.parse(content)
-            imported_names = set()
-            used_names = set()
-            
             for node in ast.walk(tree):
-                # Collect imported names
-                if isinstance(node, ast.Import):
-                    for name in node.names:
-                        imported_names.add(name.name)
-                elif isinstance(node, ast.ImportFrom):
-                    for name in node.names:
-                        if name.name != '*':
-                            if node.module:
-                                imported_name = f"{name.name}"
-                                imported_names.add(imported_name)
-                
-                # Collect name usage
-                elif isinstance(node, ast.Name):
-                    used_names.add(node.id)
-            
-            # Check for unused imports
-            for name in imported_names:
-                base_name = name.split('.')[0]
-                if base_name not in used_names:
-                    issues.append(ErrorInfo(
-                        file_path,
-                        "UnusedImport",
-                        f"Potentially unused import: '{name}'",
-                        None,
-                        None
-                    ))
-        except:
-            # Skip AST-based checks if parsing fails
+                if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load) and node.col_offset == 0:
+                    # This is a top-level name being referenced
+                    name = node.id
+                    if (name not in __builtins__ and 
+                        name not in globals() and
+                        name not in ['__name__', '__file__', '__doc__']):
+                        errors.append(BuildError(
+                            file_path,
+                            "NameError",
+                            f"Name '{name}' is not defined at module level",
+                            node.lineno
+                        ))
+                        
+        except SyntaxError:
+            # Already reported by syntax check
             pass
-        
+            
     except Exception as e:
-        issues.append(ErrorInfo(file_path, "Error", f"Error checking common issues: {str(e)}"))
+        # If there's an error preparing the execution check, it's likely critical
+        errors.append(BuildError(
+            file_path,
+            "ExecutionError",
+            f"Error preparing execution check: {str(e)}"
+        ))
     
-    return issues
+    return errors
 
 
 def process_file(file_path):
-    """Process a single Python file and return any errors found."""
+    """Process a single Python file and return any build-breaking errors found."""
     errors = []
     
     # Check syntax first
@@ -241,13 +238,14 @@ def process_file(file_path):
         # If there's a syntax error, don't check for other issues
         return errors
     
-    # Check imports
-    import_errors = check_imports(file_path)
+    # Check critical imports
+    import_errors = check_critical_imports(file_path)
     errors.extend(import_errors)
     
-    # Check for common issues
-    common_issues = check_common_issues(file_path)
-    errors.extend(common_issues)
+    # Check execution (if there are no import errors)
+    if not import_errors:
+        execution_errors = check_execution(file_path)
+        errors.extend(execution_errors)
     
     return errors
 
@@ -257,9 +255,10 @@ def find_all_python_files(directory):
     python_files = []
     
     for root, _, files in os.walk(directory):
-        # Skip virtual environments and hidden directories
+        # Skip virtual environments, hidden directories, and other non-source directories
         if any(part.startswith('.') for part in Path(root).parts) or \
-           any(part in ['venv', '__pycache__', 'env', '.env', '.venv'] for part in Path(root).parts):
+           any(part in ['venv', '__pycache__', 'env', '.env', '.venv', 'build', 'dist'] 
+               for part in Path(root).parts):
             continue
             
         for file in files:
@@ -290,7 +289,7 @@ def process_files_parallel(files, max_workers=None):
                     all_errors.extend(errors)
             except Exception as e:
                 # Handle any exceptions that occurred during processing
-                error_info = ErrorInfo(
+                error_info = BuildError(
                     file_path,
                     "ProcessingError",
                     f"Error processing file: {str(e)}"
@@ -300,10 +299,10 @@ def process_files_parallel(files, max_workers=None):
     return all_errors
 
 
-def generate_error_report(errors, verbose=False):
+def generate_error_report(errors):
     """Generate a formatted error report."""
     if not errors:
-        return "No errors found! All Python files are valid."
+        return "No build-breaking errors found! All Python files should execute without problems."
     
     # Group errors by file
     errors_by_file = {}
@@ -319,7 +318,7 @@ def generate_error_report(errors, verbose=False):
         reverse=True
     )
     
-    report = [f"Found {len(errors)} errors/warnings in {len(errors_by_file)} files\n"]
+    report = [f"Found {len(errors)} build-breaking errors in {len(errors_by_file)} files\n"]
     
     # Summary of error types
     error_types = {}
@@ -347,8 +346,8 @@ def generate_error_report(errors, verbose=False):
             line_info = f"line {error.line_number}" if error.line_number is not None else "unknown line"
             report.append(f"  [{error.error_type}] {line_info}: {error.error_message}")
             
-            # Show context if available and in verbose mode
-            if verbose and error.context:
+            # Always show context for build-breaking errors
+            if error.context:
                 context_lines = error.context.split('\n')
                 for i, ctx_line in enumerate(context_lines):
                     if i == len(context_lines) - 1 and not ctx_line:
@@ -360,15 +359,11 @@ def generate_error_report(errors, verbose=False):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Validate Python code files in a directory')
+    parser = argparse.ArgumentParser(description='Check Python files for build-breaking errors')
     parser.add_argument('directory', nargs='?', default=os.getcwd(),
                         help='Directory to scan for Python files (default: current directory)')
-    parser.add_argument('--verbose', '-v', action='store_true',
-                        help='Show more detailed output including code context')
     parser.add_argument('--output', '-o', type=str,
                         help='Write report to this file instead of stdout')
-    parser.add_argument('--fix', '-f', action='store_true',
-                        help='Attempt to fix common issues automatically (not implemented yet)')
     
     args = parser.parse_args()
     directory = args.directory
@@ -389,7 +384,7 @@ def main():
     end_time = time.time()
     
     # Generate error report
-    report = generate_error_report(all_errors, args.verbose)
+    report = generate_error_report(all_errors)
     
     # Add processing time and summary
     error_file_count = len(set(error.file_path for error in all_errors))

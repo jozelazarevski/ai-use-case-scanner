@@ -1,4 +1,4 @@
-""""# Classification prediction
+"""# Classification prediction
 from predict_model_clasification import predict_classification
 from read_file import read_data_flexible
 
@@ -21,4 +21,4 @@ filepath='../uploads/bank-full.csv'
 input_data = read_data_flexible(filepath)
 prediction_results = predict_regression(model_path, input_data)
 print(prediction_results)
-""""
+"""
