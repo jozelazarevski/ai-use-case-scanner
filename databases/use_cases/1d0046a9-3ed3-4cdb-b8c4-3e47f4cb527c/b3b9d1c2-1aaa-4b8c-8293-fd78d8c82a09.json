@@ -1,0 +1,72 @@
+{
+  "id": "b3b9d1c2-1aaa-4b8c-8293-fd78d8c82a09",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "sample_sales_data.csv",
+  "proposals": [
+    {
+      "title": "Sales Forecasting by Region",
+      "description": "This AI use case focuses on predicting future total sales for each region. A time series model, such as ARIMA or Prophet, can be trained on historical sales data (TotalSales) for each region, taking into account seasonality and trends. The model will learn patterns in the data and project them into the future, providing valuable insights for sales planning and resource allocation.",
+      "kpis": [
+        "Mean Absolute Percentage Error (MAPE): Measures the accuracy of sales predictions compared to actual sales.",
+        "Root Mean Squared Error (RMSE): Quantifies the average difference between predicted and actual sales values.",
+        "Sales Growth Prediction Accuracy: Assesses the model's ability to accurately predict future sales growth in each region."
+      ],
+      "business_value": "Accurate sales forecasts enable better inventory management, optimized staffing levels, and more effective marketing campaigns.  Improved resource allocation leads to increased profitability and reduced waste.",
+      "target_variable": "TotalSales",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model will output a predicted total sales value for a given region and time period. For example, a prediction of $10,000 indicates the expected total sales for that region in the forecast period.  Higher values suggest higher expected sales, while lower values indicate lower expected sales.",
+      "target variable understanding": "TotalSales represents the total revenue generated from sales. It is a continuous variable, allowing for a range of predictions. The number of unique predictions will be very large, as it's dependent on the granularity of the forecast and the variability of sales."
+    },
+    {
+      "title": "Customer Segmentation based on Purchase Behavior",
+      "description": "This use case aims to segment customers based on their purchasing patterns.  Clustering algorithms like K-means or hierarchical clustering can be used to group customers with similar characteristics. The features for clustering will include total sales (TotalSales), quantity purchased (Quantity), and region (Region).",
+      "kpis": [
+        "Silhouette Score: Measures how similar a data point is to its own cluster compared to other clusters.",
+        "Davies-Bouldin Index: Evaluates the average similarity between each cluster and its most similar cluster.",
+        "Customer Retention Rate per Segment: Tracks customer churn within each identified segment."
+      ],
+      "business_value": "Customer segmentation allows for targeted marketing campaigns, personalized offers, and improved customer relationship management.  Understanding customer behavior leads to increased customer lifetime value and revenue growth.",
+      "target_variable": "CustomerID",
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will assign each customer to a specific cluster (segment) based on their purchase behavior.  For example, Cluster 1 might represent high-value customers, Cluster 2 might be frequent buyers, and Cluster 3 might be infrequent, low-value buyers.",
+      "target variable understanding": "CustomerID is a categorical variable representing unique customers.  The number of unique predictions will be equal to the number of clusters identified by the algorithm.  Each customer will belong to one cluster."
+    },
+    {
+      "title": "Predicting Product Category Sales",
+      "description": "This use case predicts the total sales for each product category.  A regression model can be trained to predict TotalSales based on the Category of the product. The model will learn the relationship between product categories and their sales performance.",
+      "kpis": [
+        "R-squared: Measures the goodness of fit of the model, indicating how well it explains the variation in total sales.",
+        "Mean Absolute Error (MAE):  Represents the average absolute difference between the predicted and actual total sales for each category.",
+        "Prediction Accuracy per Category:  Assesses the prediction accuracy for each individual product category."
+      ],
+      "business_value": "Forecasting category sales allows for optimized inventory management, resource allocation to high-performing categories, and informed product development decisions.  Understanding category performance drives overall sales growth.",
+      "target_variable": "TotalSales",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a predicted total sales value for a given product category. For example, a prediction of $50,000 for 'Office Equipment' suggests the expected total sales for that category.",
+      "target variable understanding": "TotalSales is a continuous variable representing the sum of sales.  The number of unique predictions will be dependent on the number of unique product categories and the granularity of the predictions."
+    },
+    {
+      "title": "Regional Sales Trend Analysis",
+      "description": "This use case analyzes the sales trends in different regions over time. Time series analysis techniques can be used to identify patterns and seasonality in sales data for each region.  Specifically, the focus is on identifying growth and decline patterns, potentially uncovering regional-specific factors that impact sales. The data for analysis is (TotalSales) and (Region).",
+      "kpis": [
+        "Average Monthly Sales Growth per Region: Shows the average growth rate of sales in each region.",
+        "Seasonal Sales Patterns per Region: Identifies peak and off-peak sales periods for each region.",
+        "Year-over-Year Sales Growth per Region: Compares sales growth from one year to the next for each region."
+      ],
+      "business_value": "Identifying regional sales trends allows for the optimization of resource allocation to better-performing regions, the development of region-specific marketing strategies, and proactive measures to address underperforming areas. This will enhance business performance across all regions.",
+      "target_variable": "TotalSales",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "This use case does not generate specific numerical predictions, but rather provides insights into the sales trends (e.g., increasing, decreasing, stable). For example, the analysis might show that the East region has experienced a steady increase in sales over the past year, while the West region shows seasonal fluctuations.",
+      "target variable understanding": "TotalSales is a continuous variable representing the total revenue.  The number of unique predictions will depend on the timeframe and the granularity of the analysis."
+    }
+  ],
+  "created_at": "2025-04-30T18:01:36.023772",
+  "metadata": {
+    "file_path": "uploads\\sample_sales_data.csv",
+    "proposal_count": 4
+  }
+}

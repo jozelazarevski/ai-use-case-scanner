@@ -1,0 +1,72 @@
+{
+  "id": "de5d6038-d19e-4ec9-891a-e45b996a00de",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "bank-full.csv",
+  "proposals": [
+    {
+      "title": "Predicting Customer Loan Default",
+      "description": "This AI model will predict the likelihood of a customer defaulting on a loan based on their demographics, financial information, and loan history.  The model will analyze factors like age, job, marital status, education, balance, housing loan status, and contact information to assess risk.  This will allow the bank to proactively manage risk and prevent potential losses.",
+      "kpis": [
+        "Reduction in loan defaults: Measure the percentage decrease in loan defaults after implementing the model.",
+        "Improved loan approval process: Track the efficiency gains in loan application processing.",
+        "Increased profitability from lending: Analyze the impact on net profit margin after model implementation."
+      ],
+      "business_value": "By accurately predicting loan defaults, the bank can minimize financial losses, optimize lending strategies, and improve overall profitability.",
+      "target_variable": "default",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a probability score indicating the likelihood of a customer defaulting. A score above a certain threshold (e.g., 0.6) would flag the customer as high-risk. For example, a prediction of 0.75 suggests a 75% chance of default, while a prediction of 0.2 suggests a 20% chance of default. ",
+      "target variable understanding": "The 'default' variable is a binary classification indicating whether a customer has a history of credit default ('yes' or 'no'). The model will predict one of these two outcomes."
+    },
+    {
+      "title": "Predicting Housing Loan Application Approval",
+      "description": "This model will predict the probability of a housing loan application being approved based on applicant characteristics and financial information. The model will use variables such as age, job, marital status, education, balance, and loan status. This prediction will help streamline the loan approval process and improve efficiency.",
+      "kpis": [
+        "Increased efficiency in loan processing: Measure the reduction in time taken to process loan applications.",
+        "Improved customer satisfaction: Track customer satisfaction scores related to loan application speed and clarity.",
+        "Accuracy of loan application approval prediction: Evaluate the percentage of accurate predictions made by the model."
+      ],
+      "business_value": "The model will help automate and speed up the loan application process, leading to improved customer experience and operational efficiency.",
+      "target_variable": "housing",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a probability score indicating the likelihood of a housing loan application being approved ('yes' or 'no'). A probability score above a defined threshold (e.g., 0.7) might suggest approval, while a score below the threshold might indicate rejection. For instance, 0.9 signifies a high likelihood of approval, while 0.3 indicates a low likelihood.",
+      "target variable understanding": "The 'housing' variable is a binary classification indicating whether a customer has a housing loan ('yes' or 'no'). The model will predict one of these two outcomes."
+    },
+    {
+      "title": "Predicting Customer Term Deposit Subscription",
+      "description": "This model aims to predict whether a customer will subscribe to a term deposit based on their demographics, contact history, and past interactions with the bank.  The model will leverage variables such as age, job, marital status, education, balance, contact method, duration of contact, and campaign information to identify potential subscribers. This information will be valuable for targeted marketing campaigns.",
+      "kpis": [
+        "Increase in term deposit subscriptions: Measure the percentage increase in term deposit subscriptions after implementing the model.",
+        "Improved marketing campaign ROI: Evaluate the return on investment for marketing campaigns targeting predicted subscribers.",
+        "Enhanced customer acquisition cost: Track the cost per acquisition of new term deposit customers."
+      ],
+      "business_value": "By accurately predicting term deposit subscriptions, the bank can target marketing efforts more effectively, increasing sales and reducing marketing costs.",
+      "target_variable": "y",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a probability score between 0 and 1, representing the likelihood of a customer subscribing to a term deposit.  A score of 0.8 means an 80% chance of subscription, while a score of 0.2 suggests a 20% chance. The bank can use a threshold (e.g., 0.5) to classify customers as likely or unlikely subscribers.",
+      "target variable understanding": "The 'y' variable is a binary classification indicating whether a customer subscribed to a term deposit ('yes' or 'no').  The model will predict one of these two outcomes."
+    },
+    {
+      "title": "Analyzing Customer Balance Based on Demographics",
+      "description": "This model will analyze the relationship between customer demographics and their account balance.  Variables like age, job, marital status, education, and housing loan status will be used to predict the average account balance for different customer segments.  This will provide insights into customer behavior and financial patterns.",
+      "kpis": [
+        "Accuracy of balance prediction: Measure the mean absolute error or R-squared of the model's predictions.",
+        "Identification of high-value customer segments: Analyze the characteristics of customers with high account balances.",
+        "Improved customer segmentation strategy: Evaluate the effectiveness of using the model's insights for targeted marketing."
+      ],
+      "business_value": "The model will help the bank understand its customer base better, identify high-value customers, and tailor services and marketing campaigns more effectively.",
+      "target_variable": "balance",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a predicted account balance for a given customer profile. For example, a prediction of 1500 indicates that a customer with similar characteristics is expected to have an average balance of 1500.  The bank can use this information to segment customers and offer tailored financial products.",
+      "target variable understanding": "The 'balance' variable represents the customer's account balance (a continuous numerical value). The model will predict a numerical value representing the expected balance."
+    }
+  ],
+  "created_at": "2025-05-06T11:19:28.613162",
+  "metadata": {
+    "file_path": "uploads\\bank-full.csv",
+    "proposal_count": 4
+  }
+}

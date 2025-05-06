@@ -1,0 +1,868 @@
+{% from 'user_menu_component.html' import render_user_menu %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Tester | AI Use Case Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+    <style>
+        .model-tester-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .tester-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #4285f4;
+            background-color: #f0f4ff;
+        }
+        
+        .nav-tabs .nav-link {
+            color: #6c757d;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #4285f4;
+            border-color: #4285f4;
+        }
+        
+        .input-group-text {
+            background-color: #f8f9fa;
+        }
+        
+        .prediction-result {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(66, 133, 244, 0.2);
+            border-top-color: #4285f4;
+            border-radius: 50%;
+            animation: spin 1s infinite linear;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .table-responsive {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .prediction-table th {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
+            z-index: 10;
+        }
+        
+        .prediction-value {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .positive-value {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #2e7d32;
+        }
+        
+        .negative-value {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: #c62828;
+        }
+        
+        .numeric-value {
+            background-color: rgba(33, 150, 243, 0.2);
+            color: #1565c0;
+        }
+        
+        /* New styles for usecase information */
+        .usecase-section {
+            background-color: #edf8ff;
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+            margin-top: 1.5rem;
+            border-left: 4px solid #007bff;
+        }
+        
+        .business-value {
+            background-color: #f0f9eb;
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+            margin-top: 1.5rem;
+            border-left: 4px solid #52c41a;
+        }
+        
+        .kpi-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background-color: #f8f9fa;
+            border-radius: 0.25rem;
+        }
+        
+        .explanation-container {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+            border-left: 4px solid #17a2b8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .prediction-interpretation {
+            background-color: #f0f4f9;
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+            margin-top: 1.5rem;
+            border-left: 4px solid #0d6efd;
+        }
+        
+        .expert-advisor {
+            border-left: 4px solid #6f42c1;
+        }
+        
+        .usecase-info-toggler {
+            cursor: pointer;
+            font-size: 14px;
+            color: #007bff;
+        }
+        
+        .usecase-info-container {
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        
+        .usecase-info-container.show {
+            max-height: 2000px;
+        }
+    </style>
+</head>
+<body>
+    {{ render_user_menu() }}
+
+    <div class="container model-tester-container">
+        <!-- Back Button -->
+        <div class="row mb-4">
+            <div class="col">
+                <a href="{{ url_for('training_results') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Results
+                </a>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages mb-4">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <i class="fas {% if category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} me-2"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Model Information Card -->
+        <div class="tester-card">
+            <div class="card-header">
+                <h4><i class="fas fa-info-circle me-2"></i>Model Details</h4>
+                <span class="usecase-info-toggler" id="usecase-info-toggler">
+                    <i class="fas fa-chevron-down me-1"></i>Show UseCase Information
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Model Name:</strong> {{ model_name|default('Current Model', true) }}</p>
+                        <p><strong>Target Variable:</strong> <span class="badge bg-primary">{{ target_variable|default('Unknown', true) }}</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Model Type:</strong> <span class="badge bg-secondary">{{ model_type|capitalize|default('Unknown', true) }}</span></p>
+                        <p><strong>Accuracy:</strong> {{ accuracy|default('Not available', true) }}</p>
+                    </div>
+                </div>
+                
+                <!-- UseCase Information (collapsible) -->
+                <div class="usecase-info-container" id="usecase-info-container">
+                    <!-- UseCase Description -->
+                    <div class="usecase-section">
+                        <h4 class="h6 mb-3">
+                            <i class="fas fa-file-alt me-2"></i>
+                            UseCase Description
+                        </h4>
+                        <p class="mb-0">
+                            {% if training_results and training_results.description %}
+                                {{ training_results.description }}
+                            {% elif proposal and proposal.description %}
+                                {{ proposal.description }}
+                            {% else %}
+                                No description available.
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <!-- Business Value -->
+                    <div class="business-value">
+                        <h4 class="h6 mb-3">
+                            <i class="fas fa-dollar-sign me-2"></i>
+                            Business Value
+                        </h4>
+                        <p class="mb-0">
+                            {% if proposal and proposal.business_value and proposal.business_value != "Not specified" %}
+                                {{ proposal.business_value }}
+                            {% elif training_results and training_results.business_value %}
+                                {{ training_results.business_value }}
+                            {% else %}
+                                This model enables data-driven decision making with an expected ROI on implementation efforts. Early identification of patterns allows for proactive business strategies.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <!-- Prediction Interpretation -->
+                    <div class="prediction-interpretation">
+                        <h4 class="h6 mb-3">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            Prediction Interpretation
+                        </h4>
+                        <p class="mb-0">
+                            {% if proposal and proposal.prediction_interpretation and proposal.prediction_interpretation != "Predictions should be interpreted in the context of the business problem and validated by domain experts." %}
+                                {{ proposal.prediction_interpretation }}
+                            {% elif training_results and training_results.prediction_interpretation %}
+                                {{ training_results.prediction_interpretation }}
+                            {% else %}
+                                Predictions from this model should be interpreted within the specific business context and validated against domain expertise. The model outputs provide data-driven insights that should complement, not replace, business judgment.
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <!-- KPIs -->
+                    <div class="mt-4">
+                        <h4 class="h6 mb-3">
+                            <i class="fas fa-trophy me-2"></i>
+                            Key Performance Indicators
+                        </h4>
+                        <div class="kpi-container">
+                            {% if proposal and proposal.kpis and proposal.kpis|length > 0 %}
+                                {% for kpi in proposal.kpis %}
+                                    <div class="kpi-item">
+                                        <i class="fas fa-check-square me-2"></i>
+                                        {{ kpi }}
+                                    </div>
+                                {% endfor %}
+                            {% elif training_results and training_results.kpis and training_results.kpis|length > 0 %}
+                                {% for kpi in training_results.kpis %}
+                                    <div class="kpi-item">
+                                        <i class="fas fa-check-square me-2"></i>
+                                        {{ kpi }}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="kpi-item">
+                                    <i class="fas fa-check-square me-2"></i>
+                                    Improved prediction accuracy for business outcomes
+                                </div>
+                                <div class="kpi-item">
+                                    <i class="fas fa-check-square me-2"></i>
+                                    Reduced operational costs through data-driven decisions
+                                </div>
+                                <div class="kpi-item">
+                                    <i class="fas fa-check-square me-2"></i>
+                                    Increased operational efficiency
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- AI Expert Advisor -->
+                    <div class="explanation-container expert-advisor mt-4">
+                        <h4 class="h6 mb-3">
+                            <i class="fas fa-robot me-2"></i>
+                            Expert Analysis
+                        </h4>
+                        
+                        {% if llm_explanation %}
+                            {{ llm_explanation|safe }}
+                        {% elif explanation %}
+                            {{ explanation|safe }}
+                        {% else %}
+                            <p>No expert analysis is available for this model.</p>
+                        {% endif %}
+                        
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            This analysis is generated using AI to help interpret your model results. Use it as a guide alongside your domain expertise.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Data Card -->
+        <div class="tester-card">
+            <div class="card-header">
+                <h4><i class="fas fa-input me-2"></i>Input Test Data</h4>
+            </div>
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="inputTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="file-tab" data-bs-toggle="tab" data-bs-target="#fileUpload" type="button" role="tab">
+                            <i class="fas fa-file-upload me-2"></i>Upload File
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manualInput" type="button" role="tab">
+                            <i class="fas fa-keyboard me-2"></i>Manual Input
+                        </button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content mt-3" id="inputTabContent">
+                    <!-- File Upload Tab -->
+                    <div class="tab-pane fade show active" id="fileUpload" role="tabpanel">
+                        <form id="fileUploadForm" action="{{ url_for('test_model_with_file') }}" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="model_path" value="{{ model_path|default('', true) }}">
+                            
+                            <div class="upload-area text-center" id="upload-area">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                                <h5>Drag & Drop Test Data File</h5>
+                                <p class="text-muted">or click to browse</p>
+                                <input type="file" name="file" id="test-file-input" class="d-none" accept=".csv,.xlsx,.xls,.json,.txt">
+                            </div>
+                            
+                            <div id="filename-display" class="mt-3 text-center d-none">
+                                <p class="mb-2">
+                                    <i class="fas fa-file-alt me-2"></i>
+                                    <span id="filename-text"></span>
+                                </p>
+                            </div>
+                            
+                            <div class="text-center mt-3">
+                                <button type="submit" class="btn btn-primary" id="file-submit-btn" disabled>
+                                    <i class="fas fa-play me-2"></i>Run Prediction
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Manual Input Tab -->
+                    <div class="tab-pane fade" id="manualInput" role="tabpanel">
+                        <form id="manualInputForm" action="{{ url_for('test_model_manual') }}" method="post">
+                            <input type="hidden" name="model_path" value="{{ model_path|default('', true) }}">
+                            
+                            <div class="row" id="featureInputs">
+                              {% if required_features is defined and required_features|length > 0 %}
+									{% for feature in required_features %}
+									<div class="col-md-6 mb-3">
+										<label for="feature_{{ feature }}" class="form-label">{{ feature }}</label>
+										<input type="text" class="form-control" id="feature_{{ feature }}" 
+											   name="feature_{{ feature }}" required>
+									</div>
+									{% endfor %}
+								{% else %}
+									<div class="col-12">
+										<div class="alert alert-info">
+											<i class="fas fa-info-circle me-2"></i>No feature information available for this model.
+										</div>
+									</div>
+								{% endif %}
+							</div>
+                            
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" {% if not required_features %}disabled{% endif %}>
+                                    <i class="fas fa-play me-2"></i>Run Prediction
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prediction Results (conditionally rendered) -->
+        {% if prediction_df is defined %}
+        <div class="tester-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4><i class="fas fa-chart-line me-2"></i>Prediction Results</h4>
+                <div>
+                    <button id="downloadFullDataset" class="btn btn-sm btn-outline-primary me-2">
+                        <i class="fas fa-download me-2"></i>Full Dataset
+                    </button>
+                    {% if user %}
+                    <button id="save-model-btn" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#saveModelModal">
+                        <i class="fas fa-save me-2"></i>Save Model
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="prediction-result">
+                    <!-- Prediction Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover prediction-table" id="predictionTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Row</th>
+                                    {% for col in prediction_df.columns %}
+                                        {% if not col.startswith('formatted_prediction') and col != 'lower_bound' and col != 'upper_bound' %}
+                                            {% if col.startswith('predicted_') %}
+                                                <th scope="col" class="bg-primary text-white">{{ col }}</th>
+                                            {% elif col == 'probability' %}
+                                                <th scope="col">Confidence</th>
+                                            {% else %}
+                                                <th scope="col">{{ col }}</th>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in range(prediction_df|length) %}
+                                    <tr>
+                                        <td class="fw-bold">{{ i + 1 }}</td>
+                                        {% for col in prediction_df.columns %}
+                                            {% if not col.startswith('formatted_prediction') and col != 'lower_bound' and col != 'upper_bound' %}
+                                                {% if col.startswith('predicted_') %}
+                                                    <td>
+                                                        {% set pred_value = prediction_df[col].values[i] %}
+                                                        <span class="prediction-value 
+                                                            {% if model_type == 'classification' %}
+                                                                {% if pred_value in ['yes', '1', 1, 'positive'] %}
+                                                                    positive-value
+                                                                {% else %}
+                                                                    negative-value
+                                                                {% endif %}
+                                                            {% else %}
+                                                                numeric-value
+                                                            {% endif %}">
+                                                            {{ pred_value }}
+                                                        </span>
+                                                    </td>
+                                                {% elif col == 'probability' %}
+                                                    <td>{{ "%.2f"|format(prediction_df[col].values[i] * 100) }}%</td>
+                                                {% else %}
+                                                    <td>{{ prediction_df[col].values[i] }}</td>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination and Search Controls -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div class="input-group" style="max-width: 300px;">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search results...">
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <select id="rowsPerPage" class="form-select form-select-sm me-2" style="width: auto;">
+                                <option value="10">10 rows</option>
+                                <option value="25">25 rows</option>
+                                <option value="50">50 rows</option>
+                                <option value="100">100 rows</option>
+                            </select>
+                            <div class="btn-group" role="group">
+                                <button id="prevPage" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button id="nextPage" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional Export Options -->
+                    <div class="mt-3 text-center">
+                        <button id="downloadVisibleCSV" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-file-csv me-2"></i>Export CSV
+                        </button>
+                        <button id="downloadVisibleJSON" class="btn btn-outline-primary">
+                            <i class="fas fa-file-code me-2"></i>Export JSON
+                        </button>
+                    </div>
+
+                    <!-- Prediction Timestamp -->
+                    <div class="text-center text-muted mt-3">
+                        <small>Prediction made at: {{ timestamp|default('Just now', true) }}</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="card-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" onclick="clearResults()">
+                    <i class="fas fa-redo me-2"></i>Test Again
+                </button>
+                <a href="{{ url_for('training_results') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Model Details
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Save Model Modal -->
+    <div class="modal fade" id="saveModelModal" tabindex="-1" aria-labelledby="saveModelModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="saveModelModalLabel">
+                        <i class="fas fa-save me-2"></i>Save Current Model
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="saveModelForm">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="modelName" class="form-label">Model Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modelName" name="model_name" 
+                                   placeholder="Enter a name for your model" 
+                                   value="{{ target_variable|default('Untitled Model', true) }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modelDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="modelDescription" name="description" 
+                                      rows="3" placeholder="Optional description about the model"></textarea>
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Save this model to your account for future use and embedding.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Save Model
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle UseCase Information
+            const usecaseInfoToggler = document.getElementById('usecase-info-toggler');
+            const usecaseInfoContainer = document.getElementById('usecase-info-container');
+            
+            usecaseInfoToggler.addEventListener('click', function() {
+                usecaseInfoContainer.classList.toggle('show');
+                
+                if (usecaseInfoContainer.classList.contains('show')) {
+                    usecaseInfoToggler.innerHTML = '<i class="fas fa-chevron-up me-1"></i>Hide UseCase Information';
+                } else {
+                    usecaseInfoToggler.innerHTML = '<i class="fas fa-chevron-down me-1"></i>Show UseCase Information';
+                }
+            });
+            
+            // File Upload Handling
+            const uploadArea = document.getElementById('upload-area');
+            const fileInput = document.getElementById('test-file-input');
+            const filenameDisplay = document.getElementById('filename-display');
+            const filenameText = document.getElementById('filename-text');
+            const fileSubmitBtn = document.getElementById('file-submit-btn');
+
+            // Trigger file input when clicking upload area
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            // Handle file selection
+            fileInput.addEventListener('change', function() {
+                if (this.files.length) {
+                    const file = this.files[0];
+                    filenameText.textContent = file.name;
+                    filenameDisplay.classList.remove('d-none');
+                    fileSubmitBtn.disabled = false;
+                }
+            });
+
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('bg-light');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('bg-light');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('bg-light');
+                
+                const files = e.dataTransfer.files;
+                if (files.length) {
+                    fileInput.files = files;
+                    filenameText.textContent = files[0].name;
+                    filenameDisplay.classList.remove('d-none');
+                    fileSubmitBtn.disabled = false;
+                }
+            });
+
+            // Prediction Table Handling
+            const predictionTable = document.getElementById('predictionTable');
+            if (predictionTable) {
+                const searchInput = document.getElementById('searchInput');
+                const rowsPerPageSelect = document.getElementById('rowsPerPage');
+                const prevPageBtn = document.getElementById('prevPage');
+                const nextPageBtn = document.getElementById('nextPage');
+
+                let currentPage = 1;
+                let rowsPerPage = parseInt(rowsPerPageSelect.value);
+                const rows = Array.from(predictionTable.querySelectorAll('tbody tr'));
+                const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+                function updateTableView() {
+                    const startIndex = (currentPage - 1) * rowsPerPage;
+                    const endIndex = startIndex + rowsPerPage;
+
+                    rows.forEach((row, index) => {
+                        row.style.display = (index >= startIndex && index < endIndex) ? '' : 'none';
+                    });
+
+                    prevPageBtn.disabled = currentPage === 1;
+                    nextPageBtn.disabled = currentPage === totalPages;
+                }
+
+                // Pagination event listeners
+                prevPageBtn.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        updateTableView();
+                    }
+                });
+
+                nextPageBtn.addEventListener('click', () => {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        updateTableView();
+                    }
+                });
+
+                // Rows per page change
+                rowsPerPageSelect.addEventListener('change', () => {
+                    rowsPerPage = parseInt(rowsPerPageSelect.value);
+                    currentPage = 1;
+                    updateTableView();
+                });
+
+                // Search functionality
+                searchInput.addEventListener('input', () => {
+                    const searchTerm = searchInput.value.toLowerCase();
+                    
+                    rows.forEach(row => {
+                        const rowText = row.textContent.toLowerCase();
+                        row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+
+                // Initial table view
+                updateTableView();
+            }
+
+            // Download functionality
+            function downloadTableData(format) {
+                const rows = Array.from(predictionTable.querySelectorAll('tbody tr:not([style*="display: none"])'));
+                const headers = Array.from(predictionTable.querySelectorAll('thead th')).map(th => th.textContent);
+
+                const data = rows.map(row => {
+                    const cells = Array.from(row.querySelectorAll('td'));
+                    return headers.reduce((obj, header, index) => {
+                        obj[header] = cells[index].textContent;
+                        return obj;
+                    }, {});
+                });
+
+                const filename = `prediction_results_${new Date().toISOString().split('T')[0]}`;
+
+                if (format === 'csv') {
+                    const csvContent = [
+                        headers.join(','),
+                        ...data.map(row => headers.map(header => 
+                            `"${row[header].replace(/"/g, '""')}"`
+                        ).join(','))
+                    ].join('\n');
+
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `${filename}.csv`;
+                    link.click();
+                } else {
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `${filename}.json`;
+                    link.click();
+                }
+            }
+
+            // Attach download event listeners
+            document.getElementById('downloadVisibleCSV')?.addEventListener('click', () => downloadTableData('csv'));
+            document.getElementById('downloadVisibleJSON')?.addEventListener('click', () => downloadTableData('json'));
+
+            // Save Model Modal Handling
+            const saveModelForm = document.getElementById('saveModelForm');
+            if (saveModelForm) {
+                saveModelForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    // Get form data
+                    const formData = new FormData(this);
+                    
+                    // Disable submit button and show loading state
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+                    
+                    // Log the form data for debugging
+                    console.log("Submitting model save form...");
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ': ' + pair[1]);
+                    }
+                    
+                    // Send AJAX request
+                    fetch("/save-current-model", {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Server responded with status ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Save response:", data);
+                        
+                        if (data.success) {
+                            // Show success message
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('saveModelModal'));
+                            modal.hide();
+                            
+                            // Show flash message
+                            const flashContainer = document.querySelector('.flash-messages');
+                            if (flashContainer) {
+                                const flashMessage = document.createElement('div');
+                                flashMessage.className = 'alert alert-success';
+                                flashMessage.innerHTML = `
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    ${data.message || 'Model saved successfully'}
+                                `;
+                                flashContainer.appendChild(flashMessage);
+                                
+                                // Remove message after 5 seconds
+                                setTimeout(() => flashMessage.remove(), 5000);
+                            }
+                            
+                            // Redirect to My Models if applicable
+                            if (data.redirect) {
+                                setTimeout(() => {
+                                    window.location.href = data.redirect;
+                                }, 1500);
+                            }
+                        } else {
+                            // Show error message
+                            throw new Error(data.error || 'Failed to save model');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        
+                        // Show error message
+                        const flashContainer = document.querySelector('.flash-messages');
+                        if (flashContainer) {
+                            const flashMessage = document.createElement('div');
+                            flashMessage.className = 'alert alert-danger';
+                            flashMessage.innerHTML = `
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                ${error.message}
+                            `;
+                            flashContainer.appendChild(flashMessage);
+                            
+                            // Remove message after 5 seconds
+                            setTimeout(() => flashMessage.remove(), 5000);
+                        }
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save Model';
+                    });
+                });
+            }
+            
+            // Clear results function
+            window.clearResults = function() {
+                // Reset file upload
+                fileInput.value = '';
+                filenameDisplay.classList.add('d-none');
+                fileSubmitBtn.disabled = true;
+
+                // Reset manual input
+                const manualInputForm = document.getElementById('manualInputForm');
+                if (manualInputForm) {
+                    manualInputForm.reset();
+                }
+
+                // Hide results card
+                const resultsCard = document.querySelector('.tester-card:last-child');
+                if (resultsCard) {
+                    resultsCard.remove();
+                }
+
+                // Switch back to file upload tab
+                const fileTab = document.getElementById('file-tab');
+                fileTab.click();
+            };
+        });
+    </script>
+</body>
+</html>

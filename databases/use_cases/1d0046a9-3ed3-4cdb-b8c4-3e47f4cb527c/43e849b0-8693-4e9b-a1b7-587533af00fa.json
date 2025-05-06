@@ -1,0 +1,117 @@
+{
+  "id": "43e849b0-8693-4e9b-a1b7-587533af00fa",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "Acumatica_ERP_synthetic_19.csv",
+  "proposals": [
+    {
+      "title": "Predicting Campaign Success",
+      "description": "This use case aims to predict the success of a marketing campaign based on various factors such as Spend, Leads Generated, and Conversions.  A model will be trained on historical campaign data to identify patterns and relationships between these variables and the overall success of the campaign. This predictive model can then be used to optimize future marketing campaigns, allocate budgets more effectively, and improve ROI.",
+      "kpis": [
+        "Increase in Conversion Rate: Measure the percentage increase in conversions per dollar spent compared to previous campaigns.",
+        "Improved ROI on Marketing Spend: Calculate the return on investment for each campaign and compare it to previous campaigns.",
+        "Reduced Marketing Costs: Evaluate the reduction in marketing spending while maintaining or improving lead generation and conversions."
+      ],
+      "business_value": "This will lead to more efficient allocation of marketing budgets, resulting in higher ROI for marketing campaigns and improved profitability.",
+      "target_variable": "Conversions",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict the number of conversions expected for a given campaign. For example, a prediction of 50 means the model estimates 50 conversions.  A higher prediction indicates a potentially more successful campaign.",
+      "target variable understanding": "The target variable 'Conversions' represents the number of successful customer actions (e.g., purchases, sign-ups) resulting from a marketing campaign.  The number of unique predictions will be highly variable, depending on the range of conversions observed in the training data."
+    },
+    {
+      "title": "Predicting Sales Stage Progression",
+      "description": "This use case focuses on predicting the likelihood of a sales opportunity progressing to a particular stage. The model will analyze factors like Spend, Leads Generated, and Opportunity ID to forecast the next sales stage. This helps prioritize sales efforts and improves sales forecasting accuracy.",
+      "kpis": [
+        "Improved Sales Forecasting Accuracy: Measure the difference between predicted and actual sales stages.",
+        "Increased Sales Pipeline Velocity: Track the speed at which opportunities move through the sales pipeline.",
+        "Higher Win Rate of Sales Opportunities: Calculate the percentage of opportunities that successfully close."
+      ],
+      "business_value": "Improved sales forecasting leads to better resource allocation, more accurate sales planning, and increased revenue predictability.",
+      "target_variable": "Sales_Stage",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model will predict the probability of an opportunity belonging to each sales stage (e.g., Prospecting, Qualification, Negotiation, Closed Won, Closed Lost).  For example, a prediction of [0.2, 0.3, 0.4, 0.05, 0.05] indicates 40% likelihood of being in the Negotiation stage.",
+      "target variable understanding": "The target variable 'Sales_Stage' categorizes sales opportunities into different stages of the sales process.  The number of unique predictions will equal the number of distinct sales stages in the dataset."
+    },
+    {
+      "title": "Predicting Customer Satisfaction",
+      "description": "This use case aims to predict customer satisfaction ratings based on factors like Resolution Time and Service Type.  The model will analyze historical service request data to identify key drivers of customer satisfaction.  This predictive model allows for proactive identification and resolution of issues, leading to increased customer loyalty.",
+      "kpis": [
+        "Increased Customer Satisfaction Score: Measure the average customer satisfaction rating after implementing model recommendations.",
+        "Reduced Number of Customer Complaints: Track the number of complaints received from customers.",
+        "Improved Customer Retention Rate: Calculate the percentage of customers who continue using the company's services."
+      ],
+      "business_value": "Higher customer satisfaction translates to increased customer loyalty, positive word-of-mouth referrals, and improved brand reputation.",
+      "target_variable": "Satisfaction_Rating",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts the numerical satisfaction rating (e.g., 1-5).  A prediction of 4 indicates a high level of predicted satisfaction.  A lower prediction suggests potential areas for improvement in customer service.",
+      "target variable understanding": "The target variable 'Satisfaction_Rating' represents a numerical score reflecting customer satisfaction with the service provided.  The number of unique predictions will depend on the scale used for rating (e.g., 1-5, 1-10)."
+    },
+    {
+      "title": "Predicting Transaction Type",
+      "description": "This use case focuses on predicting the type of transaction based on features like Amount, Payment Method, and Account ID.  Predicting transaction types helps in fraud detection and risk assessment.",
+      "kpis": [
+        "Reduced Fraudulent Transactions:  Measure the percentage decrease in fraudulent transactions.",
+        "Improved Accuracy of Financial Forecasting: Evaluate the accuracy of financial forecasts by transaction type.",
+        "Improved Efficiency of Financial Reporting: Assess the time saved in financial reporting and analysis."
+      ],
+      "business_value": "Accurate prediction of transaction type will improve fraud detection, leading to significant financial savings and enhanced security.",
+      "target_variable": "Transaction_Type",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict the probability of a transaction being of a certain type (e.g., Expense, Payment, Revenue, Purchase). For example, a prediction of [0.1, 0.7, 0.1, 0.1] indicates a 70% chance that it's a Payment transaction.",
+      "target variable understanding": "The target variable 'Transaction_Type' categorizes financial transactions into different types. The number of unique predictions will be equal to the number of distinct transaction types in the dataset."
+    },
+    {
+      "title": "Predicting Employee Performance",
+      "description": "This use case predicts employee performance rating based on variables like Salary and Hire Date.  The predictions help identify high-performing employees and those who might need additional support or training.",
+      "kpis": [
+        "Improved Employee Retention: Measure the improvement in employee retention rates among predicted high-performers.",
+        "Increased Employee Productivity: Track the increase in overall productivity across the workforce.",
+        "Better Talent Acquisition Strategies: Analyze the relationship between predicted performance and employee attributes for improved recruiting."
+      ],
+      "business_value": "This use case improves employee engagement, retention, and talent management, leading to a more productive and satisfied workforce.",
+      "target_variable": "Performance_Rating",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict the numerical performance rating. For example, a prediction of 4.5 indicates a high performance rating.  A lower prediction could trigger interventions such as additional training or performance discussions.",
+      "target variable understanding": "The target variable 'Performance_Rating' is a numerical score indicating employee performance. The number of unique predictions will depend on the range of performance scores observed in the training data, which is likely to be continuous or have many distinct values."
+    },
+    {
+      "title": "Predicting Case Resolution Time",
+      "description": "This use case aims to predict the time it takes to resolve a customer service case based on factors like Issue Type, Agent ID, and Created Date. Predicting resolution time helps improve service level agreements and resource allocation.",
+      "kpis": [
+        "Improved Case Resolution Time: Track the average reduction in time taken to resolve customer service cases.",
+        "Increased Customer Satisfaction with Resolution Speed: Measure customer satisfaction with the speed of issue resolution.",
+        "Improved Resource Allocation in Customer Support: Evaluate the efficiency of resource allocation in customer service."
+      ],
+      "business_value": "Faster case resolution improves customer satisfaction, enhances the company\u2019s reputation, and frees up resources.",
+      "target_variable": "Resolution_Time",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict the resolution time in hours or days. For example, a prediction of 24 hours suggests that the case will likely be resolved within a day. Shorter resolution times indicate efficiency gains.",
+      "target variable understanding": "The target variable 'Resolution_Time' measures the duration it takes to resolve a customer service case, expressed in a numerical value (e.g., hours, days). The number of unique predictions will vary greatly, depending on the precision of the resolution time measurement and the distribution of resolution times observed in the dataset."
+    },
+    {
+      "title": "Predicting Defect Rate in Production",
+      "description": "This use case predicts the defect rate in production based on factors such as Quantity Produced, Machine ID, and Start Date. This assists in identifying problematic machines or production processes.",
+      "kpis": [
+        "Reduced Defect Rate: Measure the percentage reduction in the defect rate in manufactured products.",
+        "Improved Production Efficiency: Track the increase in production efficiency by reducing downtime caused by defects.",
+        "Lower Production Costs: Evaluate the decrease in production costs due to a reduction in waste and rework."
+      ],
+      "business_value": "Lower defect rates translate to cost savings, improved product quality, and enhanced customer satisfaction.",
+      "target_variable": "Defect_Rate",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts the defect rate as a percentage. A prediction of 0.02 means a 2% defect rate is anticipated.  Lower predictions indicate a lower likelihood of defects in production runs.",
+      "target variable understanding": "The target variable 'Defect_Rate' represents the percentage of defective items produced in a production run. The number of unique predictions depends on the precision of the defect rate measurement, which is likely continuous or has many distinct values."
+    }
+  ],
+  "created_at": "2025-04-17T00:11:19.851148",
+  "metadata": {
+    "file_path": "uploads\\Acumatica_ERP_synthetic_19.csv",
+    "proposal_count": 7
+  }
+}

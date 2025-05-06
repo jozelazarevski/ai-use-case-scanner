@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AI Use Case Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+	    <link href="{{ url_for('static', filename='login_style.css') }}" rel="stylesheet">
+
+    <style>
+       
+    </style>
+</head>
+<body>
+{% from 'user_menu_component.html' import render_user_menu %}
+{{ render_user_menu() }}
+    <!-- Progress bar for page -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-{{ category }}">
+                            <i class="fas {% if category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="login-card">
+            <div class="card-header">
+                <h1>AI Use Case Generator</h1>
+                <p>Sign in to your account</p>
+            </div>
+            
+            <div class="card-body">
+                <form method="post" action="{{ url_for('login') }}">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required autocomplete="email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="password-container">
+                            <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
+                            <button type="button" class="toggle-password" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    
+                    <a href="{{ url_for('forgot_password') }}" class="forgot-password">Forgot password?</a>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </form>
+                
+                <div class="divider">
+                    <span>or</span>
+                </div>
+                
+                <div class="social-login">
+                    <button class="social-btn google-btn">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                    <button class="social-btn github-btn">
+                        <i class="fab fa-github"></i> GitHub
+                    </button>
+                </div>
+                
+                <div class="register-link">
+                    Don't have an account? <a href="{{ url_for('register') }}">Register here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <script>
+        // Progress bar animation
+        const progressBar = document.getElementById('progressBar');
+        function initProgressBar() {
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 10);
+        }
+        
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+        
+        // Back to top button functionality
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Initialize progress bar on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initProgressBar();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile - AI Use Case Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            margin-right: 1.5rem;
+        }
+        
+        .profile-info h1 {
+            margin: 0;
+            color: var(--dark-text);
+        }
+        
+        .profile-info p {
+            margin: 0.5rem 0 0;
+            color: var(--medium-text);
+        }
+        
+        .profile-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            background-color: #f8f9fa;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--dark-text);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .profile-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .profile-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .profile-field {
+            margin-bottom: 1rem;
+        }
+        
+        .profile-field label {
+            display: block;
+            font-weight: 500;
+            color: var(--medium-text);
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+        
+        .profile-field p {
+            margin: 0;
+            color: var(--dark-text);
+            font-weight: 500;
+            background-color: #f8f9fa;
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+        
+        .profile-field input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            transition: border-color 0.2s ease-in-out;
+        }
+        
+        .profile-field input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(93, 95, 239, 0.1);
+        }
+        
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.25rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .stat-card.models {
+            border-left-color: #4285f4;
+        }
+        
+        .stat-card.usecases {
+            border-left-color: #34a853;
+        }
+        
+        .stat-card.datasets {
+            border-left-color: #fbbc05;
+        }
+        
+        .stat-title {
+            color: var(--medium-text);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        
+        .activity-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e8f0fe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4285f4;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .activity-icon.create {
+            background-color: #e8f0fe;
+            color: #4285f4;
+        }
+        
+        .activity-icon.train {
+            background-color: #e6f4ea;
+            color: #34a853;
+        }
+        
+        .activity-icon.test {
+            background-color: #fef6e0;
+            color: #fbbc05;
+        }
+        
+        .activity-content {
+            flex-grow: 1;
+        }
+        
+        .activity-title {
+            margin: 0 0 0.25rem;
+            font-weight: 500;
+        }
+        
+        .activity-time {
+            color: var(--medium-text);
+            font-size: 0.85rem;
+        }
+        
+        .no-activity {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--medium-text);
+        }
+        
+        .no-activity i {
+            font-size: 3rem;
+            color: #e9ecef;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .btn-edit {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.9rem;
+            border-radius: var(--border-radius);
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress bar for page -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-{{ category }}">
+                            <i class="fas {% if category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+                    <p>{{ user.email }}</p>
+                    {% if user.organization %}
+                        <p><i class="fas fa-building me-2"></i>{{ user.organization }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="stat-cards">
+                <div class="stat-card models">
+                    <div class="stat-title">Trained Models</div>
+                    <div class="stat-value">4</div>
+                </div>
+                <div class="stat-card usecases">
+                    <div class="stat-title">Generated Use Cases</div>
+                    <div class="stat-value">12</div>
+                </div>
+                <div class="stat-card datasets">
+                    <div class="stat-title">Analyzed Datasets</div>
+                    <div class="stat-value">7</div>
+                </div>
+            </div>
+            
+            <div class="profile-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-user-circle me-2"></i>Profile Information</h2>
+                    <button class="btn btn-outline-primary btn-edit" id="editProfileBtn">
+                        <i class="fas fa-pen me-1"></i> Edit
+                    </button>
+                </div>
+                <div class="card-body">
+                    <form id="profileForm" method="post" action="{{ url_for('update_profile') }}" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="profile-field">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" name="firstName" value="{{ user.first_name }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="profile-field">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" name="lastName" value="{{ user.last_name }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-field">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                        </div>
+                        
+                        <div class="profile-field">
+                            <label for="organization">Organization</label>
+                            <input type="text" id="organization" name="organization" value="{{ user.organization or '' }}">
+                        </div>
+                        
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+                            <button type="button" class="btn btn-outline-secondary" id="cancelEditBtn">Cancel</button>
+                        </div>
+                    </form>
+                    
+                    <div id="profileInfo">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="profile-field">
+                                    <label>First Name</label>
+                                    <p>{{ user.first_name }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="profile-field">
+                                    <label>Last Name</label>
+                                    <p>{{ user.last_name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-field">
+                            <label>Email</label>
+                            <p>{{ user.email }}</p>
+                        </div>
+                        
+                        <div class="profile-field">
+                            <label>Organization</label>
+                            <p>{{ user.organization or 'Not specified' }}</p>
+                        </div>
+                        
+                        <div class="profile-field">
+                            <label>Account Created</label>
+                            <p>{{ user.created_at|default('Unknown', true) }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-shield-alt me-2"></i>Security</h2>
+                </div>
+                <div class="card-body">
+                    <div class="profile-section">
+                        <h3>Change Password</h3>
+                        <p class="text-muted mb-3">Update your password to maintain account security</p>
+                        
+                        <form method="post" action="{{ url_for('change_password') }}">
+                            <div class="profile-field">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword" name="currentPassword" required>
+                            </div>
+                            
+                            <div class="profile-field">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" name="newPassword" required>
+                            </div>
+                            
+                            <div class="profile-field">
+                                <label for="confirmPassword">Confirm New Password</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Update Password</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-history me-2"></i>Recent Activity</h2>
+                </div>
+                <div class="card-body p-0">
+                    <!-- Activity feed -->
+                    <div class="activity-item">
+                        <div class="activity-icon train">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h3 class="activity-title">Trained "Customer Churn Prediction" model</h3>
+                            <div class="activity-time">2 days ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon create">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h3 class="activity-title">Generated 5 AI use cases for "sales_data.csv"</h3>
+                            <div class="activity-time">4 days ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon test">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h3 class="activity-title">Tested "Revenue Prediction" model with new data</h3>
+                            <div class="activity-time">1 week ago</div>
+                        </div>
+                    </div>
+                    
+                    <!-- For new users with no activity -->
+                    <!--
+                    <div class="no-activity">
+                        <i class="fas fa-history"></i>
+                        <p>No activity yet</p>
+                        <p>Upload a file to start generating AI use cases!</p>
+                        <a href="{{ url_for('upload_file') }}" class="btn btn-primary mt-3">
+                            <i class="fas fa-upload me-2"></i>Upload Data
+                        </a>
+                    </div>
+                    -->
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ url_for('upload_file') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-home me-2"></i>Go to Home
+                </a>
+                
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <script>
+        // Progress bar animation
+        const progressBar = document.getElementById('progressBar');
+        function initProgressBar() {
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 10);
+        }
+        
+        // Profile edit functionality
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const profileForm = document.getElementById('profileForm');
+        const profileInfo = document.getElementById('profileInfo');
+        
+        editProfileBtn.addEventListener('click', () => {
+            profileInfo.style.display = 'none';
+            profileForm.style.display = 'block';
+        });
+        
+        cancelEditBtn.addEventListener('click', () => {
+            profileInfo.style.display = 'block';
+            profileForm.style.display = 'none';
+        });
+        
+        // Back to top button functionality
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Initialize progress bar on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initProgressBar();
+        });
+    </script>
+</body>
+</html>

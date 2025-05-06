@@ -1,0 +1,73 @@
+{
+  "id": "64ae33c9-43c6-4427-9dc4-dc0247e59794",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "california_housing_train.csv",
+  "proposals": [
+    {
+      "title": "Predicting Median House Value",
+      "description": "This use case focuses on predicting the median house value in a given California district using readily available features like location (longitude, latitude), housing age, total rooms, bedrooms, population, households, and median income. A regression model will be trained on historical data to learn the relationships between these features and the median house value. This model can then be used to estimate house values for new districts based on their characteristics.",
+      "kpis": [
+        "RMSE (Root Mean Squared Error): Measures the average difference between predicted and actual house values.",
+        "R-squared: Represents the proportion of variance in house values explained by the model.",
+        "MAE (Mean Absolute Error): Indicates the average absolute difference between predicted and actual house values."
+      ],
+      "business_value": "Accurate house value prediction enables real estate companies to optimize pricing strategies, investors to make informed decisions, and homeowners to better understand their property's worth.",
+      "target_variable": "median_house_value",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a numerical value representing the predicted median house value for a given district. For example, a prediction of $250,000 suggests that the median house value in that district is expected to be $250,000. Higher values indicate more expensive districts and lower values suggest more affordable districts.",
+      "target_variable_understanding": "Median house value is the middle value of all house values in a district.  The range of predictions will depend on the range of house values present in the training dataset; this is a continuous variable with many unique possible predictions."
+    },
+    {
+      "title": "Identifying High-Value Housing Areas",
+      "description": "This use case aims to identify California districts with high median house values.  A classification model will be trained to categorize districts as 'high-value' or 'not high-value' based on a predefined threshold for the median_house_value. The model will use the same features as the previous use case to learn patterns associated with high-value districts.",
+      "kpis": [
+        "Accuracy: Percentage of correctly classified districts.",
+        "Precision: Proportion of correctly identified high-value districts out of all districts classified as high-value.",
+        "Recall: Proportion of correctly identified high-value districts out of all actual high-value districts.",
+        "F1-score: Harmonic mean of precision and recall."
+      ],
+      "business_value": "This helps real estate investors focus their search on promising high-return areas, aiding targeted marketing for luxury homes, and informs urban planning strategies.",
+      "target_variable": "median_house_value",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a binary classification: 'high-value' or 'not high-value'.  For example, a 'high-value' prediction for a district suggests that the median house value is above the specified threshold. A 'not high-value' prediction suggests the median house value is below the threshold. The threshold needs to be pre-defined.",
+      "target_variable_understanding": "Median house value is categorized into two classes based on a pre-defined threshold.  There are only two unique predictions: 'high-value' and 'not high-value'."
+    },
+    {
+      "title": "Predicting Median Income based on Housing Characteristics",
+      "description": "This use case focuses on predicting the median income of a district based on housing characteristics. A regression model will be used to analyze the relationship between features like housing median age, total rooms, total bedrooms, population, households, and geographic location (longitude, latitude) and the median income. The model aims to understand how housing attributes correlate with income levels.",
+      "kpis": [
+        "RMSE: Measures the average error in predicting median income.",
+        "R-squared: Shows how well the model explains the variance in median income.",
+        "MAE: Shows the average absolute difference between predicted and actual median income."
+      ],
+      "business_value": "Understanding the relationship between housing and income aids in targeted marketing, resource allocation for social programs and community development initiatives, and assessing economic disparity.",
+      "target_variable": "median_income",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model predicts a numerical value representing the median income of a district.  For example, a prediction of $80,000 indicates the expected median income is $80,000. Higher values suggest higher income districts, while lower values indicate lower income districts. This is a continuous variable so many different values are possible.",
+      "target_variable_understanding": "Median income is the middle value of all incomes in a district. The range of predictions will depend on the range of incomes in the training data; this is a continuous variable with many unique possible predictions."
+    },
+    {
+      "title": "Clustering Similar Housing Districts",
+      "description": "This use case uses clustering techniques to group similar housing districts based on their characteristics.  The model will utilize longitude, latitude, housing_median_age, total_rooms, total_bedrooms, population, households, and median_income to identify clusters of districts with similar profiles. This allows for a more nuanced understanding of housing market segments.",
+      "kpis": [
+        "Silhouette score: Measures how similar a data point is to its own cluster compared to other clusters.",
+        "Davies-Bouldin index: Measures the average similarity between each cluster and its most similar cluster.",
+        "Calinski-Harabasz index: Measures the ratio of between-cluster dispersion matrix and within-cluster dispersion matrix."
+      ],
+      "business_value": "Clustering helps identify distinct housing market segments, which can be used for targeted marketing, investment strategies, and understanding the geographical spread of different housing types and demographics.",
+      "target_variable": null,
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model assigns each district to a cluster, represented by a cluster ID. Districts within the same cluster share similar characteristics.  For instance, Cluster 1 might represent high-density, urban areas with high median incomes, while Cluster 2 represents low-density, suburban areas with lower median incomes. The number of clusters is a hyperparameter to be chosen.",
+      "target_variable_understanding": "There is no target variable in a clustering task.  The number of unique predictions is equal to the number of clusters defined in the model."
+    }
+  ],
+  "created_at": "2025-04-17T12:34:14.944081",
+  "metadata": {
+    "file_path": "uploads\\california_housing_train.csv",
+    "proposal_count": 4
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "id": "fa3bcadc-f90a-4afd-a060-82ff271bbcaa",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "bank-full.csv",
+  "proposals": [
+    {
+      "title": "Predicting Customer Loan Default",
+      "description": "This use case aims to predict whether a customer will default on a loan based on their existing attributes.  A classification model will be trained on historical data to identify patterns and relationships between customer characteristics and loan default. The model will analyze factors such as age, job, marital status, education level, balance, housing loan status, and contact method to assess the risk of default.",
+      "kpis": [
+        "Accuracy of loan default prediction: Percentage of correctly classified loan defaults.",
+        "Precision of loan default prediction: Proportion of true positives amongst all positive predictions.",
+        "Recall of loan default prediction: Proportion of true positives amongst all actual defaults.",
+        "F1-Score: Harmonic mean of precision and recall, providing a balanced measure of performance."
+      ],
+      "business_value": "By accurately predicting loan defaults, the bank can proactively manage risk, reduce losses from bad loans, and optimize lending strategies.  This leads to improved profitability and a more stable financial position.",
+      "target_variable": "default",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict 'yes' or 'no' indicating whether a customer is likely to default on a loan.  For example, a prediction of 'yes' suggests a high probability of default, prompting the bank to take mitigating actions such as adjusting loan terms or declining the application. A prediction of 'no' suggests a low risk of default.",
+      "target_variable_understanding": "The target variable 'default' is a binary categorical variable indicating whether a customer has a credit in default (yes/no).  The model will produce two unique predictions: 'yes' and 'no'."
+    },
+    {
+      "title": "Predicting Housing Loan Application Outcome",
+      "description": "This use case focuses on predicting whether a customer will be granted a housing loan.  A classification model will be trained to identify factors that influence the approval or rejection of housing loan applications.  The model will use variables such as age, job, marital status, education, balance, existing loan status, and contact method to assess the likelihood of loan approval.",
+      "kpis": [
+        "Accuracy of housing loan prediction: Percentage of correctly classified loan approvals.",
+        "Precision of housing loan prediction: Proportion of true positives amongst all positive predictions.",
+        "Recall of housing loan prediction: Proportion of true positives amongst all actual approvals.",
+        "AUC (Area Under the Curve): Measure of the model's ability to distinguish between loan approvals and rejections."
+      ],
+      "business_value": "Accurate prediction of housing loan application outcomes allows the bank to streamline the loan application process, improve customer experience by providing faster decisions, and reduce operational costs associated with manual processing.",
+      "target_variable": "housing",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output 'yes' or 'no' predicting whether a housing loan application will be approved. A 'yes' prediction suggests a high likelihood of approval, while a 'no' prediction suggests a low likelihood.  For example, a 'yes' prediction might lead to faster processing of the application.",
+      "target_variable_understanding": "The target variable 'housing' is a binary categorical variable representing whether the customer has a housing loan ('yes'/'no'). The model will have two unique predictions: 'yes' and 'no'."
+    },
+    {
+      "title": "Predicting Customer Term Deposit Subscription",
+      "description": "This use case aims to predict whether a customer will subscribe to a term deposit. A classification model will analyze customer demographics, financial information, and contact details to identify factors that influence their decision to subscribe. This model leverages variables such as age, job, marital status, education, balance, housing loan, personal loan, and contact method to predict subscription likelihood.",
+      "kpis": [
+        "Accuracy of term deposit subscription prediction:  Percentage of correctly classified subscriptions.",
+        "Precision of term deposit subscription prediction: Proportion of true positives among all positive predictions.",
+        "Recall of term deposit subscription prediction: Proportion of true positives among all actual subscriptions.",
+        "F1-Score: Harmonic mean of precision and recall for a balanced performance metric."
+      ],
+      "business_value": "Predicting customer term deposit subscriptions allows the bank to target marketing efforts more effectively, increasing conversion rates and improving sales performance.  This leads to increased revenue and customer acquisition.",
+      "target_variable": "y",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output 'yes' or 'no' indicating whether a customer is likely to subscribe to a term deposit. A 'yes' prediction suggests a high probability of subscription, making them a prime candidate for targeted marketing. A 'no' prediction suggests a lower probability.",
+      "target_variable_understanding": "The target variable 'y' indicates whether the customer subscribed to a term deposit ('yes'/'no'). The model will produce two unique predictions: 'yes' and 'no'."
+    },
+    {
+      "title": "Analyzing Customer Balance based on demographics",
+      "description": "This use case uses regression to predict a customer's account balance based on their demographic and financial attributes. The model will be trained to identify the relationships between features such as age, job, marital status, education, housing loan, personal loan and account balance. This enables targeted strategies for customer relationship management and financial product offerings.",
+      "kpis": [
+        "R-squared: Proportion of variance in the balance explained by the model.",
+        "RMSE (Root Mean Squared Error): Measure of the average difference between predicted and actual balances.",
+        "MAE (Mean Absolute Error): Average absolute difference between predicted and actual balances."
+      ],
+      "business_value": "Understanding customer balance variations based on demographics aids in personalized service offerings, tailored financial advice, and risk assessment. It also helps in optimizing resource allocation for customer support and marketing.",
+      "target_variable": "balance",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict a numerical value representing the customer's account balance. For instance, a prediction of 1500 suggests an estimated balance of 1500 monetary units. The accuracy of the prediction will depend on the model's performance metrics.",
+      "target_variable_understanding": "The target variable 'balance' is a continuous numerical variable representing the customer's account balance. The model will produce a wide range of numerical predictions reflecting the balance values."
+    },
+    {
+      "title": "Customer Segmentation based on Loan and Housing Status",
+      "description": "This use case employs clustering techniques to segment customers based on their loan and housing status. The model will identify distinct groups of customers with similar characteristics regarding their housing and personal loan situations. This will facilitate the design of targeted marketing campaigns and product offerings.",
+      "kpis": [
+        "Silhouette Score: Measures how similar a data point is to its own cluster compared to other clusters.",
+        "Davies-Bouldin Index: Measures the average similarity between each cluster and its most similar cluster.",
+        "Calinski-Harabasz Index: Ratio of the between-cluster dispersion to the within-cluster dispersion."
+      ],
+      "business_value": "Customer segmentation based on loan and housing status enables personalized marketing, tailored product development, and risk management.  This allows for more efficient resource allocation and improved customer satisfaction.",
+      "target_variable": "None",
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will assign each customer to a specific cluster representing a segment. For example, cluster 1 might represent customers with a housing loan but no personal loan, cluster 2 might represent customers with both loans, and so on. These segments can be analyzed to understand their characteristics and tailor strategies accordingly.",
+      "target_variable_understanding": "This use case does not involve a specific target variable; instead, it uses clustering to group customers into segments based on their features."
+    }
+  ],
+  "created_at": "2025-05-06T11:12:46.827881",
+  "metadata": {
+    "file_path": "uploads\\bank-full.csv",
+    "proposal_count": 5
+  }
+}

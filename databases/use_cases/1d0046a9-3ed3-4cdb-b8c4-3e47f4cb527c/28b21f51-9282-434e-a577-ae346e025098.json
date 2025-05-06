@@ -1,0 +1,87 @@
+{
+  "id": "28b21f51-9282-434e-a577-ae346e025098",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "bank-full.csv",
+  "proposals": [
+    {
+      "title": "Predicting Housing Loan Application Approval",
+      "description": "This AI use case focuses on predicting whether a customer will be approved for a housing loan based on their existing attributes. A classification model will be trained on the available data, analyzing factors such as age, job, marital status, balance, and existing loan status to predict the likelihood of housing loan approval.  The model can help the bank streamline the loan application process and make more informed decisions, potentially reducing manual review time and improving efficiency.",
+      "kpis": [
+        "Accuracy of housing loan approval predictions: Percentage of correctly classified loan applications.",
+        "Reduction in manual review time for loan applications: Percentage decrease in processing time.",
+        "Improved loan approval efficiency: Increase in the number of loan applications processed per unit of time."
+      ],
+      "business_value": "This use case improves operational efficiency by automating loan application review, potentially leading to faster processing times and cost savings. It also allows the bank to make data-driven decisions, reducing risks associated with loan defaults.",
+      "target_variable": "housing",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict either 'yes' (loan application approved) or 'no' (loan application rejected). For example, a prediction of 'yes' indicates a high probability of the customer being approved for a housing loan based on the input features.",
+      "target_variable_understanding": "The 'housing' variable is a binary categorical variable indicating whether a customer has a housing loan ('yes') or not ('no'). The model will predict one of these two outcomes."
+    },
+    {
+      "title": "Predicting Customer Default Risk",
+      "description": "This use case aims to predict the likelihood of a customer defaulting on a loan.  A classification model will be trained using customer attributes such as age, job, marital status, education, balance, and existing loan information.  The model's predictions can help the bank assess risk associated with individual customers, enabling proactive measures to mitigate potential losses.",
+      "kpis": [
+        "Accuracy of default prediction: Percentage of correctly classified customers as defaulters or non-defaulters.",
+        "Reduction in loan defaults: Percentage decrease in the number of loan defaults.",
+        "Improved risk assessment efficiency: Increase in the speed and accuracy of risk assessment."
+      ],
+      "business_value": "By accurately predicting default risk, the bank can reduce losses due to defaults, optimize lending strategies, and improve overall financial stability.",
+      "target_variable": "default",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict either 'yes' (customer likely to default) or 'no' (customer unlikely to default).  For example, a prediction of 'yes' suggests a higher risk of default for that customer.",
+      "target_variable_understanding": "The 'default' variable is a binary categorical variable indicating whether a customer has credit in default ('yes') or not ('no'). The model will predict one of these two outcomes."
+    },
+    {
+      "title": "Predicting Customer Loan Application Outcome",
+      "description": "This use case focuses on predicting whether a customer will be granted a loan (any type of loan). A classification model will analyze the customer's age, job, marital status, education, balance, housing loan status, and existing loan status.  The model's prediction can assist the bank in efficiently evaluating loan applications and identifying high-potential candidates.",
+      "kpis": [
+        "Accuracy of loan application approval: Percentage of correctly classified loan applications.",
+        "Processing time of loan applications: Time taken to process a loan application.",
+        "Number of loan applications processed per day: Efficiency of the loan application process."
+      ],
+      "business_value": "This will improve efficiency in loan application processing and risk management, allowing the bank to focus resources on high-potential applications.",
+      "target_variable": "loan",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output 'yes' (loan application approved) or 'no' (loan application rejected). A 'yes' prediction indicates that the customer is likely to be approved for a loan based on their profile.",
+      "target_variable_understanding": "The 'loan' variable is a binary categorical variable indicating whether a customer has a personal loan ('yes') or not ('no'). The model will predict one of these two outcomes."
+    },
+    {
+      "title": "Predicting Term Deposit Subscription",
+      "description": "This use case aims to predict whether a customer will subscribe to a term deposit. A classification model will be trained using customer demographic and financial information, such as age, job, marital status, balance, and past contact information. The model can help the bank target marketing efforts toward customers with a higher likelihood of subscribing.",
+      "kpis": [
+        "Accuracy of term deposit subscription prediction: Percentage of correctly classified customers.",
+        "Conversion rate of targeted marketing campaigns: Percentage of targeted customers who subscribe.",
+        "Return on investment (ROI) of marketing campaigns: Profit generated from targeted marketing campaigns."
+      ],
+      "business_value": "This will enable the bank to improve its marketing ROI by focusing resources on customers most likely to subscribe to term deposits.",
+      "target_variable": "y",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict either 'yes' (customer will subscribe) or 'no' (customer will not subscribe). A 'yes' prediction suggests that the customer is more likely to subscribe to a term deposit.",
+      "target_variable_understanding": "The 'y' variable is a binary categorical variable indicating whether the customer subscribed to a term deposit ('yes') or not ('no'). The model will predict one of these two outcomes."
+    },
+    {
+      "title": "Customer Balance Prediction",
+      "description": "This use case focuses on predicting a customer's account balance. A regression model will be trained using customer features such as age, job type, marital status, and loan information. This predictive model could assist in risk assessment and personalized financial advice.",
+      "kpis": [
+        "Mean Absolute Error (MAE): Average absolute difference between predicted and actual balance.",
+        "Root Mean Squared Error (RMSE): Square root of the average squared difference between predicted and actual balance.",
+        "R-squared: Proportion of variance in the balance explained by the model."
+      ],
+      "business_value": "The bank can use this to better understand customer financial behavior, tailor products and services, and manage risk more effectively. ",
+      "target_variable": "balance",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model will output a numerical value representing the predicted account balance. For example, a prediction of 1500 indicates an estimated account balance of 1500 monetary units. The accuracy of the prediction will depend on the model's performance metrics.",
+      "target_variable_understanding": "The 'balance' variable is a continuous numerical variable representing the customer's account balance. The model will predict a numerical value for the balance."
+    }
+  ],
+  "created_at": "2025-05-06T20:07:57.192298",
+  "metadata": {
+    "file_path": "uploads\\bank-full.csv",
+    "proposal_count": 5
+  }
+}

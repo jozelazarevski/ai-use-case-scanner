@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Model Training Results</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+
+
+.explanation-container pre, .explanation-container code {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 87.5%;
+    color: #212529;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.explanation-container pre {
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.explanation-container code {
+    padding: 0.2rem 0.4rem;
+}
+
+.explanation-container table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+}
+
+.explanation-container table th,
+.explanation-container table td {
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+}
+
+.explanation-container table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    text-align: left;
+}
+.explanation-container {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 0.25rem;
+    border-left: 4px solid #17a2b8;
+    margin-bottom: 1.5rem;
+}
+
+.explanation-container h3 {
+    color: #343a40;
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.explanation-container p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.explanation-container ul, .explanation-container ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.explanation-container li {
+    margin-bottom: 0.5rem;
+}
+
+.explanation-container strong {
+    font-weight: 600;
+    color: #212529;
+}
+
+.explanation-container .section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.explanation-container .section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+        .result-card {
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .success-banner {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .error-banner {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .accuracy-display {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: #28a745;
+        }
+        .model-info {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .output-container {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin-bottom: 1.5rem;
+        }
+        .explanation-container {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+            border-left: 4px solid #17a2b8;
+            margin-bottom: 1.5rem;
+        }
+        .nav-tabs .nav-link {
+            color: #495057;
+        }
+        .nav-tabs .nav-link.active {
+            font-weight: bold;
+            border-bottom: 3px solid #007bff;
+        }
+        .tab-content {
+            padding: 1.5rem 0;
+        }
+        .usecase-section {
+            background-color: #edf8ff;
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+            margin-top: 1.5rem;
+            border-left: 4px solid #007bff;
+        }
+        .kpi-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background-color: #f8f9fa;
+            border-radius: 0.25rem;
+        }
+        .business-value {
+            background-color: #f0f9eb;
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+            margin-top: 1.5rem;
+            border-left: 4px solid #52c41a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4 mb-5">
+        <h1 class="mb-4">
+            <i class="bi bi-graph-up me-2"></i>
+            AI Model Training Results
+        </h1>
+        
+        {% if success %}
+            <div class="success-banner">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong>Success!</strong> Your model has been successfully trained.
+            </div>
+        {% else %}
+            <div class="error-banner">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Error:</strong> {{ error_message }}
+            </div>
+        {% endif %}
+        
+      
+
+<!-- Model Information -->
+<!-- Replace the top part of the Model Information section -->
+
+<!-- Model Information -->
+<div class="card result-card">
+    <div class="card-header bg-light">
+        <h2 class="card-title h5 mb-0">
+            <i class="bi bi-info-circle me-2"></i>
+            Model Information
+        </h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <h3 class="h5">
+                    {% if training_results.title %}
+                        {{ training_results.title }}
+                    {% elif proposal and proposal.title %}
+                        {{ proposal.title }}
+                    {% else %}
+                        AI Model
+                    {% endif %}
+                </h3>
+                
+                
+                
+               
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h4 class="h6">Target Variable</h4>
+                        <p class="mb-0">
+                            {% if training_results.target_variable %}
+                                <strong>{{ training_results.target_variable }}</strong>
+                            {% else %}
+                                {% if proposal and proposal.target_variable and proposal.target_variable != "Unknown" %}
+                                    <strong>{{ proposal.target_variable }}</strong>
+                                {% else %}
+                                    <strong>Auto-detected</strong>
+                                {% endif %}
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 class="h6">Model Type</h4>
+                        <p class="mb-0"><strong>{{ model_type|capitalize }}</strong></p>
+                    </div>
+                </div>
+                
+                <!-- UseCase Description -->
+                <div class="usecase-section mt-4">
+                    <h4 class="h6 mb-3">
+                        <i class="bi bi-file-earmark-text me-2"></i>
+                        UseCase Description
+                    </h4>
+                    <p class="mb-0">
+                    
+                    {% if training_results.description %}
+                        {{ training_results.description }}
+                    {% elif proposal and proposal.description %}
+                        {{ proposal.description }}
+                    {% else %}
+                        No description available.
+                    {% endif %}
+               
+                    </p>
+                </div>
+                
+                
+				<!-- Business Value -->
+				<div class="business-value">
+					<h4 class="h6 mb-3">
+						<i class="bi bi-currency-dollar me-2"></i>
+						Business Value
+					</h4>
+					<p class="mb-0">
+						{% if proposal and proposal.business_value and proposal.business_value != "Not specified" %}
+							{{ proposal.business_value }}
+						{% elif training_results.business_value %}
+							{{ training_results.business_value }}
+						{% else %}
+							This model enables data-driven decision making with an expected ROI on implementation efforts. Early identification of patterns allows for proactive business strategies.
+						{% endif %}
+					</p>
+				</div>
+
+				<!-- Prediction Interpretation -->
+				<div class="usecase-section mt-4" style="background-color: #f0f4f9; border-left: 4px solid #0d6efd;">
+					<h4 class="h6 mb-3">
+						<i class="bi bi-lightbulb me-2"></i>
+						Prediction Interpretation
+					</h4>
+					<p class="mb-0">
+						{% if proposal and proposal.prediction_interpretation and proposal.prediction_interpretation != "Predictions should be interpreted in the context of the business problem and validated by domain experts." %}
+							{{ proposal.prediction_interpretation }}
+						{% elif training_results.prediction_interpretation %}
+							{{ training_results.prediction_interpretation }}
+						{% else %}
+							Predictions from this model should be interpreted within the specific business context and validated against domain expertise. The model outputs provide data-driven insights that should complement, not replace, business judgment.
+						{% endif %}
+					</p>
+				</div>
+				
+									
+					<!-- AI Expert Advisor -->
+					<div class="card result-card">
+						<div class="card-header bg-light">
+							<h2 class="card-title h5 mb-0">
+								<i class="bi bi-robot me-2"></i>
+								AI Expert Advisor
+							</h2>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-12">
+									<div class="explanation-container" style="border-left: 4px solid #6f42c1;">
+										<h4 class="h6 mb-3">
+											<i class="bi bi-chat-square-text me-2"></i>
+											Expert Analysis
+										</h4>
+										
+										{% if llm_explanation %}
+											{{ llm_explanation|safe  }}
+										{% elif explanation %}
+											{{ explanation|safe  }}
+										{% else %}
+											<p>No expert analysis is available for this model.</p>
+										{% endif %}
+									</div>
+									
+									<div class="alert alert-info mt-3">
+										<i class="bi bi-info-circle me-2"></i>
+										This analysis is generated using AI to help interpret your model results. Use it as a guide alongside your domain expertise.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				<!-- KPIs -->
+				<div class="mt-4">
+					<h4 class="h6 mb-3">
+						<i class="bi bi-trophy me-2"></i>
+						Key Performance Indicators
+					</h4>
+					<div class="kpi-container">
+						{% if proposal and proposal.kpis and proposal.kpis|length > 0 %}
+							{% for kpi in proposal.kpis %}
+								<div class="kpi-item">
+									<i class="bi bi-check-square me-2"></i>
+									{{ kpi }}
+								</div>
+							{% endfor %}
+						{% elif training_results.kpis and training_results.kpis|length > 0 %}
+							{% for kpi in training_results.kpis %}
+								<div class="kpi-item">
+									<i class="bi bi-check-square me-2"></i>
+									{{ kpi }}
+								</div>
+							{% endfor %}
+						{% else %}
+							<div class="kpi-item">
+								<i class="bi bi-check-square me-2"></i>
+								Improved prediction accuracy for business outcomes
+							</div>
+							<div class="kpi-item">
+								<i class="bi bi-check-square me-2"></i>
+								Reduced operational costs through data-driven decisions
+							</div>
+							<div class="kpi-item">
+								<i class="bi bi-check-square me-2"></i>
+								Increased operational efficiency
+							</div>
+						{% endif %}
+					</div>
+				</div>
+                 
+                
+                 
+            </div>
+               
+				<div class="col-md-4">
+					{% if success and accuracy is not none %}
+						<div class="accuracy-display">
+							{{ "%.1f"|format(accuracy * 100) if accuracy < 1 else "%.1f"|format(accuracy) }}%
+						</div>
+						<p class="text-center text-muted">
+							{% if model_type == 'regression' %}
+								Better than considering only the median value of  <strong>{{ training_results.target_variable }}</strong>
+							{% else %}
+								Model Accuracy
+							{% endif %}
+						</p>
+					{% endif %}
+				</div>
+       
+        </div>
+    </div>
+</div>
+        
+        <!-- Tabs for Results -->
+        <ul class="nav nav-tabs" id="resultTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="explanation-tab" data-bs-toggle="tab" data-bs-target="#explanation" type="button" role="tab" aria-controls="explanation" aria-selected="true">
+                    <i class="bi bi-lightbulb me-1"></i> Model Explanation
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="features-tab" data-bs-toggle="tab" data-bs-target="#features" type="button" role="tab" aria-controls="features" aria-selected="false">
+                    <i class="bi bi-bar-chart-line me-1"></i> Feature Importance
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="output-tab" data-bs-toggle="tab" data-bs-target="#output" type="button" role="tab" aria-controls="output" aria-selected="false">
+                    <i class="bi bi-terminal me-1"></i> Training Output
+                </button>
+            </li>
+            {% if script_path %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="code-tab" data-bs-toggle="tab" data-bs-target="#code" type="button" role="tab" aria-controls="code" aria-selected="false">
+                    <i class="bi bi-code-slash me-1"></i> Training Script
+                </button>
+            </li>
+            {% endif %}
+        </ul>
+        
+        <div class="tab-content" id="resultTabsContent">
+            <!-- Explanation Tab -->
+            <div class="tab-pane fade show active" id="explanation" role="tabpanel" aria-labelledby="explanation-tab">
+                {% if success %}
+                    <div class="explanation-container">
+                        {{ explanation|nl2br }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning mt-4">
+                        <i class="bi bi-exclamation-circle me-2"></i>
+                        No explanation available due to training failure.
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Feature Importance Tab -->
+           <!-- Replace the feature importance chart section in training_results.html -->
+
+		<div class="card mt-4">
+			<div class="card-header bg-light">
+				<h5 class="card-title mb-0">
+					<i class="bi bi-bar-chart-line me-2"></i>
+					Feature Importance Analysis
+				</h5>
+			</div>
+    <div class="card-body">
+        <p class="text-muted mb-4">This chart shows the relative importance of each feature in making predictions. Taller bars indicate features that have greater influence on the model's output.</p>
+        
+        {% if feature_importance and feature_importance|length > 0 %}
+            <div class="chart-container" style="position: relative; height:400px; width:100%">
+                <canvas id="featureImportanceChart"></canvas>
+            </div>
+            
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Function to initialize the chart
+                function initFeatureChart() {
+                    const ctx = document.getElementById('featureImportanceChart').getContext('2d');
+                    
+                    // Get feature importance data from Flask
+                    const features = {{ feature_importance|tojson }};
+                    console.log("Feature importance data:", features);
+                    
+                    // Sort feature importance in descending order
+                    const sortedFeatures = Object.entries(features)
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 15); // Show top 15 features
+                    
+                    const labels = sortedFeatures.map(item => item[0]);
+                    const values = sortedFeatures.map(item => item[1]);
+                    
+                    console.log("Sorted feature importance:", labels, values);
+                    
+                    // Generate colors for the bars
+                    const barColors = values.map((val, i) => {
+                        const hue = 200 - (i * 150 / values.length);
+                        return `hsla(${hue}, 70%, 50%, 0.8)`;
+                    });
+                    
+                    // Create the chart
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Feature Importance',
+                                data: values,
+                                backgroundColor: barColors,
+                                borderColor: barColors.map(color => color.replace('0.8', '1')),
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            indexAxis: 'y',
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `Importance: ${context.raw.toFixed(4)}`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Importance Score'
+                                    }
+                                },
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: 'Feature'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                // Initialize chart when DOM is ready
+                if (typeof Chart !== 'undefined') {
+                    initFeatureChart();
+                } else {
+                    // If Chart.js isn't loaded yet, wait for it
+                    document.addEventListener('chartsReady', initFeatureChart);
+                }
+            });
+            </script>
+            
+            <div class="mt-4">
+                <h6>Top features and their importance:</h6>
+                <ul>
+                    {% for feature, importance in feature_importance|dictsort(by='value')|reverse %}
+                        {% if loop.index <= 5 %}
+                            <li><strong>{{ feature }}</strong>: {{ "%.4f"|format(importance) }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                Feature importance data is not available for this model. This could be because the model type doesn't support feature importance or because the data wasn't captured during training.
+            </div>
+            
+            <!-- Placeholder chart with dummy data -->
+            <div class="chart-container" style="position: relative; height:400px; width:100%">
+                <canvas id="dummyFeatureChart"></canvas>
+            </div>
+            <a href="{{ url_for('model_tester') }}" class="btn btn-primary">
+    Test Trained Models
+</a>
+            <script>
+			
+            document.addEventListener('DOMContentLoaded', function() {
+                function initDummyChart() {
+                    const ctx = document.getElementById('dummyFeatureChart').getContext('2d');
+                    const dummyLabels = [
+                        'Feature A', 'Feature B', 'Feature C', 'Feature D', 
+                        'Feature E', 'Feature F', 'Feature G', 'Feature H'
+                    ];
+                    const dummyValues = [0.27, 0.21, 0.16, 0.12, 0.09, 0.07, 0.05, 0.03];
+                    
+                    const barColors = dummyValues.map((val, i) => {
+                        const hue = 200 - (i * 150 / dummyValues.length);
+                        return `hsla(${hue}, 70%, 50%, 0.5)`;
+                    });
+                    
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: dummyLabels,
+                            datasets: [{
+                                label: 'Example Feature Importance',
+                                data: dummyValues,
+                                backgroundColor: barColors,
+                                borderColor: 'rgba(0,0,0,0.1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            indexAxis: 'y',
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    enabled: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: '(Example) Importance Score'
+                                    }
+                                },
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: '(Example) Feature'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                if (typeof Chart !== 'undefined') {
+                    initDummyChart();
+                } else {
+                    document.addEventListener('chartsReady', initDummyChart);
+                }
+            });
+            </script>
+            
+            <div class="alert alert-warning mt-4">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                The chart above shows <strong>example data only</strong> and does not reflect your actual model.
+            </div>
+        {% endif %}
+        
+        <div class="mt-4">
+            <h6>How to use feature importance:</h6>
+            <ul>
+                <li>Focus on collecting higher quality data for important features</li>
+                <li>Consider removing features with very low importance to simplify the model</li>
+                <li>Investigate unexpected importance patterns that might indicate data issues</li>
+                <li>Use important features to guide business decisions related to the prediction target</li>
+            </ul>
+        </div>
+    </div>
+</div>
+            
+            <!-- Output Tab -->
+            <div class="tab-pane fade" id="output" role="tabpanel" aria-labelledby="output-tab">
+                <div class="output-container">
+                    {{ output }}
+                </div>
+            </div>
+            
+            <!-- Code Tab -->
+            {% if script_path %}
+            <div class="tab-pane fade" id="code" role="tabpanel" aria-labelledby="code-tab">
+                <div class="alert alert-info mb-3">
+                    <i class="bi bi-file-earmark-code me-2"></i>
+                    Training script saved at: <strong>{{ script_path }}</strong>
+                </div>
+                <div class="output-container">
+                    {% set script_content = read_script_file(script_path) %}
+                    {{ script_content }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="mt-4 d-flex justify-content-between">
+            <a href="{{ url_for('upload_file') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>
+                Upload Another File
+            </a>
+            
+            {% if success %}
+            <a href="#" class="btn btn-primary">
+                <i class="bi bi-cloud-upload me-2"></i>
+                Deploy Model
+            </a>
+            {% else %}
+            <a href="{{ url_for('upload_file') }}" class="btn btn-primary">
+                <i class="bi bi-arrow-clockwise me-2"></i>
+                Try Again
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Add this just before the closing </body> tag in your training_results.html template -->
+<script>
+    // Ensure Chart.js is properly loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded! Adding it dynamically...');
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+            script.onload = function() {
+                console.log('Chart.js loaded dynamically');
+                // Trigger any chart initialization
+                document.dispatchEvent(new Event('chartsReady'));
+            };
+            document.head.appendChild(script);
+        } else {
+            console.log('Chart.js is already loaded');
+            // If Chart.js is already loaded, dispatch the event immediately
+            setTimeout(function() {
+                document.dispatchEvent(new Event('chartsReady'));
+            }, 0);
+        }
+    });
+</script>
+</body>
+</html>

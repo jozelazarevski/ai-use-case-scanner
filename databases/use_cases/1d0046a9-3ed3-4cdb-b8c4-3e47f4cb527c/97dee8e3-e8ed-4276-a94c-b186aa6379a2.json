@@ -1,0 +1,57 @@
+{
+  "id": "97dee8e3-e8ed-4276-a94c-b186aa6379a2",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "california_housing_train.csv",
+  "proposals": [
+    {
+      "title": "Predicting Median House Value Based on Location and Age",
+      "description": "This AI model predicts the median house value using longitude, latitude, and housing median age as input features.  A regression model can be trained to identify the relationship between these variables and the median house value. This could help real estate investors and agencies understand property values in different areas based on geographical location and the age of the housing stock.",
+      "kpis": [
+        "Root Mean Squared Error (RMSE): Measures the average difference between predicted and actual median house values.",
+        "R-squared: Indicates the proportion of variance in median house value explained by the model.",
+        "Mean Absolute Error (MAE): Represents the average absolute difference between predicted and actual median house values."
+      ],
+      "business_value": "Improved accuracy in property valuation, enabling better investment decisions and more effective pricing strategies for real estate businesses. This can lead to increased profits and reduced risks.",
+      "target_variable": "median_house_value",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model outputs a numerical prediction representing the estimated median house value for a given location and housing age. For example, a prediction of $250,000 suggests the median house value in that specific area and housing age is estimated to be $250,000.  A higher prediction indicates a higher estimated median house value.",
+      "target_variable_understanding": "Median house value represents the middle value of house prices in a specific area.  The number of unique predictions will be high, as median house values vary across locations and housing ages.  It is a continuous variable"
+    },
+    {
+      "title": "Predicting Median House Value Based on Housing Characteristics",
+      "description": "This model predicts median house value based on the total number of rooms, bedrooms, population, and households in a given area. This helps understand how housing density and size impact house prices.  A regression model would be suitable to capture the continuous relationship between these variables and house prices.",
+      "kpis": [
+        "RMSE: Measures the average difference between predicted and actual median house values.",
+        "R-squared: Indicates the proportion of variance in median house value explained by the model.",
+        "MAE: Represents the average absolute difference between predicted and actual median house values."
+      ],
+      "business_value": "Facilitates more accurate pricing and investment strategies in real estate, allowing for better resource allocation and risk assessment. It could help developers make better decisions about the scale and type of housing.",
+      "target_variable": "median_house_value",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a numerical prediction representing the estimated median house value based on the input housing characteristics. For example, a prediction of $300,000 signifies the estimated median house value for a location with the provided features.  Higher values suggest more expensive areas.",
+      "target_variable_understanding": "Median house value represents the middle value of house prices in a specific area. The number of unique predictions will be high due to variations in housing characteristics across areas. It is a continuous variable."
+    },
+    {
+      "title": "Predicting Median House Value Based on Income",
+      "description": "This model uses median income as the sole predictor for median house value. This use case explores the direct relationship between income levels and house prices, providing insights into affordability and market segmentation. A regression model is appropriate because both variables are continuous.",
+      "kpis": [
+        "RMSE: Measures the average difference between predicted and actual median house values.",
+        "R-squared: Indicates the proportion of variance in median house value explained by the model.",
+        "MAE: Represents the average absolute difference between predicted and actual median house values."
+      ],
+      "business_value": "This model helps to understand market segmentation and affordability, informing investment decisions and marketing strategies. It may also reveal areas with high potential for property value appreciation.",
+      "target_variable": "median_house_value",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model outputs a numerical prediction representing the estimated median house value for a given income level.  For example, a prediction of $400,000 for a median income of $100,000 indicates that areas with such income levels tend to have median house values around $400,000.",
+      "target_variable_understanding": "Median house value represents the middle value of house prices in a specific area. The number of unique predictions will be numerous, as house prices respond to variations in income levels. It is a continuous variable."
+    }
+  ],
+  "created_at": "2025-04-30T21:48:09.975020",
+  "metadata": {
+    "file_path": "uploads\\california_housing_train.csv",
+    "proposal_count": 3
+  }
+}

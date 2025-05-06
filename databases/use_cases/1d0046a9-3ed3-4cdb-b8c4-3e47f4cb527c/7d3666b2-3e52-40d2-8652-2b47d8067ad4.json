@@ -1,0 +1,75 @@
+{
+  "id": "7d3666b2-3e52-40d2-8652-2b47d8067ad4",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "bank-full.csv",
+  "proposals": [
+    {
+      "title": "Predicting Housing Loan Application Approval",
+      "description": "This AI use case predicts whether a customer will be approved for a housing loan based on their demographic and financial information. A classification model will be trained on the available data, considering factors such as age, job, marital status, education, balance, and existing loan status. The model will learn patterns and relationships between these features and loan approval to make accurate predictions for new applications.",
+      "kpis": [
+        "Accuracy of loan approval prediction: Percentage of correctly classified loan applications.",
+        "Precision of loan approval prediction: Proportion of correctly predicted approvals among all predicted approvals.",
+        "Recall of loan approval prediction: Proportion of correctly predicted approvals among all actual approvals.",
+        "F1-score of loan approval prediction: Harmonic mean of precision and recall."
+      ],
+      "business_value": "Improved efficiency in loan processing, reduced manual review, and minimized risk of default by identifying high-risk applicants.",
+      "target_variable": "housing",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output 'yes' or 'no' indicating whether a customer is predicted to have a housing loan or not. For example, a prediction of 'yes' suggests a high likelihood of the customer having a housing loan, while 'no' suggests otherwise.",
+      "target_variable_understanding": "The target variable 'housing' is binary, representing whether a customer has a housing loan ('yes') or not ('no'). The model will predict one of these two outcomes for each customer."
+    },
+    {
+      "title": "Predicting Personal Loan Application Approval",
+      "description": "This use case focuses on predicting whether a customer will be approved for a personal loan.  A classification model will be trained using features such as age, job, marital status, education, balance, and existing housing loan status. The model will identify relationships between these variables and loan approval to improve the efficiency and accuracy of loan application processing.",
+      "kpis": [
+        "Accuracy of loan approval prediction: Percentage of correctly classified loan applications.",
+        "Precision of loan approval prediction: Proportion of correctly predicted approvals among all predicted approvals.",
+        "Recall of loan approval prediction: Proportion of correctly predicted approvals among all actual approvals.",
+        "AUC-ROC score: Area Under the Receiver Operating Characteristic Curve, representing the model's ability to distinguish between positive and negative classes."
+      ],
+      "business_value": "Streamlined loan application process, reduced manual effort, improved risk assessment, and enhanced customer experience.",
+      "target_variable": "loan",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model outputs 'yes' or 'no', predicting whether a customer will be approved for a personal loan.  'yes' indicates a predicted approval, and 'no' indicates a predicted rejection.",
+      "target_variable_understanding": "The target variable 'loan' is binary ('yes' or 'no'), representing whether a customer has a personal loan.  The model will predict one of these two outcomes for each customer."
+    },
+    {
+      "title": "Customer Segmentation based on Demographics and Financial Data",
+      "description": "This use case involves segmenting customers based on their age, job, marital status, education, balance, and other available attributes. A clustering algorithm will group similar customers together, revealing valuable insights into customer behavior and preferences. This can help the bank tailor marketing campaigns and product offerings to specific segments.",
+      "kpis": [
+        "Silhouette score: Measures how similar a data point is to its own cluster compared to other clusters.",
+        "Davies-Bouldin index: Measures the average similarity between each cluster and its most similar cluster.",
+        "Calinski-Harabasz index: Measures the ratio of between-cluster dispersion to within-cluster dispersion."
+      ],
+      "business_value": "Improved customer understanding, targeted marketing campaigns, personalized product recommendations, and increased customer lifetime value.",
+      "target_variable": "None",
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will assign each customer to a specific cluster, representing a segment of customers with similar characteristics. The interpretation of clusters will be based on the dominant features within each segment.",
+      "target_variable_understanding": "There is no target variable for clustering. The model aims to discover meaningful groupings within the customer data based on the provided attributes."
+    },
+    {
+      "title": "Predicting Customer Term Deposit Subscription",
+      "description": "This use case aims to predict whether a customer will subscribe to a term deposit.  A classification model will utilize variables like age, job, marital status, education, balance, housing loan, personal loan, contact method, duration of contact, campaign details, previous campaign interaction data and outcome to predict the likelihood of subscription.",
+      "kpis": [
+        "Accuracy: Percentage of correctly predicted subscriptions.",
+        "Precision: Proportion of correctly predicted subscriptions among all predicted subscriptions.",
+        "Recall: Proportion of correctly predicted subscriptions among all actual subscriptions.",
+        "F1-score: Harmonic mean of precision and recall."
+      ],
+      "business_value": "Improved marketing campaign targeting, increased term deposit subscriptions, optimized resource allocation, and enhanced revenue generation.",
+      "target_variable": "y",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model will predict 'yes' or 'no', indicating whether a customer is likely to subscribe to a term deposit. 'yes' indicates a higher probability of subscription.",
+      "target_variable_understanding": "The target variable 'y' is binary, representing whether a customer subscribed to a term deposit ('yes') or not ('no').  The model will output one of these two predictions for each customer."
+    }
+  ],
+  "created_at": "2025-05-06T20:00:14.950661",
+  "metadata": {
+    "file_path": "uploads\\bank-full.csv",
+    "proposal_count": 4
+  }
+}

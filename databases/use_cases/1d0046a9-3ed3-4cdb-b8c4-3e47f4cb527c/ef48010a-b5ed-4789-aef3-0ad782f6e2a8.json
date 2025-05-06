@@ -1,0 +1,88 @@
+{
+  "id": "ef48010a-b5ed-4789-aef3-0ad782f6e2a8",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "Rolex_sales_data.csv",
+  "proposals": [
+    {
+      "title": "Predicting Royalty Payable Amount",
+      "description": "This use case focuses on predicting the 'Royalty Payable' amount for each SKU based on existing sales data.  A regression model will be trained on features such as 'Units', 'Price', 'Return Units', and 'Royalty %' to predict the 'Royalty Payable'. This model can assist in financial planning and forecasting.",
+      "kpis": [
+        "Mean Absolute Error (MAE): Measure the average absolute difference between predicted and actual royalty payable amounts.",
+        "Root Mean Squared Error (RMSE): Quantify the average squared difference between predicted and actual royalty payable amounts, penalizing larger errors more heavily.",
+        "R-squared: Evaluate the goodness of fit of the model, indicating the proportion of variance in royalty payable explained by the model."
+      ],
+      "business_value": "Accurate royalty payable predictions improve financial forecasting, budgeting, and resource allocation.  It allows for proactive management of royalty expenses and enhances overall financial planning.",
+      "target_variable": "Royalty Payable",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a numerical prediction representing the estimated royalty payable amount. For example, a prediction of 100 means the estimated royalty payable is 100 units of currency.  Higher values indicate higher royalty payable amounts.",
+      "target_variable_understanding": "Royalty Payable represents the total amount of royalty owed for a given SKU.  Given the range of values in the dataset, the model will predict a continuous range of royalty payable amounts."
+    },
+    {
+      "title": "Sales Type Classification",
+      "description": "This use case aims to classify the 'Sales Type' based on other variables.  A classification model will be trained using features such as 'Territory', 'Channel', 'Units', and 'Price'. This model will help in understanding the factors influencing different sales types.",
+      "kpis": [
+        "Accuracy: Percentage of correctly classified sales types.",
+        "Precision: Proportion of correctly predicted sales types among all predicted instances for each sales type.",
+        "Recall: Proportion of correctly predicted sales types among all actual instances for each sales type.",
+        "F1-score:  Harmonic mean of precision and recall, providing a balanced measure of model performance."
+      ],
+      "business_value": "By understanding the factors driving sales types, the organization can optimize sales strategies, improve resource allocation, and enhance overall sales performance. This helps in targeted marketing campaigns and sales channel optimization.",
+      "target_variable": "Sales Type",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model will output a categorical prediction representing the sales type (e.g., Subscription, Direct, Reseller).  For example, a prediction of 'Direct' indicates that the model predicts that the sales transaction is a direct sale.",
+      "target_variable_understanding": "Sales Type has several categories representing different sales channels. The model will predict one of these existing categories for each input. The number of unique predictions is equal to the number of unique sales types in the dataset."
+    },
+    {
+      "title": "Predicting Net Sales",
+      "description": "This use case focuses on predicting 'Net Sales' based on other variables in the dataset.  A regression model will use features like 'Gross Sales', 'Returns', 'Units', and 'Price' to predict net sales. This can aid in sales forecasting and financial planning.",
+      "kpis": [
+        "MAE: Average absolute difference between predicted and actual net sales.",
+        "RMSE: Average squared difference between predicted and actual net sales.",
+        "R-squared: Proportion of variance in net sales explained by the model."
+      ],
+      "business_value": "Accurate net sales prediction improves financial forecasting and resource allocation. Better sales planning enables the company to make informed decisions regarding inventory management, production planning, and marketing campaigns.",
+      "target_variable": "Net Sales",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a numerical prediction representing the estimated net sales amount. For example, a prediction of 5000 means the estimated net sales revenue is 5000 units of currency. Higher values indicate higher net sales.",
+      "target_variable_understanding": "Net Sales is a continuous variable representing the sales revenue after deducting returns. The model will predict a continuous range of net sales values, depending on the range observed in the dataset."
+    },
+    {
+      "title": "Predicting Unit Sales",
+      "description": "This use case aims to predict 'Units' sold based on various product attributes. A regression model could be trained using features such as 'Product', 'Territory', 'Channel', and 'Price'. This model can be useful in inventory management and sales planning.",
+      "kpis": [
+        "MAE: Average absolute difference between predicted and actual units sold.",
+        "RMSE: Average squared difference between predicted and actual units sold.",
+        "R-squared: Proportion of variance in units sold explained by the model."
+      ],
+      "business_value": "Predicting unit sales helps in better inventory management by optimizing stock levels based on forecasted demand. This reduces storage costs and minimizes the risk of stockouts or overstocking.",
+      "target_variable": "Units",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a numerical prediction representing the estimated number of units sold. For example, a prediction of 100 means the model estimates 100 units will be sold.  Higher values indicate higher sales volume.",
+      "target_variable_understanding": "Units is a count of the number of items sold. The model will predict a continuous range of units, as the number of units can take on any positive value."
+    },
+    {
+      "title": "Predicting Return Units",
+      "description": "This use case focuses on predicting the number of 'Return Units' based on existing sales data. A regression model will be trained on features like 'Units', 'Price', 'Product', and 'Territory' to predict the number of units returned. This prediction helps in managing inventory and returns.",
+      "kpis": [
+        "MAE: Average absolute difference between predicted and actual return units.",
+        "RMSE: Average squared difference between predicted and actual return units.",
+        "R-squared: Proportion of variance in return units explained by the model."
+      ],
+      "business_value": "Accurate prediction of return units assists in managing returns effectively by allocating sufficient resources for handling returns and minimizing associated costs. This allows for more efficient inventory management and better customer satisfaction.",
+      "target_variable": "Return Units",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a numerical prediction representing the estimated number of units returned. For example, a prediction of 5 means that the model estimates that 5 units will be returned. Higher values indicate higher return rates.",
+      "target_variable_understanding": "Return Units represents the number of units returned by customers. The model will predict a range of non-negative integer values. "
+    }
+  ],
+  "created_at": "2025-04-17T13:39:56.023974",
+  "metadata": {
+    "file_path": "uploads\\Rolex_sales_data.csv",
+    "proposal_count": 5
+  }
+}

@@ -1,0 +1,17 @@
+Feature,Importance
+day_of_week,0.34294847
+rolling_mean_6,0.18298982
+rolling_mean_3,0.14805946
+rolling_std_3,0.08356584
+rolling_std_6,0.061966334
+lag_1,0.04926003
+lag_2,0.047981314
+rolling_mean_12,0.021862159
+lag_4,0.013379377
+rolling_std_12,0.0108569395
+day_of_year,0.0095311785
+lag_3,0.009024971
+lag_12,0.007055701
+year,0.0057313866
+month,0.0037062722
+quarter,0.0020807853

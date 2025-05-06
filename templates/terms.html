@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - AI Use Case Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+    <style>
+        .terms-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        
+        .terms-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .terms-section {
+            margin-bottom: 2rem;
+        }
+        
+        .terms-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .terms-section p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .terms-section ul, .terms-section ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .terms-section li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .back-btn {
+            margin-top: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress bar for page -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="container">
+        <div class="terms-container">
+            <div class="terms-header">
+                <h1>Terms of Service</h1>
+                <p>Last updated: April 14, 2025</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>1. Introduction</h2>
+                <p>Welcome to AI Use Case Generator. These Terms of Service govern your use of our website and services.</p>
+                <p>By accessing or using our service, you agree to be bound by these Terms. If you disagree with any part of the terms, you may not access the service.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>2. Accounts</h2>
+                <p>When you create an account with us, you must provide information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our service.</p>
+                <p>You are responsible for safeguarding the password that you use to access the service and for any activities or actions under your password.</p>
+                <p>You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>3. Content</h2>
+                <p>Our service allows you to upload, generate, and analyze content. You are responsible for the content that you upload, including its legality, reliability, and appropriateness.</p>
+                <p>By uploading content to our service, you grant us the right to process, store, and analyze that content for the purpose of providing our service to you.</p>
+                <p>We do not claim ownership of your content, but you grant us a license to use it in the ways necessary to provide our service.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>4. Service Usage</h2>
+                <p>You may use our service only as permitted by law and these Terms. You may not:</p>
+                <ul>
+                    <li>Use our service in any way that could harm, disable, overburden, or impair it</li>
+                    <li>Attempt to gain unauthorized access to any part of the service</li>
+                    <li>Use our service for any illegal or unauthorized purpose</li>
+                    <li>Violate any applicable laws or regulations</li>
+                </ul>
+            </div>
+            
+            <div class="terms-section">
+                <h2>5. Termination</h2>
+                <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason, including without limitation if you breach the Terms.</p>
+                <p>Upon termination, your right to use the service will immediately cease. If you wish to terminate your account, you may simply discontinue using the service.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>6. Limitation of Liability</h2>
+                <p>In no event shall AI Use Case Generator, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the service.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>7. Changes</h2>
+                <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days' notice prior to any new terms taking effect.</p>
+                <p>By continuing to access or use our service after those revisions become effective, you agree to be bound by the revised terms.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>8. Contact Us</h2>
+                <p>If you have any questions about these Terms, please contact us at support@aiusecasegenerator.com.</p>
+            </div>
+            
+            <div class="back-btn">
+                <a href="javascript:history.back()" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left"></i> Go Back
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <script>
+        // Progress bar animation
+        const progressBar = document.getElementById('progressBar');
+        function initProgressBar() {
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 10);
+        }
+        
+        // Back to top button functionality
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Initialize progress bar on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initProgressBar();
+        });
+    </script>
+</body>
+</html>

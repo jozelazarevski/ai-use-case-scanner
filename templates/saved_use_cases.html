@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">
+                <i class="fas fa-lightbulb me-2"></i>Saved AI Use Cases
+            </h1>
+            
+            {% if use_cases and use_cases|length > 0 %}
+                <div class="row">
+                    {% for use_case in use_cases %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-file-alt me-2 text-primary"></i>{{ use_case.filename }}
+                                </h5>
+                                <p class="card-text text-muted">
+                                    <small>
+                                        <i class="fas fa-calendar-alt me-1"></i>
+                                        {{ use_case.created_at | datetimeformat }}
+                                    </small>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-secondary">
+                                        {{ use_case.proposal_count }} Proposal{% if use_case.proposal_count != 1 %}s{% endif %}
+                                    </span>
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ url_for('view_use_case', use_case_id=use_case.id) }}" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye me-1"></i>View
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger delete-use-case" 
+                                                data-use-case-id="{{ use_case.id }}">
+                                            <i class="fas fa-trash me-1"></i>Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state text-center p-5 bg-light rounded">
+                    <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                    <h3>No Saved Use Cases</h3>
+                    <p class="text-muted">
+                        Upload a dataset to generate and save AI use cases.
+                    </p>
+                    <a href="{{ url_for('upload_file') }}" class="btn btn-primary mt-3">
+                        <i class="fas fa-upload me-2"></i>Upload Dataset
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('.delete-use-case').on('click', function() {
+        var useCaseId = $(this).data('use-case-id');
+        var $card = $(this).closest('.card');
+        
+        if(confirm('Are you sure you want to delete this use case?')) {
+            $.ajax({
+                url: '/delete-use-case/' + useCaseId,
+                type: 'POST',
+                success: function(response) {
+                    $card.fadeOut(300, function() {
+                        $(this).remove();
+                        
+                        // If no cards left, refresh the page to show empty state
+                        if($('.card').length === 0) {
+                            location.reload();
+                        }
+                    });
+                },
+                error: function(xhr) {
+                    alert('Error deleting use case: ' + xhr.responseText);
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

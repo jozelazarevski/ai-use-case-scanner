@@ -1,0 +1,207 @@
+{
+  "id": "8b693f77-8842-4e3b-abcd-d1f34607d68e",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "california_housing_train_expanded.csv",
+  "proposals": [
+    {
+      "title": "Predicting Median House Value Tier",
+      "description": "This AI use case aims to predict the median house value tier based on various housing characteristics.  A regression model will be trained on features like location, housing age, income, and room counts. This prediction can help real estate agencies and investors segment the market and understand price ranges in different areas.",
+      "kpis": [
+        "Accuracy of tier prediction: Percentage of correctly classified house value tiers.",
+        "Model F1-score: Measure the model's ability to correctly identify each tier.",
+        "RMSE of tier prediction: Measure the average error in tier prediction."
+      ],
+      "business_value": "Improved market segmentation, enhanced investment strategies, more accurate pricing for properties, and better resource allocation for real estate companies.",
+      "target_variable": "median_house_value_tier",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts one of the predefined tiers (e.g., Low, Medium, High). For example, a prediction of \"High\" indicates the house value falls into the highest price bracket according to the data. The number of unique predictions will be equal to the number of unique tiers in the dataset.",
+      "target variable understanding": "The target variable categorizes median house values into different tiers.  The exact number of unique tiers needs to be determined from the data, but it's likely to have three to five tiers."
+    },
+    {
+      "title": "Identifying High Median House Value",
+      "description": "This use case focuses on predicting whether a house's median value is high or not.  A classification model is trained using features from the dataset. This will aid investors and buyers in quick identification of potentially high-value properties based on input factors. The output is a binary classification indicating whether the house value is considered 'high' or not.",
+      "kpis": [
+        "Accuracy: Percentage of correctly classified high-value houses.",
+        "Precision: Ratio of correctly predicted high-value houses to all houses predicted as high-value.",
+        "Recall: Ratio of correctly predicted high-value houses to all actual high-value houses."
+      ],
+      "business_value": "Faster identification of high-value properties, optimized investment decisions, and improved targeting for luxury real estate markets.",
+      "target_variable": "median_house_value_is_high",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model outputs either 0 (not high) or 1 (high).  A prediction of 1 means the model predicts the house to be in the high-value category; 0 indicates it is not.",
+      "target variable understanding": "The target variable is a binary indicator (0 or 1) representing whether the median house value is considered 'high' based on a threshold defined in the data. The model will have two unique predictions: 0 and 1."
+    },
+    {
+      "title": "Predicting Median Income Tier",
+      "description": "This AI use case focuses on predicting the median income tier of a neighborhood. A classification model will be trained using various features.  Real estate agencies can use these predictions to target specific demographic segments and tailor marketing strategies accordingly. The predictions provide income tier classifications (e.g., Low, Medium, High).",
+      "kpis": [
+        "Accuracy of tier prediction: Percentage of correctly classified income tiers.",
+        "Precision: Percentage of correctly predicted income tiers out of all predictions.",
+        "Recall: Percentage of correctly predicted income tiers out of all actual income tiers."
+      ],
+      "business_value": "Improved market segmentation, targeted marketing campaigns, and better understanding of neighborhood demographics for real estate businesses.",
+      "target_variable": "median_income_tier",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts a median income tier (e.g., Low, Medium, High). A prediction of 'Medium' suggests the neighborhood falls into the medium income bracket. The number of unique predictions will be equal to the number of unique income tiers in the dataset.",
+      "target variable understanding": "This variable categorizes median income into several predefined tiers.  The number of unique predictions is determined by the number of unique tiers, likely three or more."
+    },
+    {
+      "title": "Predicting Housing Median Age Category",
+      "description": "This use case focuses on predicting the housing median age category. A classification model will be trained on various features to predict the housing age category. This could help urban planners and housing authorities understand the age distribution of housing stock in different areas and plan for renovations or new constructions.",
+      "kpis": [
+        "Prediction Accuracy: Proportion of correctly predicted age categories.",
+        "Precision: Proportion of correctly predicted positive cases among all positive predictions.",
+        "Recall: Proportion of correctly predicted positive cases out of all actual positive cases."
+      ],
+      "business_value": "Improved urban planning, targeted housing renovations, and better resource allocation for housing authorities.",
+      "target_variable": "housing_median_age_category",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict a housing age category (e.g., Low, Medium, High). For example, a prediction of \"High\" means the model predicts that the area has mostly older houses.",
+      "target variable understanding": "The target variable categorizes the median age of houses. The number of unique predictions depends on the number of categories defined for 'housing_median_age_category' in the dataset."
+    },
+    {
+      "title": "Predicting Total Rooms Category",
+      "description": "This use case focuses on predicting the total rooms category of a house. A classification model will be used to classify houses into different room count categories. This can assist real estate agencies in segmenting properties and matching them with potential buyers' needs and preferences.",
+      "kpis": [
+        "Accuracy: Percentage of correctly classified room categories.",
+        "F1-Score: The harmonic mean of precision and recall, giving a balanced measure of accuracy.",
+        "AUC-ROC: Area under the ROC curve, measuring the model's ability to distinguish between different room categories."
+      ],
+      "business_value": "Improved property matching, more efficient property searching and improved customer experience for real estate agencies.",
+      "target_variable": "total_rooms_category",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts a category representing the total number of rooms (e.g., Low, Medium, High). A prediction of \"High\" suggests a large number of rooms compared to others in the dataset. The number of unique predictions will correspond to the number of categories in 'total_rooms_category'.",
+      "target variable understanding": "This variable categorizes houses into several groups based on their total number of rooms. The number of unique predictions is equivalent to the number of categories in the 'total_rooms_category' column."
+    },
+    {
+      "title": "Predicting Population Category",
+      "description": "This use case aims to predict the population category of a neighborhood. A classification model will utilize available features to classify areas into different population density categories. This can assist city planners in managing resources and infrastructure development effectively.",
+      "kpis": [
+        "Accuracy: Percentage of correctly classified population categories.",
+        "Precision: Proportion of correctly identified positive cases.",
+        "Recall: Proportion of correctly identified positive cases out of all actual positive cases."
+      ],
+      "business_value": "Improved resource allocation, optimized infrastructure planning, and enhanced community management for city planning departments.",
+      "target_variable": "population_category",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts a population category (e.g., Low, Medium, High).  A prediction of 'High' signifies a densely populated area.  The unique predictions will match the number of categories used for this variable.",
+      "target variable understanding": "The target variable categorizes neighborhoods by their population size. The number of unique predictions depends on how many population categories are present in the dataset."
+    },
+    {
+      "title": "Predicting Households Category",
+      "description": "This use case focuses on predicting the households category of a neighborhood. A classification model will leverage other features. This information can assist social services organizations in allocating resources more effectively based on the number of households.",
+      "kpis": [
+        "Accuracy: Percentage of correctly classified household categories.",
+        "Precision: Ratio of correctly predicted positive cases to all positive predictions.",
+        "Recall: Ratio of correctly predicted positive cases to all actual positive cases."
+      ],
+      "business_value": "Optimized resource allocation, targeted social service delivery, and improved community support for social service organizations.",
+      "target_variable": "households_category",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts a category representing the number of households (e.g., Low, Medium, High).  A prediction of \"Medium\" indicates a moderate number of households. The number of unique predictions is the number of categories defined for this variable.",
+      "target variable understanding": "The target variable categorizes neighborhoods into different groups based on the number of households. The number of unique predictions will be determined by the number of categories in the 'households_category' column."
+    },
+    {
+      "title": "Predicting Median Income per Housing Median Age Category",
+      "description": "This use case focuses on predicting the category of median income per housing median age. A classification model will be trained to predict the categorized relationship between income and housing age. This model can help analysts and researchers understand the relationship between these two variables and identify patterns or trends.",
+      "kpis": [
+        "Accuracy: Proportion of correctly classified income-age relationship categories.",
+        "Precision: Proportion of correctly identified positive cases among all positive predictions.",
+        "Recall: Proportion of correctly identified positive cases out of all actual positive cases."
+      ],
+      "business_value": "Improved understanding of the relationship between median income and housing age, improved analysis of demographic patterns, better investment decision-making.",
+      "target_variable": "median_income_per_housing_median_age_category",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts a category representing the median income per housing median age (e.g., Low, Medium, High).  A prediction of 'High' suggests a strong positive correlation between income and age.",
+      "target variable understanding": "This variable categorizes the ratio of median income to median housing age. The number of unique predictions depends on the number of categories defined for this variable in the dataset."
+    },
+    {
+      "title": "Predicting Median Income Per Total Rooms Category",
+      "description": "This AI use case predicts the category of median income per total rooms.  A classification model will use the dataset features to predict the categorized relationship. This information can be valuable for understanding the correlation between housing size and income levels within neighborhoods.",
+      "kpis": [
+        "Accuracy: Percentage of correctly classified income per room categories.",
+        "Precision: Proportion of correctly identified positive cases among positive predictions.",
+        "Recall: Proportion of correctly identified positive cases out of all actual positive cases."
+      ],
+      "business_value": "Better understanding of the relationship between income and housing size, optimized marketing for properties based on target income groups.",
+      "target_variable": "median_income_per_total_rooms_category",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts a category representing median income per total room (e.g., Low, Medium, High).  A 'High' prediction suggests a higher income per room.",
+      "target variable understanding": "This variable categorizes the ratio of median income to total rooms. The number of unique predictions will depend on the number of categories present in this variable's column."
+    },
+    {
+      "title": "Predicting Median House Value Per Households Category",
+      "description": "This use case predicts the category of the median house value per household.  A classification model will be trained using data features to predict a category. The model can help real estate professionals understand price points relative to household density.",
+      "kpis": [
+        "Accuracy: Percentage of correctly classified categories.",
+        "Precision: Proportion of correctly predicted positive cases among positive predictions.",
+        "Recall: Proportion of correctly predicted positive cases among actual positive cases."
+      ],
+      "business_value": "Enhanced real estate investment analysis, optimized property valuation models, and improved understanding of housing market dynamics.",
+      "target_variable": "median_house_value_per_households_category",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict a category representing median house value per household (e.g., Low, Medium, High).  A 'High' prediction indicates a high house value relative to the number of households in the area.",
+      "target variable understanding": "This variable categorizes the ratio of median house value to the number of households. The number of unique predictions is determined by the number of categories defined for this variable."
+    },
+    {
+      "title": "Predicting Location Zone",
+      "description": "This use case focuses on predicting the location zone of a property. A classification model will be used to categorize properties into different zones based on various features. This information can be valuable for urban planning, resource allocation, and understanding property values in different areas.",
+      "kpis": [
+        "Accuracy: The percentage of correctly classified location zones.",
+        "Precision: The proportion of correctly predicted cases among all positive predictions.",
+        "Recall: The proportion of correctly predicted positive cases out of all actual positive cases."
+      ],
+      "business_value": "Improved urban planning, targeted resource allocation, and better understanding of spatial property value variations.",
+      "target_variable": "location_zone",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts a location zone (e.g., Peripheral, Central).  For example, a prediction of 'Central' means the model predicts the property to be in the central zone.",
+      "target variable understanding": "This variable categorizes properties into different location zones.  The number of unique predictions corresponds to the number of unique zones in the dataset."
+    },
+    {
+      "title": "Predicting Value Segment",
+      "description": "This use case aims to predict the value segment of a property based on various features. A classification model will categorize properties into different value segments. This information can assist real estate agents in better understanding the market and tailoring their services accordingly.",
+      "kpis": [
+        "Accuracy: The percentage of correctly classified value segments.",
+        "Precision: The proportion of correctly predicted positive cases among all positive predictions for each segment.",
+        "Recall: The proportion of correctly predicted positive cases out of all actual positive cases for each segment."
+      ],
+      "business_value": "Enhanced market understanding, targeted marketing strategies, and improved customer service for real estate agencies.",
+      "target_variable": "value_segment",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts a value segment (e.g., High Value, Medium Value, Low Value). A prediction of 'High Value' indicates that the model predicts the property to fall into the highest value segment.",
+      "target variable understanding": "This variable categorizes properties into different value segments.  The number of unique predictions will correspond to the number of unique segments in the dataset."
+    },
+    {
+      "title": "Predicting Median Income Standard Deviation Segment",
+      "description": "This use case aims to predict the median income standard deviation segment of a neighborhood. A classification model will be trained to predict the segment. This can help analysts understand the income distribution and variability within neighborhoods.",
+      "kpis": [
+        "Accuracy: The percentage of correctly classified segments.",
+        "Precision: Proportion of correctly predicted cases.",
+        "Recall: Proportion of correctly predicted positive cases."
+      ],
+      "business_value": "Improved understanding of income distribution within neighborhoods, better-targeted marketing campaigns, and more effective resource allocation.",
+      "target_variable": "median_income_stddev_segment",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts a segment based on the standard deviation of median income (e.g., Low, Medium, High). A prediction of 'High' would suggest high income variability in the neighborhood.",
+      "target variable understanding": "This variable categorizes neighborhoods based on the standard deviation of median income.  The number of unique predictions is determined by the number of segments defined in the dataset."
+    }
+  ],
+  "created_at": "2025-04-17T12:49:08.860651",
+  "metadata": {
+    "file_path": "uploads\\california_housing_train_expanded.csv",
+    "proposal_count": 13
+  }
+}

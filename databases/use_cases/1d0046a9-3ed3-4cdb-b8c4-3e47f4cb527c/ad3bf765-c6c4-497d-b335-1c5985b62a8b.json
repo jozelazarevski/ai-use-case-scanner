@@ -1,0 +1,57 @@
+{
+  "id": "ad3bf765-c6c4-497d-b335-1c5985b62a8b",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "winequality.csv",
+  "proposals": [
+    {
+      "title": "Wine Quality Prediction",
+      "description": "This use case aims to predict the quality of wine based on its physicochemical properties. A regression model will be trained on the provided dataset, using features like fixed acidity, volatile acidity, citric acid, residual sugar, chlorides, free sulfur dioxide, total sulfur dioxide, density, pH, sulphates, and alcohol content. The model will learn the relationships between these features and the wine quality score to predict the quality of new wines.",
+      "kpis": [
+        "Mean Absolute Error (MAE): Average absolute difference between predicted and actual wine quality scores.",
+        "Root Mean Squared Error (RMSE): Square root of the average squared difference between predicted and actual wine quality scores.",
+        "R-squared: Proportion of variance in wine quality explained by the model."
+      ],
+      "business_value": "Improved wine quality control through early identification of potential quality issues. Optimize winemaking processes for higher quality and yield.  Assist in pricing and market segmentation of wines.",
+      "target_variable": "quality",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts a numerical score representing wine quality. For example, a prediction of 6.8 indicates a wine quality score of 6.8, which can be compared to historical data to understand its relative quality.  A higher score indicates better quality.",
+      "target_variable_understanding": "The target variable 'quality' is a numerical score ranging from 3 to 8, representing the wine's quality. The number of unique predictions will depend on the model's precision and the range of quality scores present in the dataset, but it will be within the range [3,8]."
+    },
+    {
+      "title": "Wine Quality Classification (Good vs. Bad)",
+      "description": "This use case simplifies wine quality assessment by classifying wines into two categories: 'good' and 'bad'. A classification model will be trained to distinguish between high-quality and low-quality wines based on physicochemical properties. A threshold will be set on the 'quality' variable to determine the classification; for instance, wines with a quality score above 6 might be considered 'good', while those below are 'bad'.",
+      "kpis": [
+        "Accuracy: Percentage of correctly classified wines.",
+        "Precision: Proportion of correctly predicted 'good' wines out of all wines predicted as 'good'.",
+        "Recall: Proportion of correctly predicted 'good' wines out of all actual 'good' wines."
+      ],
+      "business_value": "Streamline wine quality assessment process making it simpler and faster. Facilitate quick decision-making regarding wine selection, pricing, and marketing.",
+      "target_variable": "quality",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts either 'good' or 'bad' quality.  For example, a prediction of 'good' indicates the model predicts the wine quality to be above the defined threshold (e.g., >6), while 'bad' suggests it falls below the threshold. This allows for straightforward quality assessment.",
+      "target_variable_understanding": "The target variable 'quality' is reclassified into binary categories ('good' or 'bad'). The number of unique predictions will be 2."
+    },
+    {
+      "title": "Clustering Wines by Chemical Properties",
+      "description": "This use case aims to group wines based on similarities in their physicochemical properties. An unsupervised clustering algorithm will identify distinct clusters of wines with similar characteristics.  This can reveal hidden patterns and relationships between the chemical composition and potential quality or sensory profiles. ",
+      "kpis": [
+        "Silhouette Score: Measures how similar a data point is to its own cluster compared to other clusters.",
+        "Davies-Bouldin Index: Measures the average similarity between each cluster and its most similar cluster.",
+        "Calinski-Harabasz Index: Ratio of the between-cluster dispersion matrix and the within-cluster dispersion matrix."
+      ],
+      "business_value": "Gain deeper insights into wine characteristics and potential variations within the production process. Improve understanding of wine diversity and enable better product development and differentiation strategies.",
+      "target_variable": null,
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model assigns each wine to a cluster, representing a group of wines with similar physicochemical properties. For example, cluster 1 might represent wines with high acidity and low sugar, while cluster 2 represents wines with low acidity and high sugar.",
+      "target_variable_understanding": "This is an unsupervised learning task; therefore, there is no target variable. The number of unique predictions (clusters) is determined by the algorithm and depends on the data's inherent structure."
+    }
+  ],
+  "created_at": "2025-04-30T21:45:24.399210",
+  "metadata": {
+    "file_path": "uploads\\winequality.csv",
+    "proposal_count": 3
+  }
+}

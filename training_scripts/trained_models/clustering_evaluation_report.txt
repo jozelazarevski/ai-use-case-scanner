@@ -1,0 +1,22 @@
+Clustering Evaluation Report
+==============================
+Data Source: ../uploads/bank-full.csv
+Best Model Found: DBSCAN
+Model saved to: trained_models\best_clustering_model.joblib
+
+Metrics:
+{
+    "model_type": "clustering",
+    "best_algorithm": "DBSCAN",
+    "parameters": {
+        "eps": 0.5,
+        "min_samples": 5
+    },
+    "n_clusters_found": 304,
+    "silhouette_score": 0.2651869401894985,
+    "davies_bouldin_index": 0.8498292733166654,
+    "calinski_harabasz_index": 129.59862539314435,
+    "data_file": "../uploads/bank-full.csv",
+    "n_samples_processed": 45211,
+    "n_features_processed": 51
+}

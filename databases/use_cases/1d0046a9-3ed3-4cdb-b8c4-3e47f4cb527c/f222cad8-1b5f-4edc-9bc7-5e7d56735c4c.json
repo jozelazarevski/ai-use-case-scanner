@@ -1,0 +1,57 @@
+{
+  "id": "f222cad8-1b5f-4edc-9bc7-5e7d56735c4c",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "pricerunner_aggregate.csv",
+  "proposals": [
+    {
+      "title": "Predicting Product Category Based on Merchant and Cluster",
+      "description": "This use case aims to predict the Category Label based on the Merchant ID and Cluster ID.  An AI model can learn patterns in merchant behavior and cluster characteristics to assign products to the correct category. This can assist in automating product categorization and improving data accuracy.",
+      "kpis": [
+        "Accuracy of category prediction: Percentage of products correctly assigned to their respective categories.",
+        "Reduction in manual categorization time: Percentage decrease in time spent on manually categorizing products.",
+        "Improvement in data accuracy: Reduction in the number of incorrectly categorized products."
+      ],
+      "business_value": "Automating product categorization saves time and resources, ensuring data consistency and accuracy across the platform. This leads to a more efficient and reliable product catalog.",
+      "target_variable": "Category Label",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a predicted Category Label. For example, given Merchant ID 1 and Cluster ID 1, the model might predict \"Mobile Phones\".  A probability score can also be provided, indicating the model's confidence in the prediction.",
+      "target variable understanding": "The target variable 'Category Label' represents the category a product belongs to. In this dataset, the primary category is 'Mobile Phones'. The model will predict one of the unique category labels present in the dataset."
+    },
+    {
+      "title": "Clustering Merchants Based on Product Offerings",
+      "description": "This use case involves clustering merchants based on the Cluster ID they offer.  An AI model will identify groups of merchants with similar product offerings, helping to understand market segmentation and competition. This can support targeted marketing campaigns and strategic partnerships.",
+      "kpis": [
+        "Number of distinct merchant clusters: The number of meaningful clusters identified by the model.",
+        "Silhouette score of clustering: A measure of how similar a data point is to its own cluster compared to other clusters.",
+        "Business interpretability of clusters: How easily the identified clusters can be understood and used in business decision-making."
+      ],
+      "business_value": "Understanding merchant groupings based on product offerings allows for more effective targeting of marketing campaigns and the identification of potential partnerships or competitive threats.",
+      "target_variable": "Merchant ID",
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will assign each merchant to a cluster. For example, Merchant ID 1 might be assigned to cluster A, while Merchant ID 2 is assigned to cluster B, indicating different types of product offerings.",
+      "target variable understanding": "The target variable 'Merchant ID' represents unique identifiers for different merchants. The model will group merchants into clusters based on their product offerings, resulting in a variable number of clusters."
+    },
+    {
+      "title": "Predicting Cluster Label from Product Title",
+      "description": "This use case aims to predict the Cluster Label (e.g., 'Apple iPhone 8 Plus 64GB') based solely on the Product Title.  An AI model will analyze textual patterns in product titles to infer the product's cluster. This is useful for automatically classifying new products or cleaning inconsistent data.",
+      "kpis": [
+        "Accuracy of cluster label prediction: The percentage of products correctly assigned to their respective clusters.",
+        "Precision of cluster label prediction: The proportion of correctly predicted products among all products predicted to belong to a specific cluster.",
+        "Recall of cluster label prediction: The proportion of correctly predicted products among all products that actually belong to a specific cluster."
+      ],
+      "business_value": "Accurate prediction of cluster labels from product titles improves data quality and consistency, streamlines product classification, and enables automated data processing.",
+      "target_variable": "Cluster Label",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model will output a predicted Cluster Label. For example, given the product title \"apple iphone 8 plus 64gb silver\", the model might predict \"Apple iPhone 8 Plus 64GB\".  A probability score can also be provided.",
+      "target variable understanding": "The target variable 'Cluster Label' represents the specific model and memory size of an iPhone. The number of unique predictions will be equal to the number of unique cluster labels in the dataset."
+    }
+  ],
+  "created_at": "2025-05-01T14:11:21.401254",
+  "metadata": {
+    "file_path": "uploads\\pricerunner_aggregate.csv",
+    "proposal_count": 3
+  }
+}

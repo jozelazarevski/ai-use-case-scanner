@@ -1,0 +1,20 @@
+column_type,original_column,confidence
+product_id,SKU,1.0
+product_name,Description,1.0
+string,Property,0.6
+string,Product,0.6
+string,Territory,0.6
+string,Channel,0.6
+revenue,Sales Type,1.0
+quantity,Units,1.0
+price,Price,1.0
+quantity,Return Units,1.0
+numeric,Royalty %,0.6
+string,Royalty Pay,0.6
+numeric,MONTH,0.6
+numeric,YEAR,0.6
+revenue,Gross Sales,1.0
+numeric,Returns,0.6
+quantity,Net Units,1.0
+revenue,Net Sales,1.0
+numeric,Royalty Payable,0.6

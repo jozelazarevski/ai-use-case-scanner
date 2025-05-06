@@ -1,0 +1,22 @@
+{
+  "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c": {
+    "id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+    "first_name": "Josip",
+    "last_name": "Lazarevski",
+    "email": "jozelazarevski@gmail.com",
+    "password_hash": "scrypt:32768:8:1$7OLfWCKmuzbjvfct$a52d65f5d7f1d4285729756595b6867f6b7768bc3c2fc194cf00a30a53816234b37b148625f636146ef4a6c4457f93a247503cc2757e2e65b38e0efcc8c41a5f",
+    "organization": "JCI",
+    "created_at": "2025-04-14T10:40:15.667485",
+    "updated_at": "2025-04-14T10:40:15.667485"
+  },
+  "7b220ad2-128a-4897-95ce-292abf080e40": {
+    "id": "7b220ad2-128a-4897-95ce-292abf080e40",
+    "first_name": "kire",
+    "last_name": "hajba",
+    "email": "kire.hajba@gmail.com",
+    "password_hash": "scrypt:32768:8:1$1hZhtPzQKa2bHTYV$3c083c20f6573ff92971b840be9528d8aeed388ec891b92a5bb9c29916365b6630259a5fc880ff117498c6aa0777941daf8373b74fa6bad11d30bacff61b3e06",
+    "organization": "",
+    "created_at": "2025-04-15T22:11:45.085126",
+    "updated_at": "2025-04-15T22:11:45.085126"
+  }
+}

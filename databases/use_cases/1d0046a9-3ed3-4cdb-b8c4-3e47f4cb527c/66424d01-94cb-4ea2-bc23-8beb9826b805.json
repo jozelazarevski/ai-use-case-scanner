@@ -1,0 +1,102 @@
+{
+  "id": "66424d01-94cb-4ea2-bc23-8beb9826b805",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "apartments_for_rent_classified_10K.csv",
+  "proposals": [
+    {
+      "title": "Apartment Price Prediction",
+      "description": "This use case aims to predict the rental price of an apartment based on available features.  A regression model will be trained on historical apartment data, utilizing features such as number of bedrooms, bathrooms, square footage, location (city and state), and amenities.  The model will learn the relationships between these features and the price to provide accurate price estimations for new listings or potential price adjustments for existing ones.",
+      "kpis": [
+        "Mean Absolute Error (MAE): The average absolute difference between predicted and actual prices.",
+        "Root Mean Squared Error (RMSE): The square root of the average squared difference between predicted and actual prices.",
+        "R-squared: The proportion of variance in the dependent variable explained by the model."
+      ],
+      "business_value": "Accurate price prediction helps landlords optimize rental income by setting competitive yet profitable prices.  It also assists renters in finding apartments within their budget by providing realistic price expectations.",
+      "target_variable": "price",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts a numerical value representing the estimated rental price. For example, a prediction of $1500 means the model estimates the apartment's rent to be $1500.  Higher predictions indicate higher rental price estimates.",
+      "target_variable_understanding": "The 'price' variable represents the monthly rental cost of an apartment. The number of unique predictions will depend on the range and distribution of prices in the dataset, potentially encompassing hundreds or thousands of unique price points."
+    },
+    {
+      "title": "Pet Allowance Prediction",
+      "description": "This use case focuses on predicting whether an apartment allows pets based on other listing characteristics.  A classification model will be trained to identify patterns associated with pet-friendly apartments.  Features such as the type of property, location, and amenities might indicate a higher likelihood of pet allowance.",
+      "kpis": [
+        "Accuracy: The percentage of correctly classified apartments (pet-allowed or not).",
+        "Precision: The proportion of correctly predicted pet-allowed apartments out of all predicted pet-allowed apartments.",
+        "Recall: The proportion of correctly predicted pet-allowed apartments out of all actual pet-allowed apartments."
+      ],
+      "business_value": "This helps renters quickly filter apartments based on their pet ownership, saving time and effort in their search. For landlords, it ensures consistent and transparent communication about pet policies.",
+      "target_variable": "pets_allowed",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts either \"None\" or a list of allowed pets (e.g., \"Cats,Dogs\"). A prediction of \"None\" indicates the model predicts the apartment does not allow pets; otherwise, the listed pets are allowed.",
+      "target_variable_understanding": "The 'pets_allowed' variable is categorical, indicating whether pets are allowed or not. It will have a limited number of unique predictions, likely representing categories such as 'None', 'Cats', 'Dogs', 'Cats, Dogs', etc."
+    },
+    {
+      "title": "Apartment Photo Availability Prediction",
+      "description": "This use case predicts whether an apartment listing includes photos. A classification model will be trained on various listing characteristics to determine the likelihood of having accompanying photos. Factors such as source, price range, and location could be relevant.",
+      "kpis": [
+        "Accuracy: The percentage of correctly classified apartments (with or without photos).",
+        "Precision: The proportion of correctly predicted apartments with photos out of all predicted apartments with photos.",
+        "Recall: The proportion of correctly predicted apartments with photos out of all actual apartments with photos."
+      ],
+      "business_value": "This can assist in prioritizing listings with photos for faster processing or highlighting those missing photos to encourage landlords to provide them for better user experience.",
+      "target_variable": "has_photo",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model outputs either 'Thumbnail' (indicating the presence of a photo) or 'No' (indicating no photo). A prediction of 'Thumbnail' suggests that the apartment listing has a thumbnail photo.",
+      "target_variable_understanding": "The 'has_photo' variable is binary, indicating whether a thumbnail photo is available.  It will have only two unique predictions: 'Thumbnail' and 'No'."
+    },
+    {
+      "title": "Price Type Classification",
+      "description": "This use case aims to classify the type of price (e.g., monthly, weekly) associated with an apartment listing. A classification model will be trained on characteristics such as the source of the listing, the description of the rental terms, and any other relevant data.",
+      "kpis": [
+        "Accuracy: The percentage of correctly classified price types.",
+        "Precision: The proportion of correctly predicted price types out of all predicted price types for each category.",
+        "Recall: The proportion of correctly predicted price types out of all actual price types for each category."
+      ],
+      "business_value": "Accurate price type classification ensures consistent data processing and better filtering options for renters. It helps in creating more efficient search filters and presenting relevant information.",
+      "target_variable": "price_type",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts the type of price, which will be either 'Monthly' or 'Weekly' in this dataset. For instance, a prediction of 'Weekly' indicates that the price listed refers to the weekly rental cost.",
+      "target_variable_understanding": "The 'price_type' variable is categorical, specifying whether the price is quoted monthly or weekly.  It has a very limited number of unique predictions, probably just 'Monthly' and 'Weekly'."
+    },
+    {
+      "title": "Number of Bathrooms Prediction",
+      "description": "This use case focuses on predicting the number of bathrooms in an apartment using available features.  A regression model would be trained to predict the number of bathrooms. Features like square footage, number of bedrooms, and the overall quality/type of the property might be helpful in predicting the number of bathrooms.",
+      "kpis": [
+        "Mean Absolute Error (MAE): The average absolute difference between predicted and actual number of bathrooms.",
+        "Root Mean Squared Error (RMSE): The square root of the average squared difference between predicted and actual number of bathrooms.",
+        "R-squared: The proportion of variance in the number of bathrooms explained by the model."
+      ],
+      "business_value": "Predicting the number of bathrooms can help refine search results and provide a more accurate representation of apartment characteristics. This improved accuracy leads to better user experience and satisfaction.",
+      "target_variable": "bathrooms",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model outputs a numerical value representing the predicted number of bathrooms. For example, a prediction of 1.5 indicates the model predicts 1.5 bathrooms, which could be interpreted as one full bathroom and one half-bathroom.",
+      "target_variable_understanding": "The 'bathrooms' variable is numerical, representing the number of bathrooms in an apartment. The number of unique predictions will depend on the range of bathroom counts in the data, but will likely be a relatively small set of integers or decimal values."
+    },
+    {
+      "title": "Number of Bedrooms Prediction",
+      "description": "This use case predicts the number of bedrooms in an apartment. A regression model will be trained on the available features in the dataset, such as square footage, price, and location, to predict the number of bedrooms in an apartment.",
+      "kpis": [
+        "Mean Absolute Error (MAE): The average absolute difference between predicted and actual number of bedrooms.",
+        "Root Mean Squared Error (RMSE): The square root of the average squared difference between predicted and actual number of bedrooms.",
+        "R-squared: The proportion of variance in the number of bedrooms explained by the model."
+      ],
+      "business_value": "Accurate bedroom prediction enhances search functionality and ensures that listings accurately reflect the apartment's features, contributing to user satisfaction and efficient search processes.",
+      "target_variable": "bedrooms",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a numerical value representing the predicted number of bedrooms. A prediction of 1.0 indicates that the model predicts 1 bedroom.",
+      "target_variable_understanding": "The 'bedrooms' variable represents the number of bedrooms in the apartment and is a numerical variable. The number of unique predictions will be limited to the number of unique bedroom counts present in the dataset."
+    }
+  ],
+  "created_at": "2025-04-16T19:32:52.377830",
+  "metadata": {
+    "file_path": "uploads\\apartments_for_rent_classified_10K.csv",
+    "proposal_count": 6
+  }
+}

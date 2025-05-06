@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - AI Use Case Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+    <style>
+        .privacy-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        
+        .privacy-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .privacy-section {
+            margin-bottom: 2rem;
+        }
+        
+        .privacy-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .privacy-section p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .privacy-section ul, .privacy-section ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .privacy-section li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .back-btn {
+            margin-top: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress bar for page -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="container">
+        <div class="privacy-container">
+            <div class="privacy-header">
+                <h1>Privacy Policy</h1>
+                <p>Last updated: April 14, 2025</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2>1. Introduction</h2>
+                <p>AI Use Case Generator ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our service.</p>
+                <p>We reserve the right to make changes to this Privacy Policy at any time and for any reason. We will alert you about any changes by updating the "Last updated" date of this Privacy Policy.</p>
+                <p>Please read this Privacy Policy carefully to understand our policies and practices regarding your information and how we will treat it.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2>2. Information We Collect</h2>
+                <p>We may collect information about you in a variety of ways. The information we may collect includes:</p>
+                <h3>2.1 Personal Data</h3>
+                <p>Personally identifiable information, such as your name, email address, and organization, that you voluntarily give to us when you register with our service or when you choose to participate in various activities related to our service.</p>
+                <h3>2.2 Data Files</h3>
+                <p>We collect and process the data files you upload to our service for the purpose of generating AI use cases. These files may contain various types of data, including business data, customer information, or other relevant information.</p>
+                <h3>2.3 Derivative Data</h3>
+                <p>Information our servers automatically collect when you access our service, such as your IP address, browser type, operating system, access times, and the pages you have viewed.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2>3. Use of Your Information</h2>
+                <p>We may use the information we collect about you for various purposes, including:</p>
+                <ul>
+                    <li>Creating and managing your account</li>
+                    <li>Processing your data files to generate AI use cases</li>
+                    <li>Providing you with the services and features you request</li>
+                    <li>Improving our service and identifying usage trends</li>
+                    <li>Communicating with you about updates, features, or support</li>
+                    <li>Preventing fraudulent transactions and monitoring against errors</li>
+                </ul>
+            </div>
+            
+            <div class="privacy-section">
+                <h2>4. Data Security</h2>
+                <p>We use administrative, technical, and physical security measures to help protect your personal information from unauthorized access, use, or disclosure.</p>
+                <p>However, despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against interception or other types of misuse.</p>
+                <p>The data files you upload for processing are stored temporarily and are deleted after processing or within a reasonable time period.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2>5. Data Retention</h2>
+                <p>We will retain your personal information only for as long as necessary to fulfill the purposes for which it was collected and to comply with our legal obligations.</p>
+                <p>If you wish to request that we delete your data, you can contact us at privacy@aiusecasegenerator.com.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2>6. Your Rights</h2>
+                <p>Depending on your location, you may have certain rights regarding your personal information, such as:</p>
+                <ul>
+                    <li>The right to access the personal information we have about you</li>
+                    <li>The right to request that we correct or update your personal information</li>
+                    <li>The right to request that we delete your personal information</li>
+                    <li>The right to object to or restrict certain processing of your personal information</li>
+                </ul>
+                <p>To exercise these rights, please contact us at privacy@aiusecasegenerator.com.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2>7. Children's Privacy</h2>
+                <p>Our service is not intended for use by children under the age of 13. We do not knowingly collect personal information from children under 13.</p>
+                <p>If we learn we have collected or received personal information from a child under 13 without verification of parental consent, we will delete that information.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2>8. Contact Us</h2>
+                <p>If you have questions or concerns about this Privacy Policy, please contact us at privacy@aiusecasegenerator.com.</p>
+            </div>
+            
+            <div class="back-btn">
+                <a href="javascript:history.back()" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left"></i> Go Back
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <script>
+        // Progress bar animation
+        const progressBar = document.getElementById('progressBar');
+        function initProgressBar() {
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 10);
+        }
+        
+        // Back to top button functionality
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Initialize progress bar on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initProgressBar();
+        });
+    </script>
+</body>
+</html>

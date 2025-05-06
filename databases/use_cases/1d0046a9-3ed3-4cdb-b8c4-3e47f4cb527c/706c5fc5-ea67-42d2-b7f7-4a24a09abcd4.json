@@ -1,0 +1,57 @@
+{
+  "id": "706c5fc5-ea67-42d2-b7f7-4a24a09abcd4",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "eloqua_lead_scoring_synthetic.csv",
+  "proposals": [
+    {
+      "title": "Predicting Lead Engagement Level",
+      "description": "This AI use case aims to predict the engagement level of leads based on their available characteristics.  A machine learning model will be trained on historical data containing features like email open rate, click rate, form completion count, website visits, and time on site. This model will then predict the likelihood of a lead to be classified as 'High', 'Medium', or 'Low' engagement.",
+      "kpis": [
+        "Improved lead qualification accuracy: Measure the percentage of correctly classified leads based on their engagement level.",
+        "Increased marketing ROI: Track the conversion rate of leads classified as 'High' engagement.",
+        "Optimized resource allocation: Analyze the efficiency of marketing campaigns by assessing the distribution of leads across engagement levels."
+      ],
+      "business_value": "By accurately predicting lead engagement levels, marketing teams can prioritize high-potential leads, optimize campaign strategies, and improve resource allocation, resulting in higher conversion rates and increased ROI.",
+      "target_variable": "engagement_level",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a predicted engagement level ('High', 'Medium', or 'Low') for each lead.  For example, a prediction of 'High' indicates a lead with a high probability of engaging with future marketing efforts, while 'Low' suggests a lower probability.  This allows for targeted lead nurturing and campaign optimization.",
+      "target variable understanding": "The target variable 'engagement_level' has three unique values: 'High', 'Medium', and 'Low'.  The model will predict one of these three levels for each lead, indicating the predicted level of engagement with marketing efforts."
+    },
+    {
+      "title": "Predicting Lead Score",
+      "description": "This use case leverages machine learning to predict a lead score, which represents the potential value of a lead. The model will be trained on various lead characteristics to learn patterns associated with high-scoring leads. This will provide a more accurate and automated lead scoring system.",
+      "kpis": [
+        "Improved lead scoring accuracy: Measure the correlation between predicted and actual lead scores.",
+        "Increased sales conversion rate: Track the conversion rate of leads with high predicted scores.",
+        "Reduced manual effort: Measure the time saved through automated lead scoring."
+      ],
+      "business_value": "Accurate lead scoring allows sales teams to prioritize their efforts on high-potential leads, improving sales efficiency and conversion rates.",
+      "target_variable": "score",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a numerical score for each lead, representing the predicted lead score.  A higher score indicates a higher potential value. For instance, a predicted score of 80 suggests a high-potential lead, whereas a score of 20 suggests a low-potential lead.",
+      "target variable understanding": "The target variable 'score' is a numerical value representing the lead's potential. The model will predict a continuous score value within a range, providing a relative ranking of leads."
+    },
+    {
+      "title": "Predicting Lead Conversion (Target)",
+      "description": "This use case focuses on predicting whether a lead will ultimately convert into a customer.  A classification model will be trained using historical data, utilizing features like lead source, engagement level, and lead score to identify patterns that indicate conversion success.",
+      "kpis": [
+        "Conversion rate improvement: Measure the increase in the percentage of leads converting into customers.",
+        "Marketing campaign effectiveness: Assess the effectiveness of different marketing channels by analyzing conversion rates within each channel.",
+        "Sales pipeline optimization: Analyze the improvement in sales pipeline efficiency by focusing on high-probability conversion leads."
+      ],
+      "business_value": "Predicting lead conversion allows for better resource allocation, more effective marketing campaigns, and improved sales conversion rates, directly increasing revenue.",
+      "target_variable": "target",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict the probability of a lead converting (0 or 1). A prediction of 1 indicates a high likelihood of conversion, while 0 suggests a low likelihood. For example, a probability of 0.8 suggests an 80% chance of conversion.",
+      "target variable understanding": "The target variable 'target' is a binary variable (0 or 1), indicating whether a lead converted (1) or not (0).  The model will output a probability score for each lead, representing the likelihood of conversion."
+    }
+  ],
+  "created_at": "2025-04-17T00:01:49.039526",
+  "metadata": {
+    "file_path": "uploads\\eloqua_lead_scoring_synthetic.csv",
+    "proposal_count": 3
+  }
+}

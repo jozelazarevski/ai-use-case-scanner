@@ -1,0 +1,87 @@
+{
+  "id": "d8cf2979-22cf-439d-a2fe-98ed665c1a68",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "bank-full.csv",
+  "proposals": [
+    {
+      "title": "Predicting Customer Loan Default",
+      "description": "This AI model will predict the likelihood of a customer defaulting on a loan based on their existing attributes.  The model will analyze factors such as age, job, marital status, education, balance, housing loan status, and contact information to identify patterns associated with loan defaults. This predictive capability allows the bank to proactively manage risk and minimize potential losses.",
+      "kpis": [
+        "Reduction in loan default rate: Measure the percentage decrease in loan defaults after implementing the model.",
+        "Improved loan approval process efficiency: Track the time saved in the loan approval process due to automated risk assessment.",
+        "Increased profitability from lending: Calculate the increase in profit margins from reduced loan defaults."
+      ],
+      "business_value": "By predicting loan defaults, the bank can reduce financial losses, improve risk management, and optimize loan approval processes, leading to increased profitability and enhanced decision-making.",
+      "target_variable": "default",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a probability of default (e.g., 0.2 means a 20% chance of default).  A higher probability suggests a higher risk of default. For example, a prediction of 0.8 indicates a high likelihood of default, prompting closer scrutiny or loan rejection.",
+      "target variable understanding": "The 'default' variable is a binary classification indicating whether a customer has defaulted on a credit ('yes') or not ('no'). The model will predict one of these two outcomes."
+    },
+    {
+      "title": "Predicting Housing Loan Application Approval",
+      "description": "This model will predict the likelihood of a housing loan application being approved based on applicant characteristics. Using variables like age, job, marital status, education, balance, and loan status, the model learns patterns associated with successful loan approvals. This helps streamline the application process and provide quicker feedback to applicants.",
+      "kpis": [
+        "Application processing time: Measure the reduction in time taken to process loan applications.",
+        "Accuracy of prediction: Evaluate the percentage of correctly predicted loan approvals.",
+        "Improved customer satisfaction: Track customer satisfaction scores related to the loan application process."
+      ],
+      "business_value": "Automating the prediction of housing loan approvals improves efficiency, reduces processing time, and enhances customer experience, resulting in faster loan disbursement and greater customer satisfaction.",
+      "target_variable": "housing",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts the likelihood of a housing loan application being approved ('yes' or 'no'). A 'yes' prediction indicates a higher probability of approval based on the input features.",
+      "target variable understanding": "The 'housing' variable is a binary classification indicating whether a customer has a housing loan ('yes') or not ('no'). The model will predict one of these two outcomes."
+    },
+    {
+      "title": "Predicting Customer Response to Marketing Campaigns",
+      "description": "This model will predict whether a customer will subscribe to a term deposit ('yes' or 'no') based on their demographics, financial details, and previous contact history. By analyzing data points such as age, job, marital status, balance, and the outcome of previous marketing campaigns, the model identifies key factors influencing customer responses. This allows the bank to personalize marketing campaigns and target the most promising prospects.",
+      "kpis": [
+        "Conversion rate: Measure the percentage of targeted customers who subscribe to a term deposit.",
+        "Marketing campaign ROI: Track the return on investment for marketing campaigns based on targeted customer segments.",
+        "Customer acquisition cost: Monitor the cost of acquiring new customers through targeted campaigns."
+      ],
+      "business_value": "The predictive model enables efficient allocation of marketing resources, leading to higher conversion rates, improved ROI, and reduced customer acquisition costs.",
+      "target_variable": "y",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model outputs the probability of a customer subscribing to a term deposit.  A high probability (e.g., 0.8) suggests a strong likelihood of subscription, while a low probability (e.g., 0.2) suggests a lower likelihood.",
+      "target variable understanding": "The 'y' variable indicates whether the customer subscribed to a term deposit ('yes' or 'no'). The model will predict one of these two outcomes."
+    },
+    {
+      "title": "Customer Segmentation based on Demographics and Financial Behavior",
+      "description": "This model segments customers based on their characteristics and financial habits without needing additional feature engineering.  It groups customers with similar attributes like age, job, marital status, education, balance, and loan status. This allows the bank to tailor products and services to specific customer segments.",
+      "kpis": [
+        "Customer retention rate: Measure the improvement in customer retention within each segment.",
+        "Customer lifetime value (CLTV): Calculate the increase in CLTV for each customer segment.",
+        "Sales growth within segments: Track the sales growth within each identified customer segment."
+      ],
+      "business_value": "Targeted marketing and product offerings lead to improved customer retention, increased CLTV, and higher sales across different customer segments.",
+      "target_variable": "job",
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will assign each customer to a specific cluster (e.g., cluster 1, cluster 2, etc.), representing a customer segment with similar characteristics. Customers in the same cluster exhibit similar behavior or attributes.",
+      "target variable understanding": "While 'job' is used as the target for clustering, the model will group customers based on multiple features, creating segments characterized by similar job types as well as other variables, such as age or balance."
+    },
+    {
+      "title": "Predicting the Duration of Customer Interactions",
+      "description": "This model predicts the duration of customer service interactions using variables such as age, job, marital status, balance, contact method and day of the week.  By identifying factors influencing call length, the bank can optimize staffing levels and improve customer service efficiency.",
+      "kpis": [
+        "Average handling time (AHT): Measure the reduction in average call duration.",
+        "Customer satisfaction score (CSAT): Assess the impact of reduced call times on customer satisfaction.",
+        "Staff efficiency: Analyze the improvement in staff productivity due to optimized call handling."
+      ],
+      "business_value": "Improved call center efficiency leads to cost savings, increased staff productivity and better customer satisfaction.",
+      "target_variable": "duration",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts the interaction duration in seconds (e.g., a prediction of 300 seconds indicates a 5-minute call).  Shorter predicted durations suggest more efficient interactions.",
+      "target variable understanding": "The 'duration' variable represents the length of a customer interaction in seconds. The model will produce a continuous numeric prediction indicating call duration."
+    }
+  ],
+  "created_at": "2025-04-30T21:43:02.772069",
+  "metadata": {
+    "file_path": "uploads\\bank-full.csv",
+    "proposal_count": 5
+  }
+}

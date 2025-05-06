@@ -1,0 +1,173 @@
+ .login-card {
+            max-width: 500px;
+            margin: 40px auto;
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .card-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--dark-text);
+        }
+
+        .card-header p {
+            margin-top: 0.5rem;
+            color: var(--medium-text);
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            transition: border-color 0.2s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(93, 95, 239, 0.1);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 0.75rem;
+            right: 1rem;
+            color: var(--medium-text);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me input {
+            margin-right: 0.5rem;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: var(--medium-text);
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+
+        .divider span {
+            padding: 0 1rem;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .social-btn:hover {
+            background-color: #f8f9fa;
+        }
+
+        .social-btn i {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        .google-btn i {
+            color: #DB4437;
+        }
+
+        .github-btn i {
+            color: #333;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--medium-text);
+        }
+
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .flash-messages {
+            margin-bottom: 1rem;
+        }

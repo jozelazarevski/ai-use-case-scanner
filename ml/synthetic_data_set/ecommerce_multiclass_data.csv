@@ -1,0 +1,1501 @@
+age,gender,location,time_on_site,pages_visited,num_purchases,customer_rating,product_id,category_id,price,discount,in_stock,delivery_time,user_id,device_type,session_duration,orders_completed,support_interactions,marketing_channel,target
+28,Female,Suburban,45,21,2,2,293,5,321,0,True,9,814,Mobile,3346,7,0,Social Media,0
+22,Female,Suburban,600,11,2,2,321,9,221,0,False,8,24,Desktop,2552,1,4,Paid Ads,0
+59,Other,Suburban,552,47,0,1,384,9,125,0,False,9,1608,Tablet,378,12,5,Paid Ads,0
+34,Other,Suburban,287,34,2,3,250,8,82,0,True,1,1256,Mobile,1061,11,5,Email,0
+37,Female,Suburban,494,25,18,1,377,13,345,0,True,4,1193,Desktop,3160,15,2,Social Media,0
+54,Female,Urban,293,30,16,2,49,10,192,0,True,1,1741,Desktop,2349,10,1,Organic Search,0
+19,Male,Rural,473,43,13,2,362,16,99,0,True,10,533,Mobile,2249,3,4,Email,0
+27,Other,Rural,101,19,19,2,45,8,186,0,False,8,500,Desktop,216,8,0,Social Media,0
+55,Male,Rural,293,28,0,5,9,8,204,0,True,5,197,Desktop,2345,10,1,Email,0
+37,Male,Suburban,78,9,19,4,103,3,269,0,True,4,1102,Mobile,2765,15,2,Email,2
+26,Other,Suburban,105,28,11,1,327,2,282,0,False,7,1840,Desktop,2662,0,4,Social Media,0
+59,Other,Rural,174,33,2,4,42,9,290,0,False,10,1499,Mobile,1337,1,5,Social Media,0
+55,Male,Urban,361,18,14,4,239,16,46,0,True,3,1856,Tablet,438,0,3,Paid Ads,2
+48,Female,Suburban,595,20,2,1,376,15,443,0,True,8,919,Desktop,2086,11,1,Paid Ads,0
+41,Male,Urban,541,30,5,5,421,18,86,0,False,4,255,Tablet,3364,4,2,Email,0
+40,Female,Urban,536,27,6,5,3,7,451,0,False,10,1647,Mobile,3195,6,5,Organic Search,0
+56,Other,Suburban,532,32,19,1,267,13,250,0,False,7,1120,Desktop,2280,2,0,Paid Ads,0
+42,Other,Rural,150,39,5,2,49,2,237,0,True,8,1510,Desktop,1002,14,0,Email,1
+35,Female,Suburban,388,43,9,3,389,18,297,0,False,1,856,Mobile,1921,3,1,Organic Search,0
+64,Other,Suburban,596,23,12,1,397,7,470,0,False,2,1091,Tablet,989,4,4,Social Media,0
+55,Female,Suburban,322,27,0,1,305,4,383,0,True,3,1011,Tablet,2729,0,3,Email,0
+50,Female,Urban,212,10,7,3,80,19,406,0,True,3,1818,Tablet,1362,6,0,Email,1
+20,Male,Suburban,168,24,17,5,5,5,201,0,True,4,798,Tablet,2180,13,2,Email,2
+33,Male,Suburban,316,7,13,4,295,2,187,0,False,6,28,Tablet,2409,0,1,Paid Ads,2
+34,Other,Urban,236,38,6,2,56,3,86,0,True,5,1651,Desktop,1497,0,2,Social Media,1
+47,Female,Rural,506,35,1,5,222,3,111,0,False,2,1651,Mobile,310,5,2,Email,0
+46,Male,Suburban,196,34,1,4,115,12,371,0,True,8,666,Mobile,1028,5,1,Email,0
+60,Other,Suburban,249,22,15,1,199,7,32,0,True,4,1995,Tablet,1100,8,1,Email,0
+22,Female,Urban,258,21,0,2,297,10,348,0,False,5,597,Desktop,509,12,4,Social Media,0
+18,Other,Urban,346,27,8,5,379,11,26,0,True,3,177,Desktop,1903,14,5,Organic Search,2
+30,Other,Urban,279,36,17,3,42,5,379,0,False,2,1205,Tablet,2297,10,5,Paid Ads,0
+34,Female,Rural,556,38,5,3,258,16,187,0,True,5,1462,Tablet,2670,4,1,Organic Search,1
+37,Other,Urban,580,29,20,2,348,11,359,0,False,10,183,Mobile,1658,1,2,Organic Search,0
+66,Female,Rural,127,41,20,2,327,15,71,0,False,2,693,Tablet,784,5,2,Social Media,0
+18,Female,Urban,468,1,1,3,210,0,157,0,True,9,1214,Desktop,3344,2,1,Organic Search,0
+44,Male,Rural,183,47,14,2,493,5,16,0,True,6,696,Mobile,3211,3,1,Organic Search,0
+62,Male,Suburban,93,12,10,2,123,15,153,0,False,2,662,Mobile,270,14,3,Social Media,0
+67,Male,Suburban,435,37,20,1,118,13,156,0,False,8,816,Desktop,2281,0,3,Email,0
+46,Other,Urban,471,9,2,1,271,6,387,0,True,6,1903,Tablet,1778,2,3,Paid Ads,0
+66,Female,Rural,234,48,20,4,347,10,17,0,False,3,1460,Desktop,547,2,0,Social Media,2
+62,Male,Rural,382,34,11,5,68,5,313,0,False,10,585,Mobile,152,3,2,Paid Ads,2
+34,Other,Urban,334,20,14,5,192,15,110,0,True,7,1903,Mobile,3037,0,0,Organic Search,2
+56,Male,Urban,15,32,15,4,69,8,192,0,True,7,696,Desktop,2006,11,1,Social Media,2
+69,Other,Urban,232,50,6,5,456,12,187,0,False,5,653,Desktop,1358,15,5,Social Media,0
+49,Female,Rural,421,21,2,5,237,13,463,0,False,6,850,Mobile,2599,13,5,Email,0
+70,Male,Rural,196,12,13,4,299,18,131,0,False,3,1390,Tablet,1135,8,0,Social Media,2
+30,Female,Rural,320,25,1,1,1,11,102,0,False,10,813,Tablet,664,4,3,Email,0
+69,Other,Suburban,447,27,5,4,474,15,315,0,True,2,1208,Desktop,229,6,4,Organic Search,0
+35,Female,Suburban,238,27,16,5,193,3,113,0,True,2,1645,Mobile,961,11,4,Email,2
+24,Other,Rural,71,32,4,1,203,5,262,0,True,6,760,Tablet,2718,2,5,Paid Ads,0
+67,Other,Urban,399,50,20,3,207,13,452,0,False,10,210,Tablet,1011,2,1,Paid Ads,0
+54,Other,Rural,125,28,7,1,413,15,375,0,False,2,1074,Tablet,3589,3,4,Organic Search,0
+61,Female,Suburban,48,31,0,1,340,6,185,0,False,4,1796,Desktop,3296,0,2,Paid Ads,0
+25,Male,Urban,119,10,0,2,404,8,409,0,False,1,77,Tablet,651,3,1,Organic Search,0
+58,Other,Urban,587,27,19,1,337,16,455,0,True,4,904,Tablet,1516,4,3,Social Media,0
+58,Male,Urban,338,9,9,1,409,8,385,0,True,10,1528,Tablet,3115,8,1,Paid Ads,0
+67,Other,Rural,259,26,6,1,305,10,429,0,True,3,1499,Desktop,421,3,5,Paid Ads,0
+52,Other,Urban,462,11,6,2,35,0,422,0,True,7,213,Desktop,259,3,4,Organic Search,1
+58,Male,Suburban,528,34,5,5,403,18,344,0,False,3,548,Tablet,775,2,3,Email,0
+59,Male,Suburban,256,14,8,5,210,14,421,0,True,5,72,Mobile,473,10,0,Email,2
+60,Male,Urban,585,38,0,5,20,17,498,0,False,7,672,Desktop,1533,14,2,Social Media,0
+44,Other,Urban,481,26,15,1,186,14,495,0,True,10,590,Tablet,2244,0,4,Paid Ads,0
+41,Female,Suburban,292,11,1,3,184,14,58,0,True,4,570,Tablet,2074,9,0,Organic Search,0
+49,Male,Urban,307,42,9,5,429,6,190,0,True,1,1818,Tablet,1855,0,2,Email,2
+41,Female,Rural,516,33,2,1,261,7,110,0,True,7,1673,Tablet,3203,8,3,Paid Ads,0
+45,Other,Suburban,171,46,14,5,342,7,463,0,False,9,990,Desktop,2324,0,3,Social Media,2
+20,Female,Urban,550,23,5,5,241,6,416,0,False,5,300,Tablet,1360,15,5,Social Media,0
+48,Male,Rural,19,2,4,1,168,13,200,0,True,8,1649,Desktop,1961,3,4,Paid Ads,0
+64,Other,Rural,17,24,18,2,254,6,138,0,False,1,1569,Desktop,258,4,1,Email,0
+20,Other,Rural,282,48,5,4,133,13,421,0,False,10,830,Tablet,1034,15,3,Email,0
+47,Male,Rural,558,16,20,5,372,14,148,0,True,6,250,Tablet,687,0,5,Paid Ads,2
+44,Female,Rural,404,21,2,3,26,2,413,0,True,3,530,Desktop,3560,3,1,Paid Ads,0
+37,Other,Rural,488,47,20,3,413,17,456,0,False,10,1761,Mobile,3153,7,3,Organic Search,0
+65,Male,Rural,414,22,0,5,443,19,283,0,True,10,1547,Tablet,1276,14,3,Paid Ads,0
+46,Male,Urban,168,8,4,3,358,5,339,0,True,3,49,Mobile,1333,4,4,Organic Search,1
+40,Other,Urban,481,35,12,4,96,16,23,0,False,8,1734,Tablet,1022,5,5,Organic Search,2
+55,Female,Suburban,552,30,3,4,206,7,97,0,True,7,369,Mobile,1487,5,2,Organic Search,0
+29,Other,Urban,353,21,2,3,166,15,233,0,True,5,375,Mobile,1272,15,2,Organic Search,0
+61,Other,Suburban,56,46,7,2,240,13,424,0,True,1,525,Desktop,1444,6,4,Email,1
+53,Female,Urban,427,40,13,3,186,6,351,0,True,1,1392,Tablet,3079,6,4,Email,0
+48,Male,Rural,557,43,0,4,214,10,333,0,True,10,888,Tablet,1550,0,2,Social Media,0
+30,Other,Urban,506,37,11,3,424,0,215,0,True,10,353,Mobile,3279,8,4,Social Media,0
+60,Female,Suburban,479,3,14,1,246,16,409,0,True,4,1529,Tablet,3322,7,5,Email,0
+48,Male,Suburban,123,13,17,2,57,3,22,0,True,3,738,Tablet,2069,5,0,Social Media,0
+45,Male,Urban,343,26,17,2,69,17,359,0,True,3,1965,Mobile,3165,5,2,Email,0
+45,Other,Rural,103,24,5,5,140,19,113,0,True,10,782,Mobile,1202,11,4,Email,0
+42,Other,Urban,594,2,12,1,263,0,245,0,True,2,501,Desktop,2192,11,0,Organic Search,0
+68,Other,Rural,500,43,4,3,356,5,319,0,False,10,329,Mobile,3206,12,1,Paid Ads,1
+55,Male,Urban,236,46,20,2,1,11,107,0,True,9,1128,Mobile,1704,11,0,Social Media,0
+18,Other,Suburban,484,3,1,3,428,18,327,0,True,3,1170,Mobile,2220,11,4,Paid Ads,0
+47,Female,Urban,428,19,3,2,228,2,398,0,True,4,1155,Desktop,2978,3,5,Email,1
+23,Female,Suburban,388,9,17,5,47,8,86,0,False,1,1177,Mobile,2125,13,5,Email,2
+55,Male,Rural,181,25,14,3,434,0,24,0,False,7,1254,Mobile,1008,14,4,Paid Ads,0
+34,Female,Suburban,541,19,12,4,188,6,425,0,True,2,254,Mobile,449,0,0,Social Media,2
+25,Male,Rural,523,26,4,3,451,2,31,0,True,2,113,Tablet,2029,2,1,Organic Search,1
+33,Female,Urban,146,22,7,1,496,5,283,0,True,2,1637,Desktop,3363,7,0,Social Media,0
+43,Other,Suburban,421,29,2,5,22,0,11,0,True,8,448,Tablet,2593,3,0,Email,0
+40,Female,Rural,203,15,18,4,225,5,305,0,False,2,449,Desktop,1152,10,4,Email,2
+52,Female,Suburban,579,28,6,5,347,5,361,0,False,4,1708,Mobile,97,15,2,Social Media,0
+66,Female,Rural,75,33,20,5,304,15,429,0,False,4,1248,Desktop,1423,3,5,Paid Ads,2
+65,Female,Urban,474,22,6,3,119,19,367,0,True,9,1671,Desktop,1751,8,2,Organic Search,1
+67,Female,Urban,397,1,10,5,28,2,300,0,True,5,626,Mobile,196,10,0,Social Media,2
+22,Female,Suburban,132,7,18,3,118,7,453,0,True,2,1405,Tablet,641,9,1,Paid Ads,0
+28,Other,Rural,47,7,3,4,65,12,393,0,True,6,1802,Desktop,691,11,2,Organic Search,0
+26,Female,Urban,490,11,3,2,240,14,75,0,False,2,1608,Tablet,1996,8,0,Social Media,1
+28,Female,Rural,588,48,10,2,464,8,380,0,True,3,1818,Mobile,1400,5,3,Social Media,0
+38,Male,Suburban,531,11,4,5,402,13,361,0,False,8,1998,Desktop,2889,6,3,Organic Search,0
+31,Other,Rural,418,12,3,3,475,19,385,0,True,5,866,Mobile,194,13,3,Paid Ads,1
+34,Male,Rural,519,4,13,3,469,2,456,0,False,5,1108,Desktop,774,4,3,Paid Ads,0
+58,Other,Rural,121,35,7,4,9,13,70,0,True,4,169,Tablet,2950,13,0,Social Media,0
+46,Male,Urban,184,42,11,2,420,7,327,0,True,1,778,Desktop,2885,10,4,Social Media,0
+28,Male,Suburban,386,30,3,3,385,6,362,0,True,4,902,Desktop,3303,14,0,Paid Ads,1
+57,Female,Rural,231,42,3,1,439,2,278,0,False,3,605,Tablet,3176,1,4,Paid Ads,0
+54,Female,Rural,447,47,15,2,332,1,426,0,False,5,138,Tablet,1724,9,5,Email,0
+57,Female,Suburban,477,44,9,1,170,6,250,0,False,3,929,Tablet,3281,2,2,Social Media,0
+55,Female,Rural,469,22,13,4,450,9,307,0,False,5,805,Tablet,1380,0,1,Social Media,2
+56,Other,Suburban,599,25,12,2,232,1,296,0,False,4,379,Tablet,3418,15,4,Organic Search,0
+32,Male,Suburban,457,46,5,4,375,2,311,0,False,9,1606,Desktop,2449,3,1,Organic Search,0
+61,Male,Urban,314,26,17,3,367,4,450,0,True,2,1910,Mobile,1424,1,3,Social Media,0
+64,Male,Urban,129,18,1,5,336,15,482,0,True,3,1698,Tablet,2032,14,3,Email,0
+59,Other,Rural,419,3,19,3,475,5,460,0,True,6,34,Mobile,3511,4,1,Email,0
+59,Other,Suburban,447,47,2,5,268,3,29,0,True,7,185,Tablet,1966,8,4,Email,0
+27,Female,Rural,502,27,13,1,269,11,72,0,True,9,343,Desktop,3461,9,0,Organic Search,0
+33,Male,Rural,338,12,7,3,128,15,242,0,False,4,401,Desktop,1644,5,2,Email,1
+32,Female,Rural,25,45,8,2,135,4,475,0,False,10,1268,Desktop,1982,4,1,Organic Search,0
+29,Other,Rural,168,14,19,1,357,13,123,0,False,6,1449,Desktop,3300,9,3,Social Media,0
+65,Other,Suburban,448,14,2,3,360,13,203,0,False,7,305,Tablet,1552,8,0,Social Media,0
+67,Male,Suburban,203,34,3,2,371,10,404,0,False,10,1857,Desktop,1497,11,4,Paid Ads,1
+52,Other,Rural,289,19,19,1,0,6,494,0,True,9,1162,Mobile,1857,3,0,Social Media,0
+19,Female,Suburban,159,1,3,1,23,3,261,0,True,7,344,Desktop,1701,15,3,Organic Search,0
+25,Male,Urban,298,10,7,2,60,8,468,0,True,5,1493,Desktop,706,8,0,Organic Search,1
+68,Male,Rural,389,46,20,5,384,16,144,0,True,4,238,Tablet,1312,1,0,Organic Search,2
+48,Other,Rural,573,17,9,4,196,9,37,0,False,8,284,Mobile,175,8,3,Email,2
+28,Female,Urban,411,10,18,2,150,3,466,0,True,2,782,Tablet,811,10,1,Social Media,0
+65,Male,Suburban,60,50,10,4,427,9,311,0,False,2,285,Tablet,1799,1,5,Email,2
+54,Male,Rural,259,21,15,2,419,2,247,0,True,6,1843,Mobile,2153,14,1,Email,0
+62,Female,Suburban,234,28,15,2,206,15,352,0,True,6,647,Mobile,1773,3,1,Organic Search,0
+52,Other,Rural,179,17,14,3,480,15,250,0,False,9,1402,Tablet,1542,10,0,Organic Search,0
+58,Female,Urban,265,4,2,1,76,6,361,0,True,4,1631,Tablet,1969,0,5,Paid Ads,0
+55,Female,Suburban,541,9,4,3,322,2,56,0,True,8,1149,Desktop,3108,15,2,Email,1
+59,Other,Suburban,545,46,4,2,443,11,396,0,False,5,429,Mobile,2310,13,2,Email,1
+68,Male,Suburban,86,1,6,3,494,9,16,0,True,10,543,Mobile,1314,7,2,Organic Search,1
+56,Male,Urban,38,46,12,3,79,15,138,0,False,2,58,Tablet,1151,6,4,Paid Ads,0
+65,Female,Rural,428,6,0,1,344,17,298,0,False,10,569,Tablet,1657,10,2,Paid Ads,0
+21,Male,Urban,257,15,10,2,38,16,309,0,False,9,1778,Tablet,395,2,5,Email,0
+36,Other,Suburban,267,29,0,5,26,0,137,0,False,1,1956,Mobile,1273,6,4,Paid Ads,0
+62,Male,Suburban,459,16,18,5,282,18,417,0,True,2,1342,Tablet,1404,13,3,Social Media,2
+56,Male,Urban,118,31,1,4,235,11,124,0,True,1,801,Mobile,1963,15,1,Paid Ads,0
+54,Male,Suburban,208,13,13,5,495,14,281,0,True,1,1571,Tablet,1687,8,4,Organic Search,2
+46,Female,Rural,220,44,0,4,169,7,371,0,True,7,619,Mobile,484,2,0,Organic Search,0
+45,Other,Rural,100,16,15,1,31,1,433,0,False,4,158,Desktop,1969,7,2,Email,0
+38,Other,Urban,140,28,3,4,383,4,316,0,False,5,562,Mobile,3592,6,0,Email,0
+38,Female,Urban,519,9,11,2,52,5,70,0,False,2,455,Mobile,452,12,2,Social Media,0
+38,Other,Rural,103,49,4,4,160,19,86,0,False,7,1068,Tablet,441,11,2,Email,0
+33,Other,Rural,357,17,9,5,17,9,496,0,True,9,880,Desktop,1899,4,4,Email,2
+31,Male,Urban,289,2,3,4,279,5,170,0,True,9,1848,Mobile,2280,12,4,Email,0
+27,Male,Urban,254,48,19,5,360,7,104,0,False,10,114,Desktop,3562,0,1,Organic Search,2
+56,Other,Rural,137,3,17,5,239,4,445,0,False,9,1500,Mobile,2472,9,2,Paid Ads,2
+54,Male,Urban,175,19,3,5,200,3,115,0,True,5,505,Desktop,873,4,1,Organic Search,0
+47,Other,Urban,542,18,12,5,347,4,85,0,False,2,1145,Desktop,3238,7,5,Organic Search,2
+56,Male,Urban,329,28,5,3,180,10,131,0,False,5,1338,Desktop,1854,14,3,Social Media,1
+48,Other,Urban,136,17,20,2,164,19,335,0,True,5,1,Desktop,1773,15,1,Organic Search,0
+25,Other,Rural,34,35,13,3,219,8,31,0,True,5,560,Desktop,1958,5,4,Organic Search,0
+41,Male,Rural,330,14,15,5,396,15,478,0,True,5,305,Desktop,2586,14,5,Paid Ads,2
+68,Male,Urban,54,34,4,4,221,2,70,0,True,9,1966,Tablet,1951,4,4,Paid Ads,0
+51,Other,Urban,127,22,20,1,435,1,75,0,False,2,335,Mobile,202,6,0,Email,0
+36,Other,Urban,181,47,9,2,481,8,96,0,True,7,1828,Mobile,1737,14,3,Email,0
+30,Male,Rural,290,21,0,4,288,9,399,0,True,7,652,Mobile,131,12,1,Social Media,0
+67,Male,Suburban,451,36,1,5,481,19,345,0,True,2,731,Mobile,2364,9,4,Organic Search,0
+56,Female,Suburban,199,43,14,2,418,13,317,0,False,3,1531,Mobile,2539,3,4,Paid Ads,0
+53,Other,Suburban,227,19,3,4,216,9,395,0,True,4,1588,Tablet,409,10,2,Email,0
+31,Female,Urban,325,45,18,1,311,17,209,0,True,1,1634,Desktop,2541,0,1,Social Media,0
+38,Male,Rural,159,12,20,1,26,12,393,0,False,3,1199,Tablet,183,3,5,Email,0
+26,Other,Suburban,219,33,2,1,152,11,188,0,True,2,1991,Desktop,3549,13,1,Organic Search,0
+35,Other,Suburban,315,8,0,4,8,11,198,0,True,8,1005,Mobile,2120,3,0,Social Media,0
+57,Female,Urban,59,25,11,2,237,1,459,0,True,6,1911,Mobile,814,5,4,Social Media,0
+57,Male,Suburban,577,13,12,4,396,13,467,0,True,9,440,Desktop,2541,7,2,Paid Ads,2
+49,Other,Rural,531,27,0,2,284,2,39,0,False,1,1600,Mobile,2246,10,5,Organic Search,0
+52,Male,Urban,264,4,9,2,169,12,474,0,False,4,1944,Mobile,814,13,2,Email,0
+32,Other,Urban,18,25,10,3,436,4,478,0,True,8,1071,Desktop,3155,10,0,Paid Ads,0
+22,Other,Rural,236,14,5,5,341,17,33,0,False,3,948,Tablet,2022,13,1,Organic Search,0
+40,Male,Urban,131,41,4,4,206,9,470,0,True,4,736,Tablet,1959,14,4,Paid Ads,0
+47,Female,Suburban,60,31,14,2,141,16,403,0,False,10,1145,Desktop,841,11,5,Social Media,0
+36,Other,Urban,288,39,20,1,356,18,354,0,False,10,705,Mobile,662,0,0,Social Media,0
+31,Male,Urban,430,31,3,5,450,4,350,0,True,8,1636,Mobile,1818,0,4,Paid Ads,0
+43,Other,Suburban,354,18,0,1,159,17,150,0,True,6,881,Desktop,2453,5,4,Paid Ads,0
+31,Other,Rural,146,38,5,2,416,18,216,0,True,2,1746,Tablet,1534,8,2,Organic Search,1
+56,Female,Rural,270,19,15,2,28,14,228,0,True,2,1901,Mobile,995,0,1,Social Media,0
+54,Female,Suburban,540,21,2,2,318,1,11,0,True,8,1998,Mobile,1505,1,4,Paid Ads,0
+60,Female,Suburban,326,29,7,4,259,17,281,0,True,3,1288,Desktop,3239,14,4,Organic Search,0
+44,Female,Urban,209,2,14,5,211,4,115,0,True,4,814,Tablet,2287,14,0,Social Media,2
+68,Male,Suburban,452,25,7,4,30,6,397,0,True,10,754,Tablet,2135,10,3,Paid Ads,0
+21,Male,Urban,345,40,11,4,401,11,156,0,False,5,361,Desktop,1012,1,2,Social Media,2
+20,Other,Suburban,102,33,8,5,479,9,106,0,False,8,250,Mobile,1089,10,1,Email,2
+22,Other,Rural,596,27,16,1,171,12,471,0,True,10,51,Desktop,2212,1,3,Paid Ads,0
+30,Other,Suburban,227,32,15,4,90,16,200,0,True,8,51,Desktop,1241,5,0,Social Media,2
+67,Male,Urban,543,21,10,1,40,15,441,0,True,4,692,Desktop,2216,13,4,Paid Ads,0
+35,Other,Suburban,304,13,4,4,229,14,412,0,False,7,1901,Mobile,3198,5,4,Email,0
+59,Male,Urban,556,4,16,1,401,10,209,0,True,3,702,Tablet,1470,8,3,Paid Ads,0
+39,Female,Suburban,277,36,8,4,139,2,245,0,True,2,860,Desktop,2991,8,5,Email,2
+51,Other,Rural,240,10,17,1,81,9,147,0,False,5,1721,Desktop,1893,7,2,Paid Ads,0
+38,Female,Rural,214,35,18,4,10,8,147,0,False,2,1301,Desktop,2145,5,4,Organic Search,2
+34,Other,Rural,550,43,10,2,277,17,299,0,False,2,1618,Desktop,3530,4,0,Email,0
+42,Other,Rural,127,43,10,5,201,17,92,0,True,4,116,Mobile,3581,4,5,Paid Ads,2
+27,Male,Suburban,13,48,14,1,361,9,258,0,False,7,1879,Tablet,3477,0,2,Email,0
+36,Female,Rural,352,49,18,3,146,17,129,0,False,7,728,Desktop,3445,2,5,Social Media,0
+50,Female,Rural,522,40,3,5,392,7,50,0,False,6,466,Mobile,1447,10,2,Paid Ads,0
+31,Female,Rural,477,42,20,1,466,5,96,0,True,9,1493,Mobile,955,15,4,Email,0
+63,Other,Suburban,21,36,17,5,251,8,293,0,False,8,555,Desktop,848,15,0,Email,2
+49,Male,Urban,454,47,5,2,77,16,388,0,False,1,576,Mobile,1813,7,5,Email,1
+56,Female,Urban,104,31,3,1,85,10,262,0,False,8,46,Mobile,509,9,1,Email,0
+50,Female,Suburban,67,10,19,2,39,9,403,0,False,6,1369,Mobile,745,3,4,Organic Search,0
+31,Male,Urban,512,32,6,3,485,2,216,0,False,8,1475,Desktop,1181,11,3,Email,1
+44,Female,Urban,555,45,2,2,360,2,220,0,False,9,323,Mobile,827,2,1,Paid Ads,0
+50,Male,Rural,548,32,16,4,363,7,456,0,True,5,874,Desktop,3445,11,5,Organic Search,2
+26,Female,Suburban,320,47,11,4,351,18,250,0,False,10,1089,Desktop,3209,3,2,Social Media,2
+49,Other,Rural,161,33,17,2,443,4,91,0,False,5,1201,Desktop,1120,6,1,Organic Search,0
+46,Male,Urban,260,24,19,5,43,13,349,0,True,10,1682,Desktop,1451,0,5,Organic Search,2
+69,Other,Suburban,226,24,20,3,416,19,441,0,False,3,122,Mobile,2565,12,1,Social Media,0
+28,Other,Rural,434,37,20,1,469,3,388,0,True,8,282,Desktop,113,8,5,Email,0
+34,Female,Rural,477,31,8,2,397,3,235,0,False,4,1193,Tablet,2830,1,1,Social Media,0
+57,Male,Suburban,570,5,18,4,93,5,170,0,False,9,940,Mobile,764,4,0,Paid Ads,2
+43,Other,Rural,96,36,9,1,17,7,245,0,True,8,697,Mobile,1254,14,0,Email,0
+63,Female,Rural,417,35,2,4,476,3,376,0,False,4,494,Desktop,2093,9,4,Email,0
+56,Other,Suburban,513,34,8,4,210,11,494,0,False,10,1102,Mobile,487,11,5,Email,2
+56,Male,Suburban,219,40,1,3,378,1,470,0,True,6,1688,Mobile,546,15,5,Email,0
+47,Male,Suburban,486,19,9,1,409,14,274,0,True,2,311,Mobile,977,3,2,Social Media,0
+45,Female,Suburban,149,10,4,2,137,6,141,0,True,3,249,Tablet,2875,2,4,Social Media,1
+37,Other,Urban,234,19,0,5,193,6,225,0,False,1,504,Tablet,363,7,1,Organic Search,0
+25,Female,Urban,466,41,5,1,413,19,152,0,False,1,902,Mobile,2348,12,4,Paid Ads,0
+19,Male,Urban,199,21,20,2,392,14,318,0,False,1,805,Desktop,485,11,0,Paid Ads,0
+60,Other,Rural,41,12,6,1,382,5,307,0,True,5,250,Tablet,1393,10,1,Paid Ads,0
+44,Other,Suburban,387,47,9,5,68,3,145,0,False,4,1869,Mobile,2491,3,0,Paid Ads,2
+31,Female,Urban,43,50,2,5,332,0,298,0,False,8,103,Desktop,302,1,3,Social Media,0
+60,Male,Urban,448,3,19,3,41,4,39,0,False,2,1312,Mobile,1400,12,1,Social Media,0
+54,Other,Suburban,59,6,20,3,282,6,222,0,False,4,1705,Mobile,383,12,4,Social Media,0
+29,Female,Suburban,119,23,3,4,43,5,21,0,True,5,1065,Desktop,2476,6,5,Paid Ads,0
+32,Male,Urban,43,30,1,2,383,1,178,0,True,8,1372,Desktop,2926,4,3,Email,0
+29,Male,Urban,538,10,8,1,205,9,494,0,True,8,1911,Tablet,2713,10,2,Paid Ads,0
+40,Other,Rural,462,37,5,4,134,10,284,0,False,5,1654,Desktop,3196,5,5,Organic Search,0
+22,Male,Rural,522,49,14,5,458,1,375,0,True,8,290,Desktop,104,5,5,Paid Ads,2
+46,Other,Suburban,149,21,14,5,292,8,115,0,True,8,1222,Mobile,1075,8,2,Organic Search,2
+57,Male,Suburban,123,1,2,2,429,0,408,0,True,5,686,Mobile,2132,5,2,Paid Ads,0
+38,Female,Suburban,46,20,11,5,437,6,242,0,False,2,80,Mobile,3322,14,1,Social Media,2
+43,Male,Rural,589,21,18,1,491,17,292,0,False,8,1025,Tablet,475,2,4,Email,0
+40,Male,Suburban,254,29,1,4,155,16,202,0,False,8,1235,Desktop,3569,4,0,Organic Search,0
+27,Other,Urban,403,43,15,1,467,7,350,0,False,6,1637,Mobile,3530,15,5,Organic Search,0
+20,Female,Urban,45,10,5,3,461,15,339,0,True,10,637,Tablet,1683,5,1,Paid Ads,1
+20,Male,Urban,293,9,3,1,206,4,461,0,False,10,11,Desktop,668,8,4,Email,0
+54,Other,Suburban,279,6,1,4,389,0,125,0,False,8,1665,Tablet,2531,5,3,Email,0
+64,Other,Suburban,508,35,13,4,479,1,402,0,False,1,992,Tablet,2768,4,4,Paid Ads,2
+61,Female,Rural,460,42,12,5,40,15,201,0,False,10,1905,Tablet,117,2,3,Email,2
+23,Male,Suburban,354,50,13,3,36,18,136,0,False,7,1379,Tablet,1717,6,2,Paid Ads,0
+61,Male,Urban,95,6,0,5,219,7,241,0,False,10,1825,Tablet,2970,1,1,Organic Search,0
+32,Other,Urban,134,23,13,2,319,5,302,0,False,9,1673,Desktop,587,0,1,Email,0
+20,Other,Rural,98,8,2,2,308,19,216,0,True,8,1770,Tablet,1049,7,0,Email,0
+53,Male,Urban,146,50,17,5,136,12,26,0,True,5,1247,Mobile,1267,9,3,Social Media,2
+37,Male,Rural,483,1,5,5,389,1,30,0,True,7,1107,Mobile,2540,13,5,Organic Search,0
+35,Male,Suburban,75,45,16,5,494,5,367,0,False,7,107,Tablet,1485,5,2,Social Media,2
+69,Male,Rural,257,43,5,5,474,8,50,0,True,6,890,Tablet,2486,6,0,Email,0
+46,Male,Suburban,308,41,2,3,447,12,128,0,True,6,992,Desktop,3578,2,1,Paid Ads,0
+59,Female,Urban,583,10,9,5,267,13,486,0,False,6,182,Desktop,683,13,1,Social Media,2
+24,Other,Urban,336,19,12,1,466,17,158,0,False,7,598,Mobile,1088,3,0,Social Media,0
+62,Female,Urban,447,20,1,2,422,8,167,0,False,1,165,Mobile,2566,2,2,Organic Search,0
+47,Other,Urban,525,1,1,1,390,11,95,0,False,10,617,Tablet,312,4,4,Email,0
+65,Female,Urban,229,7,20,1,52,10,158,0,True,2,1043,Tablet,1294,3,4,Paid Ads,0
+58,Female,Rural,406,32,11,5,144,12,97,0,False,4,950,Desktop,3522,5,0,Social Media,2
+52,Other,Rural,199,8,0,2,442,2,73,0,True,6,550,Tablet,2651,2,1,Paid Ads,0
+42,Male,Rural,181,8,11,4,111,15,191,0,False,3,1011,Mobile,266,11,2,Social Media,2
+69,Male,Urban,133,32,17,5,178,9,461,0,False,9,1283,Desktop,2328,5,3,Email,2
+55,Female,Suburban,441,25,19,1,461,10,46,0,True,7,688,Desktop,3028,2,3,Social Media,0
+39,Female,Rural,431,27,4,5,100,6,337,0,True,6,1921,Desktop,575,8,5,Paid Ads,0
+52,Male,Suburban,113,39,10,3,459,12,497,0,False,7,917,Desktop,2517,2,0,Paid Ads,0
+43,Female,Urban,166,25,6,5,326,17,43,0,False,4,1069,Tablet,400,3,3,Organic Search,0
+39,Female,Suburban,443,47,7,1,187,0,220,0,False,5,1559,Tablet,1030,6,3,Paid Ads,0
+27,Other,Urban,63,5,5,1,165,3,248,0,False,3,716,Desktop,1308,15,1,Organic Search,0
+47,Other,Rural,375,36,16,3,195,12,100,0,True,7,1614,Tablet,1389,9,5,Email,0
+19,Female,Rural,530,44,19,1,332,19,402,0,True,6,666,Tablet,301,9,3,Paid Ads,0
+45,Other,Rural,294,29,7,4,322,17,193,0,False,8,550,Tablet,1455,8,0,Paid Ads,0
+21,Other,Suburban,94,10,6,1,215,5,444,0,False,6,1543,Tablet,832,0,0,Social Media,0
+30,Male,Rural,491,20,18,1,274,5,458,0,True,1,1153,Desktop,1909,2,3,Email,0
+24,Other,Rural,23,23,10,2,370,7,110,0,False,6,1300,Tablet,1334,5,0,Organic Search,0
+48,Other,Urban,533,33,1,5,29,18,406,0,False,5,1536,Tablet,2048,13,3,Social Media,0
+67,Female,Suburban,279,38,0,4,382,6,371,0,True,8,693,Mobile,669,14,4,Email,0
+31,Male,Rural,513,4,9,4,173,15,494,0,False,9,707,Mobile,301,11,5,Social Media,2
+30,Female,Rural,483,46,12,5,321,14,22,0,True,5,1002,Tablet,3508,11,4,Email,2
+60,Female,Rural,408,43,15,3,292,3,10,0,True,5,1542,Desktop,3122,14,4,Social Media,0
+22,Male,Rural,278,12,6,3,292,4,96,0,False,7,356,Mobile,72,3,4,Paid Ads,1
+20,Male,Rural,266,18,0,2,372,12,35,0,False,1,1030,Mobile,75,1,4,Organic Search,0
+18,Other,Rural,323,13,15,3,354,3,265,0,True,2,1287,Mobile,2976,9,2,Organic Search,0
+49,Other,Suburban,387,37,20,2,360,10,397,0,False,1,841,Tablet,97,1,3,Paid Ads,0
+67,Other,Rural,419,18,5,5,415,8,44,0,False,5,511,Desktop,2960,2,0,Paid Ads,0
+52,Other,Urban,275,16,8,3,115,9,244,0,True,9,1546,Desktop,452,1,0,Paid Ads,0
+38,Female,Suburban,405,16,0,1,54,1,383,0,False,6,421,Tablet,2083,7,3,Organic Search,0
+55,Male,Suburban,102,39,20,1,317,18,250,0,False,4,280,Desktop,1601,12,1,Organic Search,0
+67,Other,Rural,303,39,7,4,211,8,86,0,True,10,794,Tablet,3415,9,4,Organic Search,0
+63,Other,Suburban,424,46,8,3,340,16,354,0,True,5,415,Mobile,369,14,5,Social Media,0
+22,Female,Rural,362,22,7,5,296,15,322,0,False,1,759,Desktop,1100,2,4,Social Media,0
+34,Female,Suburban,60,28,2,1,273,19,334,0,False,6,1219,Desktop,2852,13,3,Email,0
+27,Female,Urban,32,47,4,5,187,13,47,0,True,3,597,Tablet,2438,7,1,Email,0
+31,Female,Rural,177,49,13,4,374,16,486,0,False,6,1223,Desktop,292,0,3,Organic Search,2
+26,Other,Suburban,509,36,2,3,494,11,43,0,False,9,326,Tablet,2072,15,1,Social Media,0
+28,Female,Suburban,454,43,10,4,282,15,165,0,False,8,1105,Desktop,310,7,1,Paid Ads,2
+34,Female,Urban,512,33,17,4,13,5,420,0,True,7,710,Tablet,1582,4,1,Email,2
+59,Male,Rural,88,34,9,2,494,16,318,0,False,3,1282,Desktop,2903,3,2,Social Media,0
+62,Female,Rural,223,12,0,1,104,5,371,0,False,2,1940,Tablet,546,9,4,Social Media,0
+44,Female,Rural,48,39,18,2,175,0,210,0,False,6,1537,Desktop,3017,10,3,Social Media,0
+70,Male,Rural,102,21,10,4,449,15,354,0,False,8,503,Mobile,2640,9,3,Social Media,2
+27,Other,Suburban,269,21,9,1,364,13,487,0,False,3,1519,Tablet,1809,9,4,Email,0
+53,Female,Urban,20,36,13,3,381,6,338,0,False,5,247,Tablet,1906,4,4,Social Media,0
+54,Male,Rural,69,34,5,1,354,15,283,0,False,10,1847,Desktop,814,0,3,Email,0
+41,Other,Suburban,91,45,9,5,444,10,456,0,False,10,272,Mobile,1279,5,3,Paid Ads,2
+39,Other,Urban,181,36,5,5,365,2,278,0,True,9,409,Desktop,1996,9,4,Social Media,0
+68,Male,Urban,15,20,15,4,99,9,123,0,True,7,237,Mobile,1989,3,0,Social Media,2
+35,Male,Suburban,340,16,7,1,180,11,70,0,True,7,1213,Tablet,3386,7,5,Email,0
+35,Other,Suburban,232,10,4,1,99,19,432,0,False,3,1670,Mobile,281,7,3,Organic Search,0
+39,Male,Rural,29,48,12,3,267,1,19,0,True,10,394,Desktop,2653,14,3,Organic Search,0
+20,Male,Urban,78,44,14,2,405,19,423,0,False,2,1160,Desktop,3212,14,1,Email,0
+38,Female,Urban,166,18,7,4,1,11,118,0,True,4,812,Desktop,244,11,3,Email,0
+58,Male,Urban,560,21,15,4,415,4,52,0,False,2,1861,Desktop,3242,8,2,Organic Search,2
+40,Other,Rural,537,1,0,1,142,12,58,0,True,8,11,Mobile,1723,4,1,Paid Ads,0
+20,Male,Suburban,33,37,0,2,463,16,408,0,False,3,685,Mobile,348,3,5,Paid Ads,0
+38,Male,Rural,560,29,20,1,180,11,390,0,True,7,1740,Mobile,1260,5,1,Social Media,0
+29,Male,Urban,501,40,14,1,306,4,129,0,True,9,172,Mobile,2622,9,0,Email,0
+27,Female,Suburban,518,30,4,4,289,5,243,0,True,8,962,Tablet,429,3,1,Email,0
+60,Female,Urban,286,2,0,5,358,5,126,0,True,6,1991,Mobile,391,15,0,Organic Search,0
+50,Male,Urban,563,9,9,1,350,7,395,0,False,10,27,Desktop,2450,11,2,Social Media,0
+34,Female,Suburban,100,34,15,2,139,7,228,0,False,6,1444,Desktop,3093,4,4,Paid Ads,0
+70,Male,Urban,274,49,13,3,68,12,279,0,False,3,1820,Mobile,2209,15,4,Social Media,0
+45,Female,Suburban,114,28,12,5,484,1,298,0,True,7,1329,Desktop,1548,7,1,Paid Ads,2
+52,Male,Rural,482,21,19,4,350,18,123,0,True,5,1373,Tablet,2930,15,4,Social Media,2
+37,Other,Rural,354,31,6,4,416,3,283,0,False,2,1247,Mobile,1581,6,3,Paid Ads,0
+66,Other,Suburban,578,7,1,4,49,4,196,0,True,1,436,Desktop,2189,5,3,Paid Ads,0
+27,Other,Urban,551,25,13,1,249,3,366,0,False,4,941,Desktop,1361,1,0,Email,0
+41,Male,Suburban,34,17,11,4,196,2,283,0,False,3,1098,Mobile,2690,15,5,Paid Ads,2
+42,Male,Rural,330,25,6,1,461,14,199,0,False,1,1808,Tablet,2587,1,3,Paid Ads,0
+57,Other,Urban,541,44,18,1,336,5,399,0,False,9,170,Mobile,882,6,5,Social Media,0
+60,Female,Urban,103,47,15,3,422,4,221,0,True,10,101,Mobile,1683,7,1,Organic Search,0
+40,Other,Urban,64,16,6,2,434,1,490,0,False,7,52,Tablet,2121,5,3,Social Media,1
+53,Other,Suburban,224,44,19,5,313,0,400,0,True,5,1159,Tablet,933,6,5,Organic Search,2
+70,Other,Suburban,529,43,14,1,285,8,43,0,False,2,1215,Tablet,1433,13,0,Email,0
+36,Male,Rural,326,47,9,4,107,7,255,0,True,5,200,Tablet,3056,5,4,Paid Ads,2
+65,Other,Rural,475,37,12,4,207,7,263,0,False,3,307,Mobile,2433,9,0,Email,2
+43,Female,Suburban,355,48,2,2,427,3,84,0,False,2,753,Desktop,2712,0,0,Organic Search,0
+32,Other,Urban,153,2,9,1,398,16,179,0,True,6,1239,Mobile,2817,14,0,Paid Ads,0
+22,Other,Suburban,418,31,9,4,201,11,433,0,True,4,1785,Desktop,2736,15,0,Social Media,2
+26,Male,Urban,562,32,5,5,283,8,128,0,True,9,1871,Mobile,1096,8,3,Social Media,0
+19,Male,Rural,143,7,15,5,272,11,177,0,True,8,32,Tablet,1219,9,4,Paid Ads,2
+37,Other,Urban,49,30,4,2,379,2,193,0,False,9,915,Tablet,2252,12,2,Organic Search,1
+30,Other,Suburban,580,49,19,2,254,13,469,0,False,9,1968,Desktop,1279,2,0,Email,0
+57,Other,Urban,500,2,16,1,229,17,247,0,False,10,332,Mobile,3311,9,3,Organic Search,0
+55,Male,Suburban,40,39,11,1,108,16,313,0,True,1,801,Desktop,3327,14,2,Social Media,0
+33,Other,Suburban,377,18,12,2,234,0,209,0,False,7,622,Desktop,615,2,0,Email,0
+29,Female,Rural,491,1,3,1,272,13,76,0,False,1,1226,Mobile,400,5,0,Organic Search,0
+37,Other,Rural,455,12,13,2,215,11,270,0,True,10,1701,Desktop,496,6,5,Social Media,0
+44,Male,Suburban,362,31,8,3,330,17,95,0,False,1,489,Desktop,2331,0,0,Paid Ads,0
+31,Female,Suburban,416,33,20,1,277,12,166,0,True,4,1191,Desktop,2606,14,2,Paid Ads,0
+32,Other,Urban,391,30,10,4,62,6,405,0,True,2,464,Mobile,3245,3,4,Organic Search,2
+65,Other,Rural,293,47,20,1,229,2,127,0,False,8,1746,Desktop,2533,15,1,Organic Search,0
+50,Male,Rural,525,1,7,5,389,2,219,0,True,9,1683,Mobile,486,12,5,Social Media,0
+47,Female,Urban,555,47,19,5,146,10,458,0,False,5,1596,Desktop,928,9,2,Paid Ads,2
+19,Male,Rural,66,28,3,2,78,1,374,0,False,2,1732,Tablet,3013,10,5,Social Media,1
+24,Other,Rural,187,46,2,1,169,8,61,0,False,8,1072,Mobile,477,11,5,Organic Search,0
+59,Female,Rural,106,43,15,4,102,3,92,0,False,3,1624,Tablet,2156,2,4,Paid Ads,2
+46,Male,Suburban,361,35,3,2,139,18,282,0,False,5,1361,Mobile,3086,10,5,Paid Ads,1
+22,Female,Urban,71,12,19,3,112,19,487,0,False,5,1886,Mobile,3528,11,0,Email,0
+26,Other,Urban,136,32,0,3,302,1,477,0,True,2,1850,Tablet,327,1,3,Email,0
+68,Female,Rural,515,34,11,2,115,15,376,0,False,1,275,Mobile,2452,13,1,Organic Search,0
+47,Other,Rural,69,18,2,3,219,18,453,0,True,10,859,Mobile,693,13,1,Paid Ads,0
+30,Female,Suburban,115,36,8,4,177,13,116,0,False,9,450,Tablet,2955,3,3,Email,2
+18,Male,Suburban,217,32,9,2,262,13,484,0,False,7,870,Tablet,907,9,2,Paid Ads,0
+24,Other,Urban,244,8,8,4,73,9,85,0,False,3,1631,Desktop,366,6,3,Organic Search,2
+43,Female,Suburban,144,15,17,5,390,10,89,0,True,7,1828,Desktop,2324,1,5,Email,2
+24,Female,Urban,368,35,5,5,431,11,257,0,True,1,1824,Desktop,2861,3,3,Social Media,0
+21,Other,Suburban,82,8,10,3,217,8,252,0,True,6,1641,Mobile,2609,12,2,Organic Search,0
+35,Other,Suburban,10,25,14,5,240,10,444,0,False,8,111,Tablet,331,14,3,Paid Ads,2
+20,Male,Suburban,379,31,5,1,27,10,354,0,True,8,1413,Tablet,1898,10,0,Social Media,0
+18,Other,Suburban,398,34,0,1,247,6,156,0,True,2,1779,Tablet,2394,11,1,Paid Ads,0
+40,Male,Suburban,189,17,10,2,153,8,227,0,True,10,663,Desktop,3435,2,5,Organic Search,0
+57,Female,Urban,298,32,9,2,224,15,160,0,True,1,26,Tablet,1473,12,1,Organic Search,0
+25,Other,Suburban,165,37,5,4,284,18,199,0,False,7,1875,Desktop,2364,14,2,Social Media,0
+55,Other,Urban,25,10,12,1,322,10,397,0,False,5,1572,Mobile,2208,2,1,Social Media,0
+20,Male,Urban,408,30,18,5,4,12,456,0,False,4,1029,Mobile,2650,11,4,Organic Search,2
+64,Male,Rural,413,17,13,2,484,17,489,0,True,10,1301,Tablet,3207,6,5,Organic Search,0
+34,Male,Suburban,207,48,17,1,50,3,171,0,True,2,1699,Mobile,2043,14,1,Email,0
+69,Female,Rural,586,14,7,5,395,15,497,0,False,6,1010,Tablet,2665,1,0,Organic Search,0
+40,Other,Suburban,469,19,20,2,423,15,81,0,True,9,1256,Desktop,1493,3,3,Organic Search,0
+28,Female,Suburban,442,38,5,3,64,15,396,0,False,6,863,Tablet,1965,1,0,Email,1
+38,Other,Rural,59,13,12,5,104,12,137,0,False,9,1349,Mobile,2784,1,1,Organic Search,2
+37,Female,Suburban,565,4,13,5,365,10,341,0,False,5,108,Desktop,3237,7,3,Paid Ads,2
+59,Female,Urban,63,12,6,4,332,4,497,0,False,2,1753,Mobile,2422,6,4,Paid Ads,0
+55,Other,Urban,243,44,5,4,332,3,401,0,True,4,615,Tablet,1479,7,5,Paid Ads,0
+43,Other,Urban,447,47,14,2,90,9,182,0,False,9,1403,Mobile,1765,13,1,Paid Ads,0
+18,Female,Suburban,530,19,5,2,112,15,290,0,True,4,148,Desktop,1947,15,5,Organic Search,1
+27,Female,Rural,195,26,6,3,262,5,280,0,False,2,1548,Mobile,663,5,4,Email,1
+59,Male,Suburban,398,35,8,5,272,6,259,0,False,6,274,Mobile,625,8,5,Social Media,2
+59,Other,Urban,134,40,16,3,445,11,176,0,True,8,445,Tablet,2103,9,3,Social Media,0
+35,Female,Suburban,439,23,5,1,166,4,202,0,False,8,1019,Mobile,1501,5,1,Organic Search,0
+23,Other,Suburban,165,8,15,4,223,7,375,0,False,7,571,Desktop,1965,5,0,Email,2
+44,Male,Suburban,560,4,2,3,119,12,78,0,False,2,559,Desktop,2948,9,3,Organic Search,0
+52,Other,Urban,483,25,5,3,399,19,197,0,True,4,7,Desktop,2512,10,2,Organic Search,1
+54,Male,Suburban,392,12,14,4,344,17,135,0,True,4,87,Tablet,2515,10,2,Email,2
+22,Male,Rural,288,37,11,5,156,5,495,0,False,8,888,Mobile,1973,3,1,Email,2
+18,Other,Rural,72,29,10,4,489,17,370,0,True,9,813,Desktop,1295,2,3,Email,2
+67,Male,Rural,376,17,1,4,62,7,383,0,True,4,104,Desktop,3270,14,0,Email,0
+65,Female,Suburban,180,18,15,2,463,14,147,0,True,2,1532,Desktop,3350,1,5,Paid Ads,0
+26,Female,Rural,50,49,16,1,495,17,324,0,False,8,108,Mobile,1533,11,1,Paid Ads,0
+67,Male,Suburban,420,45,13,4,423,17,250,0,True,3,804,Tablet,389,13,3,Organic Search,2
+39,Male,Suburban,29,14,15,5,434,13,290,0,False,9,1429,Tablet,3218,13,4,Social Media,2
+52,Other,Urban,585,11,6,1,434,13,255,0,False,6,564,Tablet,458,12,2,Social Media,0
+23,Male,Suburban,469,3,5,4,199,14,102,0,False,4,1477,Tablet,2132,1,0,Paid Ads,0
+35,Other,Rural,79,18,17,3,84,8,42,0,True,10,268,Desktop,1400,8,3,Organic Search,0
+27,Male,Rural,429,27,14,5,201,16,111,0,False,7,990,Mobile,1981,9,4,Email,2
+52,Male,Rural,197,40,17,1,72,17,379,0,True,4,535,Desktop,1484,5,4,Email,0
+36,Female,Rural,93,8,13,5,303,4,312,0,True,2,1874,Mobile,197,6,4,Social Media,2
+43,Other,Suburban,531,9,12,2,479,11,345,0,True,7,1578,Mobile,245,3,0,Social Media,0
+55,Other,Urban,341,22,9,3,264,4,424,0,False,3,109,Desktop,2912,9,3,Email,0
+27,Female,Rural,409,25,2,3,143,14,363,0,True,2,1810,Mobile,686,11,0,Email,0
+51,Male,Urban,486,4,20,1,487,4,50,0,True,5,294,Desktop,2148,13,0,Organic Search,0
+48,Other,Urban,577,38,16,3,444,17,182,0,True,9,1842,Desktop,3395,10,4,Organic Search,0
+57,Female,Urban,579,18,18,1,341,19,28,0,True,8,1917,Tablet,1606,1,5,Email,0
+29,Female,Suburban,50,17,14,3,129,2,358,0,True,7,367,Tablet,2018,12,2,Paid Ads,0
+20,Female,Rural,328,3,0,1,266,2,416,0,False,10,370,Tablet,698,8,3,Email,0
+49,Other,Rural,234,44,13,4,95,5,232,0,True,3,196,Mobile,3457,14,5,Social Media,2
+42,Other,Urban,26,22,17,3,492,3,491,0,True,5,1381,Desktop,1033,11,1,Email,0
+70,Other,Urban,521,3,5,2,259,2,372,0,True,9,887,Tablet,1836,12,2,Paid Ads,1
+31,Other,Urban,172,18,12,1,187,2,309,0,False,9,264,Desktop,152,8,3,Paid Ads,0
+35,Other,Urban,69,47,4,5,96,9,38,0,True,2,1812,Desktop,1662,4,5,Paid Ads,0
+48,Male,Urban,304,30,9,4,314,1,218,0,False,9,1519,Mobile,3271,12,2,Organic Search,2
+26,Male,Suburban,44,48,2,5,34,18,476,0,False,6,730,Desktop,676,0,2,Email,0
+29,Other,Rural,439,39,18,4,66,3,221,0,False,7,1032,Desktop,2047,1,3,Email,2
+59,Other,Rural,176,42,12,1,103,18,147,0,True,4,1113,Mobile,2285,15,3,Social Media,0
+43,Female,Suburban,122,24,14,1,361,19,208,0,True,6,1104,Tablet,1069,10,5,Paid Ads,0
+52,Other,Rural,37,12,18,4,479,2,120,0,True,6,1899,Mobile,1911,6,4,Social Media,2
+28,Other,Rural,446,37,18,1,124,0,454,0,False,1,194,Desktop,2580,12,5,Email,0
+34,Male,Suburban,132,6,15,5,330,17,184,0,True,2,1029,Mobile,1596,2,1,Organic Search,2
+30,Other,Suburban,218,38,2,5,319,5,400,0,True,7,73,Desktop,2623,14,0,Social Media,0
+65,Female,Rural,422,13,7,4,308,2,92,0,True,10,1242,Tablet,466,6,1,Organic Search,0
+62,Female,Suburban,300,22,0,3,451,5,160,0,True,7,1425,Tablet,1226,13,0,Organic Search,0
+23,Female,Urban,537,20,0,5,87,14,418,0,True,3,481,Tablet,3354,14,2,Email,0
+54,Other,Suburban,548,41,11,5,366,7,453,0,True,4,748,Mobile,1919,11,5,Social Media,2
+68,Other,Suburban,130,45,1,4,38,1,373,0,True,4,112,Desktop,894,13,1,Paid Ads,0
+49,Male,Rural,150,4,14,3,305,9,26,0,True,6,1330,Desktop,2105,5,3,Email,0
+47,Female,Rural,74,44,9,3,105,12,111,0,False,6,105,Tablet,2032,6,1,Email,0
+29,Male,Urban,134,38,13,5,308,4,102,0,False,1,770,Desktop,1378,9,1,Social Media,2
+36,Male,Suburban,68,1,15,3,419,7,77,0,False,6,643,Mobile,2574,2,2,Organic Search,0
+26,Male,Urban,419,44,0,4,48,1,71,0,False,2,427,Tablet,2932,13,3,Email,0
+31,Female,Urban,509,31,3,3,173,9,492,0,False,8,1669,Mobile,1897,6,4,Email,1
+29,Other,Urban,441,4,0,1,2,12,252,0,False,8,830,Desktop,3150,2,3,Organic Search,0
+40,Female,Suburban,405,22,6,2,105,3,438,0,False,5,1809,Mobile,75,1,0,Social Media,1
+30,Male,Urban,62,39,16,5,119,12,179,0,True,3,1815,Desktop,2742,2,5,Social Media,2
+39,Male,Suburban,598,23,7,5,112,4,380,0,False,2,1747,Desktop,453,15,4,Social Media,0
+41,Male,Urban,594,30,9,4,252,6,383,0,True,3,1544,Tablet,2460,6,3,Paid Ads,2
+44,Male,Rural,137,44,18,3,147,9,428,0,True,8,223,Tablet,2645,3,5,Organic Search,0
+48,Female,Rural,427,30,9,5,417,1,223,0,False,10,993,Tablet,3423,10,0,Organic Search,2
+36,Other,Urban,308,40,19,5,421,1,336,0,False,4,1071,Mobile,1398,14,2,Social Media,2
+20,Female,Urban,44,35,5,3,342,10,278,0,False,5,252,Tablet,3409,15,4,Organic Search,1
+57,Other,Rural,416,48,0,4,21,6,345,0,False,10,316,Desktop,3405,5,1,Email,0
+50,Other,Rural,212,49,9,4,266,8,50,0,False,5,1129,Tablet,2109,13,1,Paid Ads,2
+55,Male,Rural,488,45,19,5,118,3,420,0,True,9,1160,Mobile,2141,15,3,Email,2
+69,Other,Urban,336,18,13,2,376,6,86,0,False,9,255,Mobile,1003,2,5,Social Media,0
+42,Female,Urban,13,37,14,2,173,14,29,0,False,5,799,Tablet,2516,6,4,Paid Ads,0
+27,Female,Rural,299,21,1,5,46,10,375,0,False,6,1230,Tablet,1690,5,2,Social Media,0
+46,Female,Rural,329,39,7,3,434,10,48,0,False,10,100,Tablet,2746,9,4,Organic Search,1
+18,Male,Urban,509,4,0,4,453,8,231,0,True,6,754,Tablet,1247,2,4,Social Media,0
+23,Other,Urban,67,17,15,1,129,4,248,0,False,9,1947,Tablet,2655,11,5,Social Media,0
+33,Male,Suburban,176,8,11,4,430,16,160,0,True,5,1031,Tablet,3284,2,4,Organic Search,2
+34,Male,Suburban,585,12,2,1,221,3,302,0,True,2,939,Mobile,574,14,5,Email,0
+37,Male,Rural,125,40,12,5,148,3,45,0,False,5,1335,Desktop,3302,8,2,Social Media,2
+33,Female,Urban,347,3,15,2,174,3,31,0,True,6,480,Desktop,147,9,3,Paid Ads,0
+63,Female,Urban,311,16,10,3,356,11,227,0,True,5,1165,Mobile,2531,3,0,Email,0
+44,Female,Suburban,71,6,9,2,305,9,420,0,False,8,69,Mobile,3278,4,4,Paid Ads,0
+67,Female,Rural,420,20,18,2,313,1,285,0,False,5,1222,Mobile,181,4,2,Paid Ads,0
+22,Male,Urban,267,34,3,4,364,8,111,0,False,5,102,Tablet,1046,1,1,Social Media,0
+18,Other,Urban,85,5,12,1,195,14,185,0,False,6,1053,Desktop,1323,3,2,Email,0
+46,Male,Rural,61,22,3,1,354,13,435,0,True,10,1092,Tablet,2252,1,0,Organic Search,0
+60,Female,Suburban,228,35,3,4,435,14,197,0,False,7,446,Mobile,1470,1,3,Social Media,0
+32,Male,Suburban,194,49,8,4,214,13,43,0,True,2,533,Mobile,375,14,3,Email,2
+49,Other,Suburban,227,9,6,2,300,9,134,0,True,5,931,Mobile,3244,12,2,Email,1
+48,Other,Suburban,77,36,10,5,78,5,363,0,True,8,1360,Mobile,2223,1,4,Email,2
+22,Male,Suburban,85,47,7,5,193,8,66,0,True,7,890,Desktop,2383,0,2,Organic Search,0
+45,Other,Urban,407,22,14,4,110,7,487,0,True,6,424,Desktop,243,13,2,Email,2
+24,Other,Urban,131,31,19,4,73,19,242,0,True,5,1574,Desktop,1745,6,2,Social Media,2
+36,Female,Suburban,135,45,3,1,427,9,352,0,True,6,1880,Mobile,1332,3,5,Email,0
+41,Female,Suburban,408,20,6,1,317,11,360,0,False,5,429,Mobile,2338,2,3,Paid Ads,0
+55,Male,Rural,394,27,11,5,65,8,246,0,False,2,1379,Mobile,2272,6,0,Organic Search,2
+31,Other,Rural,510,39,19,3,44,6,288,0,True,8,794,Mobile,541,0,2,Email,0
+52,Female,Urban,486,17,6,4,180,10,201,0,True,4,19,Mobile,1979,10,5,Paid Ads,0
+41,Female,Urban,494,2,12,1,46,16,344,0,True,7,253,Tablet,1508,15,2,Email,0
+59,Male,Urban,305,43,20,1,284,14,291,0,True,10,471,Tablet,2671,7,0,Social Media,0
+28,Other,Rural,190,34,20,3,259,16,208,0,True,9,745,Mobile,327,5,0,Email,0
+20,Other,Urban,482,8,4,1,419,1,171,0,True,5,124,Mobile,3573,15,2,Paid Ads,0
+52,Female,Rural,125,31,15,2,290,10,134,0,False,5,1966,Mobile,2528,1,0,Email,0
+57,Male,Rural,296,28,2,5,348,3,287,0,False,10,554,Tablet,738,12,4,Organic Search,0
+65,Female,Rural,531,15,13,3,295,19,140,0,True,2,1997,Desktop,2424,5,5,Paid Ads,0
+57,Female,Suburban,178,40,13,2,66,14,46,0,False,3,1401,Tablet,87,14,0,Email,0
+39,Other,Suburban,358,49,20,2,496,15,318,0,False,1,1929,Tablet,3440,2,1,Email,0
+30,Other,Urban,131,19,19,5,248,8,145,0,True,3,1350,Tablet,1902,12,3,Organic Search,2
+44,Female,Rural,151,3,20,1,191,19,481,0,True,2,101,Tablet,2532,5,3,Social Media,0
+52,Other,Rural,243,6,8,4,338,13,54,0,False,5,1652,Desktop,2012,3,4,Paid Ads,2
+56,Other,Suburban,171,44,5,2,71,19,134,0,False,2,832,Tablet,505,9,2,Social Media,1
+28,Female,Suburban,596,27,9,2,475,2,235,0,False,6,889,Tablet,1714,12,2,Social Media,0
+65,Male,Urban,538,39,2,1,394,7,474,0,False,2,1216,Tablet,2999,7,0,Social Media,0
+32,Female,Urban,493,44,0,2,205,8,159,0,True,6,927,Tablet,1463,8,2,Social Media,0
+68,Female,Urban,307,33,14,4,329,11,242,0,False,4,174,Mobile,1966,15,2,Social Media,2
+52,Male,Suburban,104,15,5,5,396,5,471,0,True,6,439,Desktop,492,5,4,Organic Search,0
+27,Other,Rural,25,13,12,1,429,12,229,0,False,6,1917,Mobile,2381,9,4,Paid Ads,0
+54,Female,Urban,181,33,3,4,278,17,267,0,False,9,288,Mobile,3472,6,0,Social Media,0
+70,Other,Urban,219,34,20,2,437,19,239,0,True,4,929,Tablet,756,9,1,Paid Ads,0
+65,Male,Suburban,536,21,19,3,422,15,277,0,False,4,444,Desktop,1424,8,0,Social Media,0
+41,Other,Rural,376,41,16,3,15,4,289,0,False,1,1871,Tablet,2536,7,2,Organic Search,0
+43,Male,Suburban,529,24,16,2,306,8,164,0,True,3,878,Mobile,1179,15,4,Social Media,0
+62,Other,Urban,68,24,17,3,411,17,73,0,False,6,753,Mobile,2278,1,4,Social Media,0
+70,Female,Rural,451,34,6,4,225,9,467,0,False,8,1231,Desktop,1421,4,0,Organic Search,0
+44,Female,Urban,306,36,13,1,241,6,270,0,True,8,1297,Desktop,1741,3,2,Organic Search,0
+27,Male,Urban,367,44,7,3,312,0,248,0,False,1,529,Tablet,3272,15,4,Email,1
+39,Male,Urban,50,42,8,1,358,7,410,0,True,7,1652,Desktop,2931,6,2,Paid Ads,0
+67,Female,Rural,401,32,4,3,96,10,403,0,False,9,618,Tablet,2741,0,1,Organic Search,1
+19,Other,Rural,159,35,17,1,12,14,188,0,False,6,864,Desktop,845,4,5,Paid Ads,0
+45,Female,Rural,289,49,11,1,482,18,257,0,True,5,821,Desktop,2300,9,4,Paid Ads,0
+42,Other,Rural,389,5,15,3,397,18,48,0,False,8,579,Desktop,197,5,3,Organic Search,0
+53,Female,Rural,244,21,3,5,43,5,276,0,True,3,1144,Mobile,1718,8,2,Social Media,0
+37,Female,Rural,175,41,20,3,498,13,276,0,True,5,1950,Desktop,2973,15,3,Social Media,0
+39,Other,Rural,10,4,3,1,434,4,81,0,True,2,379,Tablet,2702,5,4,Email,0
+55,Other,Urban,514,27,16,2,476,17,66,0,False,7,511,Mobile,1413,7,5,Paid Ads,0
+51,Male,Rural,240,41,13,4,383,16,273,0,True,2,123,Mobile,123,15,4,Paid Ads,2
+49,Other,Urban,474,36,20,5,112,6,140,0,False,5,282,Desktop,2418,9,2,Organic Search,2
+46,Female,Rural,201,15,2,3,422,4,77,0,False,10,1160,Desktop,3316,9,0,Organic Search,0
+44,Other,Rural,358,8,8,1,236,18,102,0,True,10,1604,Mobile,1446,9,4,Paid Ads,0
+56,Female,Suburban,329,21,3,3,393,3,411,0,True,1,983,Tablet,2764,0,4,Social Media,1
+24,Female,Suburban,68,17,16,3,494,15,65,0,False,2,844,Mobile,1532,9,4,Organic Search,0
+70,Female,Rural,586,19,0,3,168,2,141,0,True,7,620,Desktop,2762,11,1,Paid Ads,0
+56,Female,Rural,177,26,14,2,371,4,217,0,False,10,1965,Tablet,215,10,4,Organic Search,0
+34,Male,Rural,77,24,17,2,336,2,44,0,False,3,1902,Mobile,2105,3,3,Email,0
+43,Other,Rural,245,23,14,4,326,8,398,0,True,6,1085,Tablet,2991,9,3,Email,2
+66,Male,Suburban,399,11,4,3,164,5,334,0,False,1,1610,Desktop,2432,11,1,Social Media,1
+27,Female,Rural,395,34,12,2,58,2,496,0,False,2,1718,Mobile,2502,13,5,Social Media,0
+41,Male,Suburban,236,23,16,1,78,15,270,0,False,6,1971,Desktop,2582,0,2,Paid Ads,0
+62,Other,Rural,71,29,8,5,92,9,478,0,False,6,842,Mobile,1356,15,2,Organic Search,2
+65,Male,Urban,253,27,10,3,155,8,326,0,True,6,1244,Desktop,3004,0,3,Organic Search,0
+21,Male,Urban,517,26,19,5,74,10,254,0,False,5,745,Mobile,2364,2,0,Social Media,2
+26,Male,Rural,378,18,0,2,398,12,286,0,True,1,1918,Mobile,2147,13,1,Social Media,0
+35,Female,Urban,21,4,20,4,336,5,85,0,False,2,591,Mobile,530,6,5,Organic Search,2
+53,Other,Rural,143,45,5,2,464,12,191,0,False,5,1793,Mobile,524,3,1,Email,1
+50,Other,Suburban,520,13,4,5,39,18,457,0,False,5,413,Mobile,2379,4,5,Social Media,0
+23,Male,Suburban,338,39,20,3,28,4,148,0,False,2,338,Mobile,657,4,3,Email,0
+41,Male,Rural,238,12,18,5,148,12,361,0,False,9,859,Tablet,81,14,3,Paid Ads,2
+38,Other,Rural,383,6,2,1,251,3,101,0,False,2,1128,Tablet,3279,6,1,Social Media,0
+29,Other,Rural,381,17,8,4,427,8,260,0,True,10,978,Mobile,2395,2,3,Paid Ads,2
+62,Male,Rural,68,43,20,5,220,14,187,0,False,5,756,Tablet,2003,1,4,Paid Ads,2
+23,Male,Rural,219,30,2,5,134,4,387,0,True,6,1292,Mobile,2852,12,1,Organic Search,0
+31,Female,Urban,91,5,18,5,289,7,31,0,True,5,1137,Tablet,416,5,5,Paid Ads,2
+57,Female,Suburban,523,40,14,4,41,1,298,0,True,3,1214,Desktop,268,1,1,Organic Search,2
+64,Other,Rural,568,43,13,2,149,11,391,0,False,3,1788,Tablet,3205,7,1,Social Media,0
+31,Male,Urban,440,15,12,1,31,6,474,0,True,3,368,Desktop,790,2,1,Social Media,0
+33,Male,Urban,418,21,18,5,296,14,276,0,False,8,134,Tablet,2959,2,1,Organic Search,2
+60,Female,Urban,260,45,8,2,41,11,190,0,True,3,993,Desktop,2779,11,4,Social Media,0
+65,Female,Suburban,99,21,14,1,352,0,343,0,False,8,834,Tablet,2503,12,1,Paid Ads,0
+39,Female,Suburban,443,27,11,2,44,16,339,0,False,9,305,Tablet,1760,12,4,Paid Ads,0
+35,Female,Suburban,239,48,13,2,293,4,461,0,False,6,180,Mobile,3571,15,2,Paid Ads,0
+42,Male,Urban,431,37,19,1,405,4,367,0,True,7,279,Mobile,1634,3,2,Social Media,0
+29,Male,Urban,287,40,8,1,497,18,100,0,False,4,118,Mobile,1046,13,1,Email,0
+26,Female,Suburban,105,40,2,4,416,0,391,0,True,5,1552,Mobile,1285,6,1,Social Media,0
+34,Female,Suburban,403,32,10,3,178,4,194,0,True,4,1297,Tablet,3461,11,1,Organic Search,0
+56,Other,Suburban,539,45,14,1,177,16,278,0,True,2,1327,Tablet,2160,2,3,Organic Search,0
+61,Female,Suburban,178,41,18,5,92,15,346,0,False,9,1678,Desktop,2389,1,3,Paid Ads,2
+66,Other,Suburban,445,47,6,4,414,17,291,0,False,7,730,Mobile,1851,4,1,Social Media,0
+54,Male,Suburban,365,44,10,5,237,14,81,0,False,6,950,Desktop,2254,2,3,Social Media,2
+42,Male,Rural,86,20,17,1,128,10,378,0,False,5,688,Mobile,126,2,2,Email,0
+37,Other,Urban,527,24,19,3,423,1,453,0,True,6,347,Mobile,1962,7,5,Organic Search,0
+33,Other,Suburban,525,48,20,2,94,10,138,0,True,6,108,Desktop,1779,7,4,Social Media,0
+48,Male,Rural,230,34,13,4,369,14,235,0,False,10,1864,Desktop,1775,6,1,Organic Search,2
+30,Female,Rural,87,49,7,3,288,9,53,0,True,10,987,Desktop,717,3,0,Paid Ads,1
+32,Female,Suburban,274,13,12,5,410,0,312,0,False,2,906,Tablet,132,1,1,Email,2
+47,Female,Suburban,417,7,19,2,361,11,317,0,True,3,495,Tablet,289,0,3,Social Media,0
+53,Female,Urban,219,7,1,2,490,14,13,0,False,4,1384,Tablet,441,1,4,Organic Search,0
+60,Male,Urban,139,8,2,4,489,16,137,0,True,4,1164,Tablet,1877,15,0,Paid Ads,0
+51,Female,Suburban,541,32,14,3,298,7,49,0,False,6,167,Tablet,1751,2,1,Social Media,0
+54,Female,Rural,526,12,3,2,125,19,383,0,True,1,1397,Tablet,379,4,2,Email,1
+27,Male,Suburban,344,34,16,4,423,17,73,0,False,10,1069,Desktop,2288,10,4,Social Media,2
+43,Other,Urban,21,38,3,4,398,3,443,0,False,3,1105,Desktop,3385,7,3,Social Media,0
+45,Male,Urban,401,38,5,3,306,11,186,0,True,3,80,Tablet,2295,9,0,Organic Search,1
+69,Male,Rural,211,28,9,5,388,13,186,0,False,4,268,Desktop,1906,12,2,Social Media,2
+58,Female,Urban,157,1,13,2,104,1,23,0,False,3,1687,Desktop,1513,4,2,Paid Ads,0
+23,Female,Rural,499,27,5,3,97,13,280,0,False,5,1596,Desktop,887,3,4,Social Media,1
+65,Other,Suburban,30,37,7,3,130,10,237,0,False,7,781,Mobile,1209,4,0,Paid Ads,1
+38,Male,Rural,332,15,0,4,6,17,85,0,False,7,1393,Tablet,125,15,3,Email,0
+31,Female,Rural,565,37,20,2,365,0,37,0,False,10,1523,Mobile,3405,7,2,Social Media,0
+51,Male,Rural,473,28,5,5,255,11,163,0,True,8,1463,Desktop,451,11,2,Organic Search,0
+60,Other,Urban,121,13,15,4,456,7,179,0,True,5,536,Desktop,1956,3,5,Email,2
+54,Female,Urban,436,39,4,1,55,1,202,0,False,3,1677,Desktop,3050,15,4,Organic Search,0
+21,Male,Suburban,223,20,10,5,263,17,94,0,True,10,1910,Mobile,2791,10,4,Organic Search,2
+31,Other,Urban,200,28,9,5,13,19,45,0,False,1,604,Mobile,2483,9,4,Organic Search,2
+55,Female,Urban,512,25,13,1,485,11,67,0,True,2,224,Tablet,2914,8,0,Organic Search,0
+49,Male,Suburban,268,41,15,1,173,10,168,0,True,6,761,Desktop,333,10,2,Paid Ads,0
+57,Female,Urban,243,50,2,2,138,17,405,0,False,1,1723,Desktop,178,13,2,Paid Ads,0
+55,Female,Suburban,164,12,9,4,49,8,244,0,False,3,1101,Mobile,923,8,2,Email,2
+66,Female,Urban,416,11,20,2,279,4,428,0,True,2,876,Desktop,402,4,2,Email,0
+29,Female,Suburban,136,43,14,4,457,3,314,0,True,3,1384,Tablet,1556,13,1,Organic Search,2
+60,Female,Suburban,293,9,6,1,55,16,230,0,True,1,289,Mobile,2949,3,0,Email,0
+29,Male,Rural,303,35,2,4,121,15,143,0,True,8,1930,Mobile,88,8,2,Email,0
+36,Other,Urban,45,18,5,1,350,5,213,0,True,10,586,Mobile,1904,9,4,Organic Search,0
+26,Female,Urban,413,46,5,2,144,13,150,0,False,9,1214,Desktop,300,9,5,Email,1
+67,Other,Suburban,82,32,1,1,196,8,342,0,False,6,1301,Tablet,2776,14,3,Paid Ads,0
+21,Other,Rural,232,26,1,2,223,11,339,0,True,6,811,Mobile,2956,4,0,Organic Search,0
+67,Female,Urban,467,34,15,5,357,18,457,0,True,9,867,Tablet,760,3,0,Paid Ads,2
+53,Female,Suburban,115,7,3,2,477,4,330,0,False,6,248,Desktop,894,12,1,Email,1
+38,Other,Rural,347,44,2,2,126,8,381,0,False,5,269,Mobile,189,5,0,Social Media,0
+39,Other,Suburban,177,5,5,5,367,11,203,0,True,9,202,Tablet,2709,11,4,Paid Ads,0
+27,Male,Rural,470,4,11,4,423,6,36,0,False,1,647,Tablet,2388,14,0,Paid Ads,2
+65,Female,Rural,246,38,8,5,205,1,47,0,False,5,484,Desktop,2813,5,3,Paid Ads,2
+63,Female,Suburban,497,26,13,2,473,19,183,0,True,6,1385,Desktop,1863,5,0,Paid Ads,0
+40,Male,Urban,522,13,7,4,448,0,455,0,True,8,715,Mobile,1770,11,0,Organic Search,0
+55,Male,Urban,358,40,2,5,120,15,48,0,True,4,421,Tablet,556,1,5,Email,0
+35,Female,Suburban,218,27,2,2,58,6,402,0,False,7,1889,Desktop,2537,9,1,Organic Search,0
+50,Other,Urban,437,28,16,2,188,10,283,0,True,3,1444,Mobile,189,13,3,Paid Ads,0
+64,Male,Rural,243,7,8,5,89,11,305,0,False,2,930,Desktop,2371,4,2,Organic Search,2
+29,Male,Urban,262,42,5,5,138,19,171,0,True,10,1855,Tablet,2171,1,1,Email,0
+48,Other,Rural,468,49,18,4,61,16,82,0,True,10,635,Tablet,2946,15,4,Email,2
+24,Other,Urban,178,34,6,3,356,19,455,0,False,5,907,Tablet,3498,8,2,Social Media,1
+60,Other,Rural,375,26,13,1,306,1,398,0,True,10,1777,Tablet,2097,11,5,Paid Ads,0
+51,Male,Rural,65,23,7,1,107,5,365,0,False,8,1317,Desktop,947,0,2,Paid Ads,0
+54,Female,Urban,508,1,8,1,118,18,482,0,True,4,194,Desktop,1175,2,5,Paid Ads,0
+34,Male,Suburban,356,50,14,2,215,2,284,0,False,4,1173,Mobile,3269,6,0,Organic Search,0
+47,Male,Urban,324,49,2,2,200,3,173,0,False,7,137,Desktop,174,7,2,Paid Ads,0
+32,Other,Urban,530,43,17,5,11,4,294,0,True,1,1121,Mobile,2061,3,3,Paid Ads,2
+40,Female,Suburban,28,12,1,4,253,2,121,0,True,7,1256,Desktop,1035,7,0,Social Media,0
+60,Female,Urban,185,42,0,3,314,5,15,0,False,8,1001,Desktop,208,9,2,Organic Search,0
+38,Male,Rural,199,7,18,2,469,2,144,0,False,4,17,Tablet,2489,9,1,Paid Ads,0
+39,Male,Rural,436,11,13,3,189,18,401,0,True,3,1525,Mobile,1059,2,3,Paid Ads,0
+34,Male,Suburban,324,24,13,5,84,2,94,0,True,3,251,Tablet,881,7,4,Organic Search,2
+45,Female,Rural,204,22,15,1,64,0,307,0,True,7,1517,Mobile,1869,4,3,Social Media,0
+34,Other,Urban,294,20,14,2,287,14,232,0,False,7,54,Tablet,2872,1,1,Paid Ads,0
+34,Female,Suburban,67,49,18,5,68,1,347,0,True,2,230,Mobile,2412,2,2,Organic Search,2
+21,Male,Suburban,495,12,6,4,282,9,313,0,False,10,177,Desktop,2458,15,4,Paid Ads,0
+54,Female,Urban,128,24,11,3,160,4,47,0,False,4,1434,Desktop,1916,8,3,Email,0
+53,Other,Urban,401,23,6,5,240,5,126,0,True,5,449,Tablet,464,6,0,Social Media,0
+20,Male,Urban,316,27,11,2,233,14,83,0,False,2,1184,Tablet,1730,10,3,Social Media,0
+62,Male,Urban,306,2,20,5,192,13,43,0,False,9,352,Desktop,3161,9,4,Paid Ads,2
+44,Female,Rural,394,30,11,4,476,2,376,0,True,9,569,Tablet,1786,1,4,Email,2
+32,Other,Urban,558,17,8,4,138,18,489,0,True,3,73,Desktop,1709,12,2,Paid Ads,2
+50,Male,Rural,123,21,11,1,137,16,440,0,True,2,1138,Desktop,1601,6,3,Organic Search,0
+35,Other,Rural,89,14,9,4,486,5,246,0,True,5,1819,Mobile,1457,8,1,Paid Ads,2
+67,Female,Rural,323,9,10,2,298,15,17,0,True,1,1458,Mobile,2302,14,0,Email,0
+55,Female,Urban,320,7,7,4,370,8,387,0,False,1,402,Mobile,3342,7,5,Social Media,0
+47,Other,Rural,303,44,14,2,222,2,330,0,True,5,1326,Mobile,1259,6,2,Organic Search,0
+49,Other,Suburban,165,1,16,3,443,19,144,0,False,4,1169,Mobile,1189,14,1,Email,0
+69,Other,Suburban,453,37,7,4,316,0,400,0,False,7,463,Desktop,2279,1,3,Email,0
+34,Female,Suburban,270,16,10,3,476,11,315,0,True,9,415,Desktop,2731,4,0,Paid Ads,0
+66,Male,Urban,482,2,3,1,305,3,430,0,True,8,713,Desktop,1319,14,0,Social Media,0
+54,Other,Suburban,277,50,15,2,106,10,124,0,True,5,491,Tablet,482,11,4,Organic Search,0
+25,Other,Suburban,382,43,0,1,314,10,252,0,True,8,265,Tablet,144,14,4,Email,0
+53,Female,Urban,378,17,4,3,282,4,457,0,False,3,1083,Desktop,1964,13,1,Email,1
+52,Male,Suburban,361,31,3,1,66,4,39,0,False,8,1303,Mobile,1127,9,3,Organic Search,0
+40,Other,Rural,13,38,3,5,109,17,20,0,True,4,329,Desktop,3183,5,2,Social Media,0
+45,Female,Urban,588,31,4,1,136,1,500,0,True,10,842,Desktop,2135,11,4,Email,0
+57,Other,Suburban,125,7,18,4,73,10,426,0,True,3,232,Tablet,1646,15,1,Social Media,2
+18,Other,Rural,305,19,10,1,450,14,357,0,False,4,233,Mobile,2828,10,3,Email,0
+37,Other,Suburban,45,49,17,5,403,16,227,0,False,10,273,Tablet,2493,12,3,Email,2
+21,Female,Suburban,50,4,3,3,481,15,165,0,True,8,314,Desktop,826,5,5,Organic Search,1
+35,Female,Suburban,561,3,15,3,189,19,110,0,True,6,517,Tablet,1241,4,5,Organic Search,0
+51,Male,Urban,149,8,4,3,391,5,143,0,False,5,1891,Tablet,2632,7,3,Organic Search,1
+33,Male,Suburban,104,12,10,3,407,9,141,0,True,7,590,Tablet,2103,8,0,Email,0
+63,Male,Suburban,157,30,2,5,426,5,270,0,True,3,471,Desktop,781,11,1,Organic Search,0
+47,Other,Suburban,123,20,0,4,424,18,467,0,True,5,1026,Desktop,1126,7,0,Email,0
+45,Male,Rural,176,25,0,2,158,17,250,0,False,3,770,Desktop,2422,1,3,Email,0
+51,Other,Urban,436,4,17,5,454,6,18,0,False,1,1887,Desktop,1524,11,3,Email,2
+58,Other,Rural,303,34,13,5,52,14,91,0,True,2,1236,Desktop,1238,12,0,Paid Ads,2
+44,Female,Rural,22,45,9,5,384,5,220,0,False,8,1152,Mobile,2322,12,0,Paid Ads,2
+39,Male,Urban,370,9,2,4,272,8,474,0,True,2,1180,Desktop,218,1,2,Social Media,0
+63,Female,Urban,66,12,18,1,370,15,122,0,True,10,64,Tablet,3079,8,3,Paid Ads,0
+67,Male,Urban,121,30,3,3,261,2,423,0,False,2,35,Mobile,2681,2,1,Email,1
+41,Other,Rural,97,7,20,2,492,8,487,0,True,10,268,Tablet,2820,11,4,Organic Search,0
+44,Male,Rural,105,2,5,2,398,11,369,0,True,1,1049,Desktop,1399,7,5,Email,1
+33,Male,Suburban,441,44,2,4,218,18,456,0,True,4,1637,Tablet,3389,1,1,Paid Ads,0
+39,Female,Urban,513,19,11,1,22,14,65,0,False,6,1989,Desktop,1963,13,1,Social Media,0
+30,Male,Rural,277,46,0,4,429,3,24,0,False,2,761,Desktop,806,5,1,Paid Ads,0
+41,Other,Rural,159,5,11,2,91,16,459,0,False,7,1446,Desktop,2632,10,4,Social Media,0
+64,Male,Suburban,358,16,16,5,56,13,271,0,True,4,441,Tablet,2333,6,1,Paid Ads,2
+35,Female,Urban,204,40,20,4,499,3,172,0,True,3,1997,Desktop,581,9,5,Paid Ads,2
+23,Female,Rural,468,31,2,3,353,13,398,0,True,5,651,Mobile,1410,13,1,Social Media,0
+60,Other,Rural,297,2,2,4,268,11,300,0,True,2,1887,Desktop,1660,2,3,Social Media,0
+53,Male,Urban,247,17,20,2,47,16,380,0,False,8,295,Desktop,3109,8,1,Social Media,0
+39,Other,Suburban,127,24,2,3,470,18,398,0,True,6,1361,Desktop,617,14,2,Social Media,0
+18,Other,Suburban,262,40,16,2,345,16,164,0,False,6,1691,Mobile,1183,0,5,Organic Search,0
+51,Male,Urban,318,38,17,3,421,11,63,0,False,10,1201,Tablet,1571,14,4,Organic Search,0
+49,Male,Suburban,51,35,5,3,469,12,140,0,True,7,1893,Tablet,1607,1,0,Paid Ads,1
+40,Other,Urban,125,42,5,3,460,16,15,0,False,7,1361,Tablet,2755,11,5,Social Media,1
+34,Male,Rural,168,27,4,5,375,0,253,0,False,8,681,Desktop,3529,2,2,Organic Search,0
+64,Male,Suburban,569,9,6,2,190,1,374,0,False,1,798,Mobile,1624,10,3,Social Media,1
+30,Male,Suburban,160,33,10,4,191,1,241,0,True,2,356,Mobile,3205,4,2,Email,2
+50,Male,Urban,59,20,8,4,146,11,381,0,True,6,378,Mobile,1909,8,5,Social Media,2
+37,Male,Urban,574,10,20,3,107,18,469,0,True,8,1227,Mobile,2737,7,5,Paid Ads,0
+55,Male,Suburban,476,16,10,5,49,6,374,0,True,6,1986,Desktop,3065,11,3,Paid Ads,2
+50,Male,Suburban,379,8,10,3,173,6,76,0,False,7,1655,Desktop,3227,2,5,Social Media,0
+67,Other,Rural,485,17,15,3,413,10,393,0,False,1,824,Mobile,2142,6,4,Organic Search,0
+54,Other,Rural,427,11,17,1,193,19,284,0,True,6,1041,Tablet,3323,11,3,Email,0
+42,Other,Urban,354,46,2,4,429,18,390,0,True,5,1246,Mobile,1574,4,5,Social Media,0
+68,Other,Rural,22,23,9,1,376,11,500,0,False,3,1216,Desktop,1011,0,4,Organic Search,0
+44,Other,Urban,412,48,0,4,490,9,47,0,True,3,1677,Tablet,276,11,1,Paid Ads,0
+53,Other,Rural,197,28,15,4,75,17,359,0,False,10,1628,Tablet,1234,5,4,Organic Search,2
+32,Female,Suburban,453,35,18,2,262,18,146,0,False,9,1402,Desktop,911,1,5,Email,0
+69,Other,Rural,66,36,14,5,33,12,48,0,False,10,382,Tablet,1763,10,0,Organic Search,2
+41,Other,Suburban,518,20,16,2,302,18,345,0,False,4,50,Mobile,1463,8,4,Email,0
+65,Female,Urban,594,48,6,4,21,13,17,0,True,3,558,Mobile,3579,11,2,Paid Ads,0
+69,Male,Rural,164,40,2,1,305,7,124,0,True,1,1532,Mobile,331,3,4,Email,0
+35,Male,Urban,55,39,9,3,450,18,302,0,True,1,308,Tablet,985,12,2,Paid Ads,0
+55,Male,Urban,424,34,8,5,296,15,253,0,True,10,160,Mobile,2929,9,3,Paid Ads,2
+36,Female,Suburban,272,24,9,5,131,8,453,0,True,9,1363,Desktop,3461,1,0,Email,2
+50,Female,Rural,448,15,11,3,450,4,478,0,False,5,1079,Tablet,3124,11,1,Email,0
+70,Male,Suburban,158,24,17,5,330,8,341,0,False,10,1085,Desktop,1528,9,1,Paid Ads,2
+19,Other,Urban,564,5,0,5,323,16,372,0,True,1,1965,Tablet,1463,7,4,Organic Search,0
+45,Male,Urban,39,31,4,1,233,19,299,0,False,2,541,Desktop,1107,15,0,Social Media,0
+65,Other,Urban,362,27,12,5,260,6,346,0,False,2,995,Tablet,142,10,0,Paid Ads,2
+25,Female,Rural,77,15,8,2,470,17,344,0,True,3,184,Desktop,2183,0,4,Paid Ads,0
+62,Male,Rural,441,26,20,5,35,4,467,0,True,5,219,Tablet,1386,11,5,Email,2
+54,Other,Rural,353,16,9,4,383,5,260,0,False,6,1634,Desktop,3432,13,1,Paid Ads,2
+39,Female,Rural,64,1,14,4,394,12,37,0,False,9,715,Desktop,1248,12,1,Paid Ads,2
+48,Other,Suburban,157,29,9,4,176,11,276,0,True,1,538,Desktop,407,13,1,Social Media,2
+31,Male,Rural,229,46,3,4,335,10,69,0,False,2,1303,Tablet,1715,8,4,Email,0
+25,Male,Suburban,558,14,4,3,291,0,57,0,True,3,1425,Desktop,2563,7,1,Paid Ads,1
+61,Other,Suburban,172,30,2,2,360,7,339,0,True,3,898,Mobile,1775,14,2,Social Media,0
+64,Male,Rural,575,16,9,4,53,19,38,0,False,2,1049,Mobile,3459,7,4,Organic Search,2
+56,Male,Suburban,197,6,14,1,362,9,189,0,False,3,1747,Desktop,510,6,0,Email,0
+47,Other,Urban,467,6,20,1,467,0,444,0,False,10,1621,Mobile,1214,10,2,Email,0
+53,Female,Suburban,21,46,15,5,31,16,447,0,False,3,1909,Mobile,183,2,1,Organic Search,2
+54,Female,Rural,194,35,5,3,307,15,261,0,True,8,1786,Mobile,2358,8,3,Organic Search,1
+56,Female,Rural,237,20,16,3,252,6,392,0,False,3,212,Desktop,1802,2,5,Organic Search,0
+68,Other,Urban,587,34,12,1,73,0,426,0,True,10,1734,Desktop,2583,6,1,Organic Search,0
+37,Other,Rural,395,14,15,5,339,0,84,0,False,6,17,Mobile,1051,2,0,Email,2
+69,Female,Rural,344,4,17,1,326,19,480,0,False,8,928,Desktop,3268,7,3,Organic Search,0
+43,Female,Urban,506,15,4,4,389,7,403,0,False,10,1419,Tablet,2410,1,5,Email,0
+30,Other,Rural,412,33,3,3,44,17,283,0,False,6,1188,Desktop,2885,4,3,Paid Ads,1
+55,Other,Urban,320,11,0,4,455,6,22,0,False,6,1281,Mobile,1917,11,0,Email,0
+70,Other,Urban,571,8,18,2,235,10,377,0,True,9,1978,Desktop,3117,8,1,Organic Search,0
+35,Female,Rural,103,48,11,1,138,8,93,0,False,1,1140,Mobile,1592,15,0,Email,0
+21,Male,Rural,284,4,9,3,245,14,203,0,False,6,1377,Desktop,977,10,5,Email,0
+48,Other,Suburban,436,13,17,2,492,15,448,0,False,8,1550,Tablet,1448,7,0,Paid Ads,0
+66,Female,Rural,486,25,11,4,240,9,348,0,True,7,1086,Tablet,1579,2,4,Email,2
+64,Male,Rural,218,42,10,2,401,11,468,0,True,8,1548,Desktop,2684,13,1,Email,0
+66,Female,Rural,229,3,3,3,115,14,103,0,True,3,1860,Mobile,2876,2,1,Paid Ads,1
+21,Male,Urban,141,1,7,2,109,17,381,0,True,2,923,Tablet,2091,15,2,Email,1
+22,Male,Urban,264,8,20,5,27,3,435,0,False,4,549,Mobile,3392,0,5,Email,2
+26,Female,Urban,382,29,4,3,286,10,319,0,True,2,494,Desktop,1267,9,2,Email,1
+43,Male,Rural,381,7,9,5,422,18,152,0,True,8,1049,Tablet,3201,3,3,Organic Search,2
+62,Male,Suburban,348,38,20,4,239,12,128,0,False,8,1784,Tablet,1916,11,2,Paid Ads,2
+39,Female,Suburban,417,16,19,4,50,4,250,0,False,8,1217,Tablet,2724,11,4,Organic Search,2
+38,Other,Rural,405,27,7,5,196,16,336,0,False,1,1725,Tablet,2413,0,3,Social Media,0
+40,Male,Suburban,212,6,19,5,332,12,78,0,False,10,1572,Desktop,3293,11,4,Organic Search,2
+18,Other,Urban,183,30,16,2,80,3,13,0,False,5,115,Desktop,686,6,4,Organic Search,0
+65,Female,Urban,141,23,8,3,322,18,393,0,False,8,398,Mobile,1998,6,3,Email,0
+53,Other,Rural,387,2,3,4,165,19,400,0,True,5,1927,Mobile,1492,5,4,Email,0
+59,Female,Urban,297,48,2,5,97,0,291,0,False,4,1160,Tablet,3031,12,5,Paid Ads,0
+19,Female,Suburban,445,15,12,3,471,5,123,0,False,3,1266,Desktop,2437,5,0,Social Media,0
+20,Female,Suburban,571,26,5,4,71,9,461,0,False,5,353,Tablet,1159,1,1,Organic Search,0
+44,Male,Rural,21,6,6,1,190,2,236,0,True,3,1483,Mobile,378,6,2,Social Media,0
+43,Male,Suburban,482,32,12,1,151,1,466,0,True,1,198,Mobile,2482,3,0,Paid Ads,0
+38,Male,Rural,320,23,12,3,116,12,295,0,False,6,1453,Desktop,1101,12,2,Email,0
+30,Female,Rural,438,18,4,1,299,15,197,0,True,9,1376,Desktop,2084,9,3,Paid Ads,0
+42,Female,Urban,256,47,5,5,383,5,167,0,True,10,1670,Mobile,1846,7,4,Organic Search,0
+53,Female,Rural,260,14,5,3,214,14,477,0,False,1,1062,Desktop,3494,8,4,Paid Ads,1
+39,Other,Rural,319,16,9,2,162,1,303,0,True,2,1344,Mobile,2651,7,3,Social Media,0
+45,Other,Urban,184,41,8,4,484,13,388,0,False,5,1541,Tablet,2075,3,1,Email,2
+66,Male,Suburban,261,17,7,3,275,3,220,0,False,4,1710,Mobile,2996,15,5,Email,1
+34,Other,Urban,37,29,15,5,142,3,54,0,True,2,126,Desktop,2435,4,0,Social Media,2
+63,Other,Rural,423,42,1,1,383,2,172,0,False,2,1011,Tablet,113,11,4,Email,0
+18,Female,Urban,183,33,17,4,201,16,349,0,False,7,608,Mobile,2802,11,2,Email,2
+44,Other,Suburban,351,50,12,3,485,8,193,0,True,5,754,Desktop,1554,14,1,Organic Search,0
+28,Male,Rural,476,23,19,5,246,6,20,0,True,9,44,Desktop,3267,1,1,Email,2
+33,Female,Suburban,488,46,13,5,478,9,321,0,True,2,1113,Tablet,440,2,1,Email,2
+64,Female,Rural,501,36,20,3,460,11,141,0,True,7,149,Mobile,540,4,3,Paid Ads,0
+46,Other,Suburban,545,30,0,1,441,10,54,0,True,6,721,Mobile,103,1,4,Organic Search,0
+58,Male,Suburban,428,2,3,3,164,18,199,0,False,5,1443,Tablet,714,9,2,Organic Search,1
+67,Female,Suburban,84,6,3,1,373,3,492,0,False,1,776,Mobile,595,12,4,Paid Ads,0
+42,Other,Rural,591,33,11,3,465,17,328,0,True,9,496,Tablet,2977,6,5,Email,0
+18,Male,Suburban,434,15,8,4,241,2,259,0,False,7,1243,Mobile,1215,9,2,Paid Ads,2
+29,Other,Rural,303,24,10,2,34,16,450,0,True,7,1058,Mobile,1771,1,5,Paid Ads,0
+60,Female,Rural,398,50,16,2,87,15,317,0,True,10,57,Mobile,95,1,1,Paid Ads,0
+36,Female,Urban,420,13,8,5,270,8,288,0,False,1,1652,Tablet,3217,10,1,Social Media,2
+31,Female,Rural,254,23,20,2,449,7,215,0,False,4,1885,Desktop,1520,0,4,Organic Search,0
+60,Female,Rural,217,41,13,1,89,16,177,0,False,6,116,Tablet,2874,4,1,Organic Search,0
+46,Female,Urban,389,23,11,2,200,0,232,0,False,9,1441,Tablet,1413,13,5,Paid Ads,0
+48,Female,Suburban,563,21,10,1,306,15,338,0,True,5,1592,Mobile,1607,13,3,Organic Search,0
+32,Male,Suburban,348,17,0,3,138,7,154,0,False,1,1609,Tablet,1208,5,3,Email,0
+28,Female,Suburban,425,47,11,2,218,5,130,0,True,4,66,Desktop,647,1,4,Social Media,0
+49,Male,Urban,323,22,2,1,113,1,404,0,True,8,774,Desktop,3193,12,2,Social Media,0
+61,Male,Suburban,484,1,8,5,5,17,231,0,False,10,1614,Mobile,699,6,0,Organic Search,2
+49,Female,Urban,511,16,15,3,259,13,450,0,False,4,1837,Mobile,1581,5,1,Organic Search,0
+22,Male,Urban,53,42,1,4,171,9,197,0,False,7,491,Desktop,297,5,1,Organic Search,0
+54,Male,Rural,47,49,11,3,32,12,350,0,False,8,237,Desktop,1320,6,4,Social Media,0
+61,Other,Urban,258,45,18,2,54,11,289,0,False,8,1239,Desktop,522,9,2,Organic Search,0
+28,Female,Urban,194,15,16,4,291,0,333,0,False,6,710,Desktop,3557,0,0,Organic Search,2
+41,Male,Rural,542,35,8,4,293,11,438,0,False,10,310,Tablet,2564,0,3,Paid Ads,2
+28,Female,Urban,258,20,19,4,367,12,305,0,False,5,354,Tablet,404,9,4,Social Media,2
+33,Female,Suburban,550,24,10,5,442,6,371,0,True,2,1836,Mobile,1550,13,2,Organic Search,2
+50,Male,Suburban,500,10,20,2,211,9,352,0,False,2,1826,Mobile,975,8,1,Email,0
+33,Female,Urban,88,37,11,4,410,8,136,0,False,3,1844,Tablet,1491,4,1,Paid Ads,2
+31,Other,Rural,377,5,4,3,205,12,122,0,True,6,1114,Tablet,451,0,3,Email,1
+20,Other,Rural,198,14,1,1,54,17,361,0,False,8,294,Tablet,3234,13,0,Paid Ads,0
+45,Male,Suburban,545,33,11,3,489,2,384,0,False,9,1923,Tablet,283,5,1,Organic Search,0
+66,Other,Urban,64,23,1,2,17,10,88,0,True,10,1342,Desktop,2300,1,4,Paid Ads,0
+34,Male,Rural,216,3,4,5,461,15,273,0,True,9,1565,Desktop,1581,4,1,Social Media,0
+49,Female,Suburban,533,26,5,5,28,4,214,0,False,5,1542,Mobile,2160,12,4,Email,0
+20,Other,Rural,161,40,10,3,454,11,145,0,False,3,1225,Desktop,2825,3,5,Email,0
+42,Female,Rural,12,45,20,5,136,0,42,0,False,2,1314,Desktop,830,2,1,Social Media,2
+46,Male,Suburban,597,21,5,5,327,5,200,0,True,10,734,Mobile,1871,12,3,Email,0
+31,Male,Urban,125,18,12,2,395,5,468,0,False,10,1631,Mobile,222,8,0,Paid Ads,0
+47,Male,Rural,169,18,7,3,297,15,260,0,False,10,279,Tablet,446,3,4,Email,1
+39,Female,Suburban,425,32,1,4,458,8,77,0,True,7,641,Desktop,230,12,4,Social Media,0
+36,Male,Urban,461,43,17,3,285,1,162,0,True,4,15,Tablet,2099,10,3,Paid Ads,0
+63,Male,Suburban,30,34,19,4,453,14,57,0,False,9,992,Desktop,3463,2,5,Social Media,2
+42,Male,Suburban,143,41,2,4,476,1,433,0,False,3,30,Tablet,2963,7,0,Email,0
+30,Female,Rural,80,38,10,3,39,17,307,0,True,4,67,Mobile,3293,8,2,Email,0
+26,Other,Urban,68,2,14,2,312,8,286,0,True,6,1084,Mobile,3447,8,3,Organic Search,0
+41,Female,Urban,254,36,5,2,106,1,373,0,True,4,1155,Mobile,1433,10,2,Organic Search,1
+69,Male,Rural,64,22,3,2,75,10,351,0,True,3,796,Mobile,1721,11,3,Email,1
+48,Other,Urban,130,30,1,3,277,4,140,0,False,5,3,Tablet,2510,15,4,Email,0
+51,Female,Suburban,524,29,11,3,359,2,449,0,True,4,1385,Tablet,1125,8,2,Email,0
+26,Male,Rural,424,20,17,5,81,10,258,0,False,9,1385,Desktop,3080,12,1,Paid Ads,2
+66,Male,Suburban,372,20,16,3,486,12,451,0,False,5,840,Mobile,1577,6,2,Paid Ads,0
+25,Female,Suburban,328,5,15,4,82,18,315,0,True,1,1515,Desktop,1196,7,4,Organic Search,2
+29,Male,Urban,20,49,17,1,174,8,267,0,False,2,259,Tablet,3090,5,2,Paid Ads,0
+69,Female,Rural,297,18,9,4,371,8,85,0,True,6,1634,Desktop,2103,1,0,Email,2
+19,Other,Rural,102,9,6,2,113,17,431,0,False,9,1726,Tablet,98,11,2,Email,1
+49,Male,Urban,381,19,11,5,464,15,413,0,True,1,471,Mobile,2227,10,0,Paid Ads,2
+56,Male,Rural,84,30,14,4,281,11,406,0,False,2,192,Mobile,2560,7,2,Social Media,2
+36,Other,Suburban,76,27,8,5,339,9,483,0,True,3,1507,Tablet,2859,1,5,Email,2
+23,Female,Urban,92,12,4,1,390,4,322,0,False,7,1825,Mobile,587,2,2,Email,0
+35,Other,Rural,110,23,12,5,377,0,73,0,True,10,1716,Mobile,1102,8,1,Email,2
+54,Other,Rural,304,37,4,1,7,3,53,0,False,2,1429,Desktop,3445,5,2,Social Media,0
+46,Male,Suburban,434,23,8,5,130,13,345,0,True,9,1686,Desktop,381,14,1,Organic Search,2
+37,Female,Urban,385,32,18,4,282,2,293,0,False,9,367,Tablet,394,12,4,Paid Ads,2
+45,Other,Rural,576,2,13,1,206,7,211,0,True,3,1170,Mobile,122,14,1,Paid Ads,0
+64,Female,Suburban,334,35,7,2,216,15,48,0,False,1,1411,Desktop,2923,14,1,Paid Ads,1
+18,Other,Urban,256,46,14,3,61,17,195,0,True,7,1474,Mobile,1131,15,0,Social Media,0
+61,Female,Suburban,220,38,13,2,353,17,101,0,True,4,358,Tablet,2083,11,0,Social Media,0
+56,Male,Urban,533,42,2,2,127,14,467,0,False,1,1146,Mobile,2927,3,0,Social Media,0
+41,Male,Suburban,519,32,4,5,403,8,134,0,False,5,904,Mobile,3432,4,1,Social Media,0
+33,Other,Urban,523,39,12,3,283,8,187,0,True,1,1379,Tablet,2472,9,4,Paid Ads,0
+62,Male,Suburban,353,39,13,2,181,2,335,0,True,4,1510,Desktop,1474,10,3,Organic Search,0
+26,Other,Rural,179,37,2,2,235,3,159,0,False,4,1973,Desktop,1798,15,5,Email,0
+59,Male,Suburban,572,31,1,4,485,2,285,0,True,6,1858,Desktop,1262,12,5,Organic Search,0
+19,Female,Urban,244,29,0,5,486,15,178,0,False,1,68,Desktop,1748,6,0,Social Media,0
+64,Female,Rural,140,50,5,3,133,6,353,0,False,1,1556,Tablet,919,11,0,Social Media,1
+31,Female,Rural,573,3,0,5,244,5,368,0,True,5,947,Tablet,779,9,1,Email,0
+25,Male,Suburban,337,2,5,3,326,10,330,0,False,9,470,Desktop,942,0,1,Social Media,1
+26,Other,Rural,427,31,4,3,403,9,302,0,False,5,679,Tablet,3050,5,1,Email,1
+57,Other,Rural,578,46,7,2,68,10,235,0,False,6,977,Mobile,3410,3,4,Social Media,1
+29,Other,Urban,283,19,2,2,302,12,134,0,True,7,1567,Desktop,2111,13,0,Social Media,0
+47,Female,Rural,183,29,12,2,445,15,405,0,False,2,1222,Mobile,3297,6,1,Social Media,0
+25,Other,Rural,282,1,2,1,194,0,248,0,False,6,1237,Desktop,990,6,1,Paid Ads,0
+68,Other,Rural,352,39,1,1,140,10,122,0,True,9,1908,Mobile,2161,0,1,Organic Search,0
+66,Female,Rural,112,47,4,1,461,18,36,0,False,5,1554,Mobile,1096,9,2,Social Media,0
+41,Other,Suburban,271,35,7,3,259,0,489,0,True,3,1386,Tablet,1844,11,3,Social Media,1
+63,Male,Rural,99,32,1,3,217,2,117,0,False,1,1331,Mobile,1807,3,2,Paid Ads,0
+37,Female,Suburban,252,43,3,4,203,4,329,0,False,9,917,Desktop,2457,9,5,Paid Ads,0
+26,Female,Urban,286,41,20,3,74,0,360,0,False,9,1958,Mobile,3259,3,5,Social Media,0
+56,Other,Suburban,319,14,16,5,72,17,200,0,True,5,19,Mobile,2943,9,2,Paid Ads,2
+49,Male,Suburban,371,19,6,1,153,10,291,0,False,9,1168,Mobile,1459,10,2,Social Media,0
+26,Female,Suburban,239,50,2,4,181,11,412,0,True,7,1322,Tablet,2819,13,4,Social Media,0
+31,Female,Suburban,345,16,20,3,278,15,397,0,False,8,127,Desktop,739,14,0,Organic Search,0
+26,Female,Urban,78,23,4,1,84,9,13,0,True,1,846,Desktop,2251,10,3,Social Media,0
+29,Male,Urban,108,32,13,2,370,0,279,0,True,7,935,Tablet,932,10,0,Paid Ads,0
+60,Male,Rural,100,6,19,5,311,11,188,0,False,1,974,Tablet,3177,15,4,Organic Search,2
+36,Male,Rural,28,4,19,1,497,9,122,0,True,7,169,Desktop,1587,14,4,Email,0
+18,Male,Urban,454,2,0,3,302,12,164,0,True,7,410,Desktop,1582,1,0,Organic Search,0
+67,Male,Rural,322,13,10,2,29,15,436,0,False,5,930,Desktop,2732,1,5,Paid Ads,0
+19,Other,Suburban,247,31,14,2,214,6,126,0,False,5,1597,Mobile,3442,7,0,Email,0
+57,Male,Urban,225,44,13,1,41,13,331,0,True,10,417,Mobile,2502,2,4,Social Media,0
+43,Male,Urban,201,35,8,4,64,3,15,0,False,10,118,Desktop,1865,0,5,Social Media,2
+47,Female,Rural,386,8,10,1,308,4,42,0,True,4,1554,Mobile,1114,3,5,Social Media,0
+38,Female,Rural,208,41,12,4,189,18,467,0,True,9,1468,Desktop,345,14,2,Social Media,2
+63,Male,Urban,342,30,17,1,26,7,104,0,False,6,148,Mobile,1099,12,4,Email,0
+18,Other,Urban,93,50,5,1,333,3,296,0,False,3,1646,Desktop,2057,1,5,Organic Search,0
+32,Female,Urban,208,24,20,4,169,2,444,0,True,4,604,Mobile,2862,12,0,Organic Search,2
+52,Other,Urban,136,11,12,2,423,7,13,0,True,6,1248,Desktop,198,4,5,Organic Search,0
+63,Other,Suburban,13,19,8,2,290,16,407,0,False,3,1453,Mobile,222,2,0,Paid Ads,0
+68,Female,Urban,450,13,0,2,178,13,140,0,False,9,1563,Tablet,1218,4,0,Email,0
+57,Male,Suburban,104,36,12,3,236,17,349,0,True,4,149,Mobile,2488,10,5,Email,0
+36,Female,Rural,153,42,0,2,288,3,326,0,False,1,1567,Desktop,1229,8,3,Email,0
+31,Female,Rural,371,23,16,2,460,12,154,0,True,4,341,Tablet,3223,1,4,Paid Ads,0
+55,Other,Suburban,400,39,15,4,224,9,396,0,False,3,1198,Tablet,2965,12,3,Organic Search,2
+53,Other,Rural,334,40,1,1,390,0,170,0,True,6,1138,Desktop,3318,4,3,Email,0
+67,Other,Urban,207,36,19,1,37,14,241,0,False,1,713,Mobile,1966,0,0,Paid Ads,0
+50,Female,Rural,11,32,11,4,231,17,211,0,True,6,268,Mobile,1705,8,3,Paid Ads,2
+25,Other,Urban,321,40,11,3,54,14,432,0,True,6,13,Mobile,2979,6,3,Social Media,0
+35,Other,Rural,101,20,5,2,277,12,328,0,True,3,1381,Mobile,1678,4,5,Organic Search,1
+27,Female,Suburban,398,10,9,1,233,6,366,0,False,9,1412,Desktop,3313,12,4,Paid Ads,0
+37,Male,Suburban,564,32,18,2,434,8,84,0,False,5,1049,Tablet,1055,6,2,Social Media,0
+42,Other,Suburban,155,17,7,3,471,0,15,0,True,5,513,Mobile,1111,3,0,Paid Ads,1
+55,Male,Rural,276,48,12,3,306,14,41,0,False,10,606,Mobile,3476,8,1,Organic Search,0
+32,Other,Suburban,74,49,15,3,457,19,187,0,True,8,217,Tablet,111,6,0,Organic Search,0
+60,Other,Suburban,52,28,11,2,433,19,417,0,True,4,1432,Desktop,2687,8,3,Social Media,0
+43,Male,Urban,117,26,1,5,493,1,245,0,False,6,874,Desktop,3068,7,5,Organic Search,0
+36,Other,Suburban,25,34,16,1,150,1,393,0,False,5,368,Mobile,739,7,2,Organic Search,0
+56,Other,Suburban,174,36,16,2,482,12,342,0,True,9,671,Mobile,2669,7,0,Paid Ads,0
+39,Male,Rural,230,37,18,4,393,0,175,0,False,1,548,Tablet,3254,1,2,Email,2
+58,Female,Suburban,76,42,15,4,237,17,93,0,False,7,360,Tablet,2033,14,0,Email,2
+65,Other,Rural,129,37,9,2,109,6,338,0,False,9,842,Tablet,1781,15,3,Paid Ads,0
+22,Female,Urban,454,31,18,5,498,9,499,0,False,9,33,Desktop,1817,14,0,Social Media,2
+22,Other,Suburban,367,7,15,3,57,8,40,0,True,6,816,Desktop,2803,12,0,Email,0
+57,Female,Suburban,273,37,11,4,184,19,403,0,False,4,1145,Desktop,2641,11,1,Social Media,2
+41,Other,Suburban,536,38,20,4,261,5,413,0,False,5,205,Desktop,1582,15,0,Paid Ads,2
+46,Other,Suburban,309,24,1,3,23,11,336,0,True,2,988,Tablet,2072,8,4,Paid Ads,0
+44,Female,Urban,516,22,6,4,92,19,224,0,True,5,1884,Mobile,1558,2,2,Organic Search,0
+28,Male,Rural,590,6,3,5,44,2,108,0,True,9,1919,Tablet,2645,4,1,Paid Ads,0
+38,Female,Suburban,144,4,20,4,494,5,266,0,False,10,1024,Mobile,1477,6,1,Paid Ads,2
+70,Female,Suburban,142,26,10,5,442,13,496,0,False,7,799,Mobile,3347,15,5,Organic Search,2
+47,Male,Suburban,539,49,16,1,231,0,67,0,False,2,242,Mobile,3217,12,4,Email,0
+66,Female,Suburban,105,40,8,4,371,19,466,0,False,1,965,Desktop,2053,5,0,Social Media,2
+64,Other,Suburban,177,40,9,3,178,13,199,0,True,5,673,Mobile,3241,5,0,Organic Search,0
+41,Female,Suburban,479,3,8,1,31,13,35,0,False,1,273,Mobile,3216,10,4,Organic Search,0
+23,Female,Rural,556,13,8,5,5,10,311,0,True,1,1977,Mobile,2610,1,5,Email,2
+33,Other,Rural,461,39,19,4,375,1,294,0,False,5,1640,Tablet,564,7,0,Paid Ads,2
+24,Male,Urban,425,9,11,1,149,3,122,0,False,10,1447,Tablet,3497,13,1,Organic Search,0
+51,Female,Urban,298,17,0,4,80,12,26,0,True,1,807,Desktop,2528,2,0,Paid Ads,0
+33,Female,Urban,152,7,17,2,64,4,256,0,True,3,1740,Tablet,2813,7,0,Social Media,0
+50,Male,Rural,154,7,11,4,274,15,220,0,False,1,260,Tablet,138,1,1,Email,2
+55,Male,Rural,453,4,19,2,439,9,120,0,False,7,1973,Tablet,2170,5,2,Social Media,0
+30,Other,Rural,355,6,5,1,290,18,461,0,False,5,273,Desktop,2553,12,0,Email,0
+38,Female,Suburban,225,22,0,4,281,3,337,0,True,1,1768,Desktop,597,10,2,Paid Ads,0
+50,Female,Suburban,378,48,0,3,189,19,47,0,False,9,460,Mobile,3342,2,4,Social Media,0
+33,Other,Urban,532,21,17,1,442,13,433,0,True,10,64,Desktop,3064,14,0,Email,0
+26,Female,Rural,206,48,4,1,223,13,330,0,True,8,1758,Mobile,433,3,1,Organic Search,0
+62,Male,Urban,567,27,8,1,448,5,82,0,True,10,1896,Tablet,1519,14,5,Paid Ads,0
+30,Female,Suburban,480,34,0,3,164,19,458,0,True,2,1597,Mobile,907,13,1,Paid Ads,0
+24,Male,Urban,484,27,20,5,202,19,392,0,True,6,502,Tablet,1504,7,1,Email,2
+51,Other,Urban,398,4,19,5,337,12,355,0,False,10,425,Desktop,1870,7,4,Paid Ads,2
+66,Female,Rural,229,44,18,1,324,7,10,0,False,8,180,Tablet,1471,0,2,Organic Search,0
+19,Male,Urban,477,12,3,1,335,0,121,0,False,3,1164,Mobile,1205,3,1,Organic Search,0
+43,Male,Urban,262,31,16,4,54,9,272,0,True,4,411,Desktop,3173,7,3,Paid Ads,2
+44,Male,Urban,134,3,7,5,18,15,55,0,True,3,621,Mobile,343,13,2,Email,0
+24,Female,Urban,535,6,9,3,32,2,366,0,True,5,154,Tablet,258,2,0,Paid Ads,0
+66,Male,Rural,553,30,11,4,41,0,196,0,True,7,1041,Mobile,149,7,4,Paid Ads,2
+22,Male,Suburban,599,21,0,3,170,18,355,0,False,2,915,Mobile,2885,1,3,Social Media,0
+21,Other,Urban,281,22,16,2,36,4,461,0,True,8,116,Desktop,828,0,3,Email,0
+50,Other,Suburban,238,45,1,1,383,8,68,0,False,2,1390,Mobile,3247,8,3,Organic Search,0
+36,Other,Suburban,431,5,5,4,203,10,154,0,False,6,1329,Tablet,1226,14,1,Paid Ads,0
+18,Other,Suburban,493,17,3,1,143,13,280,0,False,1,46,Mobile,3302,14,0,Organic Search,0
+53,Male,Urban,157,20,12,5,82,17,76,0,False,9,258,Desktop,258,7,0,Social Media,2
+43,Other,Urban,528,21,10,3,9,17,391,0,True,7,826,Desktop,1418,1,2,Organic Search,0
+39,Other,Rural,146,27,9,5,220,9,381,0,False,5,1578,Desktop,1743,3,1,Paid Ads,2
+43,Other,Rural,25,9,15,4,340,5,431,0,False,7,1500,Desktop,1926,15,2,Email,2
+60,Male,Suburban,296,8,18,3,353,6,475,0,False,2,532,Mobile,1787,9,5,Paid Ads,0
+43,Female,Suburban,285,22,19,5,79,8,98,0,False,6,1945,Tablet,896,6,4,Paid Ads,2
+34,Female,Rural,360,26,4,2,5,5,198,0,False,10,1028,Tablet,1284,1,1,Email,1
+55,Female,Suburban,169,22,4,2,398,15,190,0,True,1,135,Mobile,595,6,0,Email,1
+36,Male,Suburban,573,30,17,2,96,4,367,0,False,8,1063,Desktop,2514,0,5,Paid Ads,0
+31,Female,Suburban,107,33,15,1,166,1,444,0,True,2,1218,Tablet,1195,2,2,Social Media,0
+31,Male,Urban,464,23,9,5,79,13,175,0,True,10,1798,Desktop,2624,2,3,Paid Ads,2
+60,Female,Rural,342,30,2,3,408,13,170,0,False,8,1097,Desktop,2736,4,0,Paid Ads,0
+40,Female,Urban,370,17,16,5,101,4,263,0,False,7,1186,Desktop,218,1,4,Social Media,2
+47,Female,Suburban,542,14,19,4,206,3,49,0,False,1,1405,Mobile,2681,15,2,Organic Search,2
+25,Male,Urban,262,33,6,1,383,18,98,0,False,3,147,Tablet,1842,2,4,Social Media,0
+66,Male,Urban,600,47,10,1,72,9,96,0,True,10,168,Tablet,897,15,3,Organic Search,0
+42,Female,Suburban,273,28,19,5,304,7,293,0,True,9,1423,Tablet,1517,7,1,Social Media,2
+69,Other,Suburban,135,37,8,5,12,19,137,0,True,1,1414,Tablet,2967,6,4,Email,2
+38,Male,Urban,181,32,18,4,143,12,457,0,False,1,38,Mobile,875,8,0,Organic Search,2
+28,Other,Urban,258,35,16,3,274,4,319,0,True,3,493,Tablet,2935,8,2,Paid Ads,0
+31,Other,Urban,507,46,14,2,200,4,60,0,False,8,127,Tablet,751,1,4,Email,0
+55,Other,Urban,457,29,19,2,298,9,356,0,True,8,1436,Mobile,1569,14,3,Paid Ads,0
+52,Male,Rural,20,9,1,2,360,17,245,0,False,4,888,Tablet,1807,1,2,Paid Ads,0
+26,Female,Rural,215,26,18,5,220,18,189,0,False,5,780,Desktop,1025,5,4,Organic Search,2
+43,Male,Suburban,236,3,13,5,199,19,67,0,True,7,235,Desktop,665,3,5,Organic Search,2
+30,Female,Rural,448,34,13,1,214,8,447,0,False,3,1738,Desktop,2109,10,0,Paid Ads,0
+48,Female,Suburban,574,18,16,2,440,1,201,0,False,8,1502,Mobile,803,6,0,Email,0
+20,Male,Urban,169,21,18,3,147,2,420,0,False,7,852,Desktop,895,7,5,Social Media,0
+40,Male,Suburban,41,29,9,1,156,2,15,0,True,5,291,Tablet,989,15,3,Social Media,0
+29,Other,Suburban,564,48,15,2,45,10,396,0,False,2,886,Tablet,1548,11,3,Social Media,0
+64,Male,Urban,325,32,9,2,6,8,470,0,True,8,130,Desktop,1072,10,1,Email,0
+50,Female,Urban,549,20,0,3,312,0,111,0,False,3,1133,Mobile,2259,1,4,Social Media,0
+55,Male,Suburban,423,17,15,2,311,18,50,0,True,7,19,Mobile,259,1,2,Social Media,0
+30,Male,Rural,100,26,14,5,153,0,416,0,True,5,1073,Tablet,3499,10,3,Email,2
+45,Male,Rural,229,15,9,2,40,15,265,0,False,5,1808,Mobile,903,8,5,Paid Ads,0
+37,Female,Urban,384,15,20,5,304,10,478,0,True,9,1954,Desktop,2499,6,5,Paid Ads,2
+59,Female,Urban,133,45,8,2,401,11,366,0,False,9,1578,Tablet,2096,2,2,Organic Search,0
+27,Other,Urban,294,48,5,5,67,8,400,0,False,1,88,Mobile,349,12,1,Email,0
+40,Female,Rural,10,7,10,4,434,7,491,0,False,2,59,Mobile,1031,0,2,Paid Ads,2
+49,Other,Suburban,431,23,18,3,413,2,81,0,True,6,983,Mobile,3081,0,5,Social Media,0
+50,Male,Urban,19,27,15,2,173,14,359,0,False,6,655,Tablet,1365,10,5,Email,0
+69,Female,Rural,428,16,12,2,258,6,36,0,True,2,1032,Desktop,534,6,0,Email,0
+51,Female,Rural,116,26,6,4,482,2,115,0,True,1,963,Desktop,3435,8,4,Organic Search,0
+29,Female,Suburban,225,1,18,4,282,4,387,0,True,5,730,Mobile,1187,5,5,Organic Search,2
+53,Male,Suburban,301,5,20,4,42,19,72,0,True,5,433,Desktop,1940,8,5,Organic Search,2
+49,Male,Suburban,188,1,16,2,114,6,433,0,False,3,1075,Mobile,2066,6,1,Email,0
+36,Male,Rural,36,28,18,3,379,18,149,0,False,1,921,Tablet,3071,15,1,Email,0
+55,Male,Urban,41,13,17,4,62,9,421,0,True,8,399,Desktop,1945,8,4,Paid Ads,2
+33,Male,Rural,448,33,8,5,61,13,286,0,True,5,279,Tablet,2771,2,5,Email,2
+52,Other,Urban,101,41,10,2,47,3,301,0,False,4,1430,Desktop,2958,10,2,Social Media,0
+30,Male,Suburban,554,13,12,1,38,18,210,0,False,9,1105,Tablet,870,14,4,Paid Ads,0
+70,Female,Rural,72,1,13,1,25,4,438,0,False,1,614,Desktop,2864,15,1,Social Media,0
+64,Female,Rural,600,27,18,4,223,19,186,0,True,5,1863,Mobile,850,0,5,Paid Ads,2
+45,Other,Rural,181,2,0,2,480,0,444,0,False,5,115,Tablet,3008,15,2,Email,0
+35,Other,Rural,276,46,4,1,240,12,95,0,False,2,1229,Mobile,2149,12,5,Organic Search,0
+55,Male,Rural,131,43,9,3,166,1,220,0,True,9,622,Tablet,2635,13,1,Social Media,0
+27,Male,Urban,439,25,0,2,442,7,165,0,False,9,413,Mobile,80,9,3,Paid Ads,0
+23,Male,Rural,436,37,1,3,492,16,234,0,False,8,1164,Tablet,411,14,2,Social Media,0
+67,Female,Rural,399,1,6,4,275,8,35,0,True,4,1621,Mobile,3399,4,4,Organic Search,0
+25,Male,Suburban,212,36,13,5,324,12,219,0,True,3,1659,Tablet,1247,13,1,Paid Ads,2
+22,Other,Urban,551,8,12,2,188,0,57,0,True,1,238,Tablet,2201,12,4,Paid Ads,0
+52,Male,Suburban,25,2,11,2,237,4,474,0,False,4,1991,Mobile,67,0,4,Paid Ads,0
+49,Female,Rural,566,12,19,1,176,17,295,0,True,1,1154,Mobile,2823,7,3,Organic Search,0
+63,Male,Rural,352,48,18,1,344,3,211,0,True,3,1390,Tablet,391,13,0,Organic Search,0
+30,Other,Rural,295,33,13,3,23,12,435,0,False,5,1358,Desktop,2462,2,0,Social Media,0
+60,Male,Suburban,587,39,19,2,141,11,178,0,False,7,259,Mobile,3122,1,1,Email,0
+31,Male,Suburban,343,43,2,5,360,6,400,0,True,10,1306,Tablet,2641,14,5,Email,0
+51,Male,Suburban,333,43,16,4,344,12,25,0,False,6,823,Mobile,860,13,1,Social Media,2
+51,Male,Urban,451,36,3,5,388,8,222,0,True,2,1299,Mobile,157,15,2,Organic Search,0
+43,Male,Rural,342,35,16,1,308,4,267,0,True,10,383,Tablet,3576,10,1,Organic Search,0
+68,Other,Suburban,49,7,19,5,194,16,381,0,True,1,878,Tablet,738,13,5,Email,2
+53,Other,Rural,399,20,18,5,184,0,199,0,True,7,47,Tablet,3591,8,3,Email,2
+41,Female,Urban,274,15,14,3,285,15,372,0,False,9,1600,Mobile,2305,7,4,Social Media,0
+31,Female,Rural,272,16,2,3,398,18,277,0,False,3,1552,Tablet,1030,13,2,Email,0
+55,Female,Urban,140,42,11,1,403,19,20,0,True,10,1452,Mobile,1715,12,2,Paid Ads,0
+25,Male,Urban,143,34,18,4,0,19,66,0,False,1,1750,Mobile,2238,7,2,Paid Ads,2
+39,Female,Rural,350,33,7,1,278,17,18,0,False,6,272,Tablet,2796,12,5,Organic Search,0
+45,Female,Urban,388,42,11,5,325,12,372,0,True,9,1382,Desktop,2656,9,2,Social Media,2
+61,Other,Suburban,160,34,4,2,273,6,191,0,True,6,950,Desktop,534,4,1,Paid Ads,1
+67,Other,Suburban,470,27,8,1,100,12,115,0,False,2,583,Desktop,1314,6,1,Social Media,0
+44,Male,Urban,169,2,5,5,150,16,17,0,False,5,588,Desktop,2840,0,2,Email,0
+25,Male,Rural,509,9,10,2,175,17,304,0,False,5,245,Mobile,500,2,3,Paid Ads,0
+56,Female,Suburban,288,6,15,1,225,7,204,0,True,7,558,Mobile,1098,7,3,Social Media,0
+48,Other,Urban,325,22,18,5,422,16,17,0,True,8,1454,Desktop,943,7,1,Paid Ads,2
+42,Female,Rural,224,42,6,3,450,7,330,0,True,8,611,Tablet,140,10,1,Paid Ads,1
+34,Female,Suburban,280,17,2,2,393,2,168,0,False,10,1157,Desktop,1348,4,2,Paid Ads,0
+18,Male,Urban,356,15,5,1,81,1,341,0,True,5,1502,Mobile,3559,0,2,Email,0
+20,Female,Rural,301,33,3,5,150,4,128,0,True,6,1249,Tablet,849,13,2,Social Media,0
+70,Other,Urban,205,44,19,5,400,17,201,0,True,7,1682,Desktop,274,7,5,Paid Ads,2
+38,Male,Urban,469,21,2,5,386,15,290,0,True,6,888,Tablet,2205,13,1,Paid Ads,0
+22,Other,Suburban,498,18,4,2,327,12,343,0,False,10,603,Desktop,2867,7,0,Social Media,1
+23,Other,Rural,349,6,19,4,43,11,44,0,False,6,273,Desktop,1903,7,5,Organic Search,2
+50,Other,Urban,377,41,20,5,379,0,254,0,True,10,719,Mobile,373,3,3,Organic Search,2
+33,Male,Rural,86,40,7,3,345,11,230,0,True,3,1001,Mobile,1103,13,5,Social Media,1
+38,Other,Rural,332,20,13,4,441,5,232,0,True,1,1679,Desktop,526,15,5,Social Media,2
+28,Female,Rural,333,34,8,1,326,18,339,0,False,1,1438,Tablet,888,14,5,Email,0
+58,Male,Rural,24,15,9,3,400,16,232,0,False,7,1157,Mobile,2904,7,3,Email,0
+54,Other,Suburban,567,3,8,2,347,12,158,0,False,8,623,Desktop,1797,6,2,Organic Search,0
+48,Other,Urban,405,37,4,5,143,11,401,0,True,9,1778,Desktop,3069,12,5,Social Media,0
+26,Other,Rural,190,13,3,4,364,13,106,0,True,10,247,Mobile,87,2,3,Organic Search,0
+30,Other,Rural,439,13,4,4,43,1,201,0,True,3,1685,Tablet,2708,15,3,Organic Search,0
+35,Female,Rural,130,39,2,3,314,1,139,0,True,8,1383,Mobile,1051,5,4,Social Media,0
+36,Other,Urban,116,27,0,1,310,14,293,0,False,3,348,Mobile,979,5,5,Organic Search,0
+39,Female,Suburban,570,15,5,5,342,15,64,0,True,6,516,Tablet,496,1,2,Email,0
+64,Male,Urban,521,38,3,2,415,13,390,0,True,6,476,Tablet,2344,6,3,Email,1
+18,Female,Rural,177,18,2,3,69,5,352,0,False,4,1279,Tablet,2569,11,3,Social Media,0
+36,Female,Urban,333,1,3,2,186,17,458,0,True,2,201,Mobile,2036,0,1,Social Media,1
+56,Female,Rural,200,3,9,3,52,10,371,0,False,3,1260,Tablet,961,5,5,Paid Ads,0
+59,Male,Suburban,25,17,1,2,1,3,167,0,True,4,1747,Desktop,1380,7,3,Paid Ads,0
+35,Male,Rural,322,9,16,1,214,0,342,0,False,3,1011,Desktop,2330,7,2,Social Media,0
+68,Other,Rural,351,42,17,5,218,14,221,0,False,10,1489,Desktop,2452,0,1,Paid Ads,2
+45,Male,Rural,596,44,4,1,75,17,79,0,True,2,1431,Tablet,3371,11,2,Paid Ads,0
+56,Other,Urban,348,3,14,4,450,17,476,0,False,6,671,Tablet,1787,15,4,Paid Ads,2
+57,Other,Suburban,274,30,17,5,139,7,378,0,True,9,1234,Mobile,2193,14,2,Email,2
+57,Other,Urban,577,28,12,2,198,5,324,0,False,10,1895,Tablet,3357,12,5,Social Media,0
+29,Female,Rural,278,20,5,3,251,10,59,0,False,1,851,Desktop,2771,13,1,Social Media,1
+57,Female,Rural,359,39,11,2,380,13,162,0,True,3,1592,Desktop,125,6,5,Email,0
+49,Male,Suburban,120,34,3,3,391,18,441,0,True,2,724,Tablet,609,4,1,Organic Search,1
+45,Male,Rural,290,19,7,2,97,16,494,0,False,6,805,Mobile,874,14,4,Email,1
+65,Other,Rural,425,45,1,3,265,12,391,0,True,6,1533,Mobile,222,3,3,Social Media,0
+34,Male,Suburban,417,30,11,4,345,13,13,0,False,7,128,Tablet,1200,11,5,Organic Search,2
+58,Other,Suburban,533,22,9,5,312,4,427,0,False,3,331,Mobile,1855,10,4,Social Media,2
+46,Female,Suburban,383,36,17,3,363,9,77,0,True,2,997,Tablet,3233,9,3,Organic Search,0
+34,Female,Suburban,307,32,4,1,19,11,198,0,True,6,1654,Tablet,828,0,4,Email,0
+49,Male,Rural,578,40,12,2,302,17,55,0,False,6,1186,Tablet,1900,10,1,Social Media,0
+68,Female,Suburban,499,6,16,4,487,13,119,0,True,7,285,Mobile,3229,15,0,Organic Search,2
+19,Male,Rural,182,38,18,2,263,11,89,0,True,2,343,Tablet,564,3,4,Paid Ads,0
+37,Male,Rural,497,23,17,1,292,17,282,0,False,9,1535,Mobile,3568,4,3,Organic Search,0
+50,Other,Urban,311,38,6,4,387,7,192,0,True,6,1962,Mobile,3033,6,1,Social Media,0
+50,Female,Urban,387,49,10,1,291,4,216,0,True,10,640,Mobile,1703,10,5,Social Media,0
+63,Male,Rural,23,8,14,3,299,8,178,0,True,1,1150,Desktop,1249,10,5,Email,0
+41,Female,Urban,594,40,20,3,77,2,232,0,False,4,1887,Mobile,2584,6,2,Email,0
+44,Male,Suburban,544,16,2,5,202,14,113,0,True,8,870,Tablet,132,10,1,Email,0
+55,Female,Suburban,386,1,12,2,310,10,493,0,False,7,1798,Desktop,727,14,1,Paid Ads,0
+23,Other,Rural,62,34,16,5,443,3,302,0,False,9,764,Desktop,2988,2,2,Social Media,2
+53,Female,Rural,544,18,12,3,310,16,277,0,True,8,829,Tablet,1398,5,4,Email,0
+65,Female,Rural,429,44,5,1,178,7,326,0,False,3,395,Desktop,250,7,2,Email,0
+70,Other,Rural,64,10,5,3,267,15,481,0,False,1,1245,Mobile,2661,14,5,Social Media,1
+49,Female,Urban,271,5,19,4,72,2,39,0,False,8,36,Tablet,1453,13,1,Social Media,2
+35,Male,Suburban,136,39,15,1,351,18,56,0,True,5,1060,Tablet,1859,10,2,Organic Search,0
+49,Female,Urban,523,50,2,3,162,13,448,0,True,10,1510,Mobile,3377,15,4,Organic Search,0
+58,Female,Suburban,383,41,1,3,156,19,214,0,False,8,1273,Mobile,2462,11,3,Organic Search,0
+36,Male,Suburban,96,26,5,2,238,8,371,0,False,4,1724,Desktop,3365,5,2,Email,1
+42,Male,Suburban,163,44,19,4,192,18,54,0,True,5,1738,Tablet,579,6,0,Social Media,2
+28,Other,Rural,544,41,10,5,445,7,96,0,False,4,1494,Mobile,3157,7,4,Social Media,2
+54,Other,Urban,457,18,10,1,334,0,389,0,False,1,754,Desktop,252,8,1,Social Media,0
+38,Male,Urban,436,49,15,3,84,2,131,0,False,8,1241,Tablet,709,14,2,Email,0
+24,Female,Suburban,522,50,17,1,125,10,138,0,True,1,892,Desktop,2019,5,5,Organic Search,0
+22,Other,Urban,14,15,4,4,449,13,94,0,False,6,386,Tablet,1280,13,4,Organic Search,0
+26,Female,Urban,574,28,10,2,271,12,143,0,False,9,1860,Tablet,999,12,4,Organic Search,0
+52,Male,Urban,25,16,3,5,265,12,464,0,True,3,597,Desktop,3381,9,3,Social Media,0
+66,Female,Urban,442,6,13,4,470,14,369,0,False,4,1602,Mobile,1155,12,1,Organic Search,2
+61,Male,Rural,26,42,0,3,306,7,443,0,False,8,768,Tablet,2156,15,3,Paid Ads,0
+18,Female,Suburban,137,9,14,4,209,16,47,0,False,1,1496,Tablet,2461,9,1,Email,2
+52,Female,Urban,416,9,10,4,359,9,61,0,False,6,1737,Tablet,860,4,3,Email,2
+25,Male,Urban,193,37,17,1,238,13,333,0,False,6,1754,Mobile,3385,13,2,Organic Search,0
+35,Male,Suburban,110,36,6,4,230,13,92,0,True,8,1876,Mobile,722,13,3,Organic Search,0
+22,Other,Rural,24,28,20,2,429,11,220,0,True,4,1743,Desktop,2684,2,4,Social Media,0
+37,Other,Urban,104,40,14,3,458,6,31,0,False,7,683,Mobile,380,13,1,Paid Ads,0
+26,Other,Suburban,18,22,5,3,289,11,131,0,True,1,447,Tablet,676,11,3,Email,1
+39,Other,Suburban,312,48,14,2,336,9,145,0,True,9,1539,Desktop,957,14,2,Social Media,0
+68,Female,Suburban,548,46,8,5,127,11,306,0,True,1,11,Tablet,3317,5,3,Social Media,2
+44,Female,Rural,58,30,16,5,261,7,265,0,True,5,1839,Tablet,3534,12,5,Organic Search,2
+24,Female,Suburban,581,45,9,3,181,8,269,0,True,1,1930,Mobile,3568,2,1,Organic Search,0
+33,Female,Urban,480,3,3,4,316,6,126,0,False,7,1476,Mobile,2972,2,2,Organic Search,0
+20,Female,Urban,67,9,7,5,439,4,37,0,False,8,67,Mobile,1360,8,4,Email,0
+70,Male,Suburban,600,7,17,4,279,1,73,0,False,8,1091,Desktop,397,10,3,Paid Ads,2
+21,Female,Rural,254,17,17,1,438,9,124,0,True,7,0,Tablet,2227,0,0,Social Media,0
+61,Female,Rural,366,50,19,2,150,5,159,0,True,5,181,Desktop,752,7,1,Social Media,0
+36,Female,Suburban,535,24,15,1,15,1,178,0,True,3,1965,Desktop,2013,8,0,Social Media,0
+41,Male,Rural,396,4,18,1,495,11,66,0,False,7,794,Tablet,3380,4,5,Paid Ads,0
+68,Other,Rural,343,4,16,4,277,17,432,0,True,7,943,Desktop,1186,3,1,Paid Ads,2
+45,Other,Rural,203,8,2,5,103,16,12,0,False,8,1465,Desktop,2754,7,5,Organic Search,0
+45,Male,Rural,231,36,4,4,180,13,148,0,False,2,1929,Desktop,2156,14,3,Social Media,0
+32,Male,Suburban,221,32,4,4,391,2,85,0,False,9,99,Tablet,2660,4,3,Email,0
+29,Female,Suburban,249,33,6,1,340,11,122,0,True,6,129,Mobile,2700,9,5,Social Media,0
+38,Male,Urban,212,8,11,4,397,2,81,0,False,4,1048,Mobile,3510,7,5,Paid Ads,2
+39,Other,Rural,514,23,7,4,421,11,182,0,False,5,1519,Mobile,3051,9,3,Organic Search,0
+50,Other,Urban,44,34,10,3,319,1,142,0,True,4,653,Desktop,3094,0,2,Email,0
+42,Female,Rural,582,8,14,1,161,10,121,0,False,9,1781,Mobile,3056,4,4,Social Media,0
+31,Other,Rural,224,46,4,5,330,17,307,0,False,8,248,Mobile,2715,7,3,Paid Ads,0
+24,Other,Urban,452,26,12,4,498,16,202,0,True,8,1907,Tablet,1312,1,3,Email,2
+63,Other,Suburban,344,26,3,1,290,0,420,0,False,8,665,Tablet,72,2,1,Social Media,0
+55,Female,Suburban,134,37,16,4,120,2,257,0,False,4,1342,Mobile,2625,1,1,Email,2
+54,Male,Rural,407,37,11,5,394,13,339,0,True,1,310,Tablet,543,12,4,Email,2
+21,Male,Rural,118,37,15,1,210,19,276,0,True,9,1308,Tablet,2547,13,2,Email,0
+55,Other,Urban,318,45,7,3,299,17,60,0,False,3,831,Desktop,159,6,4,Paid Ads,1
+33,Other,Suburban,411,29,8,5,435,15,478,0,False,3,395,Tablet,1412,13,0,Paid Ads,2
+51,Female,Urban,468,39,2,5,195,18,253,0,False,3,1578,Desktop,905,6,2,Social Media,0
+43,Male,Urban,215,37,5,2,26,3,117,0,False,6,545,Tablet,613,10,4,Social Media,1
+48,Other,Urban,23,33,7,5,148,10,439,0,False,6,909,Mobile,912,14,1,Organic Search,0
+42,Female,Rural,345,49,3,4,418,12,54,0,True,10,460,Desktop,535,2,4,Social Media,0
+51,Female,Suburban,141,18,13,4,142,2,66,0,False,6,1918,Tablet,3402,13,2,Organic Search,2
+55,Other,Rural,127,19,19,1,6,11,387,0,True,7,337,Tablet,1054,15,1,Email,0
+19,Other,Urban,491,40,20,1,295,4,406,0,False,1,1445,Desktop,604,13,1,Email,0
+67,Male,Urban,536,3,9,3,351,6,401,0,True,8,1933,Desktop,2053,14,2,Email,0
+68,Other,Urban,62,5,0,5,253,8,129,0,False,8,825,Desktop,3334,7,1,Email,0
+23,Other,Rural,389,46,2,3,1,9,60,0,True,3,19,Mobile,1453,1,1,Social Media,0
+42,Male,Suburban,363,46,19,1,176,0,484,0,False,8,1610,Desktop,1944,11,2,Paid Ads,0
+31,Male,Rural,595,20,13,2,143,6,176,0,False,3,290,Desktop,2644,8,0,Social Media,0
+56,Male,Suburban,133,9,5,2,124,12,104,0,True,7,1036,Mobile,2345,5,4,Organic Search,1
+23,Other,Rural,133,34,2,5,106,9,469,0,True,8,769,Tablet,2811,6,5,Email,0
+36,Male,Suburban,595,41,8,2,291,7,147,0,False,2,1432,Mobile,2822,1,5,Organic Search,0
+64,Other,Urban,109,35,6,2,165,0,382,0,True,10,566,Mobile,3515,7,0,Social Media,1
+35,Other,Suburban,421,34,7,4,295,2,189,0,True,10,1166,Mobile,3359,15,1,Social Media,0
+62,Male,Rural,558,2,10,1,474,12,68,0,False,6,567,Desktop,2197,11,4,Paid Ads,0
+41,Male,Rural,48,39,17,2,173,5,500,0,True,7,424,Tablet,2356,13,5,Social Media,0
+50,Female,Urban,500,21,5,3,390,19,39,0,True,6,762,Tablet,1409,12,4,Paid Ads,1
+55,Other,Urban,205,33,19,5,391,7,163,0,True,7,1735,Mobile,160,5,3,Paid Ads,2
+57,Female,Urban,246,41,2,5,166,1,407,0,True,6,880,Mobile,1139,15,0,Organic Search,0
+59,Other,Urban,368,10,1,5,240,13,261,0,False,4,991,Tablet,2620,1,2,Email,0
+26,Other,Rural,185,3,7,5,139,0,311,0,False,3,1954,Desktop,3305,6,2,Paid Ads,0
+55,Female,Suburban,242,50,5,5,184,18,139,0,True,6,1631,Tablet,1520,13,5,Organic Search,0
+64,Other,Urban,308,46,16,4,441,14,115,0,True,7,198,Tablet,1971,11,4,Email,2
+55,Other,Rural,145,3,9,3,33,0,385,0,False,2,1815,Mobile,849,3,5,Paid Ads,0
+33,Other,Rural,356,39,5,4,194,7,39,0,False,7,899,Tablet,454,12,2,Email,0
+39,Other,Suburban,289,40,8,2,422,7,356,0,False,7,774,Tablet,1479,12,0,Social Media,0
+40,Male,Suburban,587,7,7,2,202,8,486,0,True,6,932,Desktop,3132,2,5,Email,1
+56,Male,Suburban,573,24,14,2,212,17,194,0,False,10,1599,Desktop,1407,12,2,Organic Search,0
+34,Female,Suburban,577,15,20,2,106,19,445,0,True,6,1238,Desktop,1438,12,5,Organic Search,0
+44,Male,Rural,211,45,1,5,331,1,445,0,True,7,42,Desktop,931,6,1,Email,0
+51,Other,Rural,481,33,3,2,292,4,256,0,False,10,429,Desktop,424,1,3,Organic Search,1
+24,Female,Urban,404,17,3,3,142,14,270,0,False,9,1834,Tablet,214,8,1,Organic Search,1
+60,Female,Suburban,218,29,20,3,277,15,82,0,False,7,562,Tablet,752,2,4,Organic Search,0
+30,Male,Rural,149,24,7,5,246,10,74,0,False,5,1389,Tablet,1441,3,4,Social Media,0
+23,Other,Suburban,388,21,19,5,44,1,169,0,True,8,1827,Desktop,2938,2,1,Social Media,2
+52,Other,Suburban,71,49,13,1,382,19,40,0,False,4,403,Mobile,1198,14,4,Paid Ads,0
+52,Male,Rural,405,13,5,3,177,6,241,0,True,2,586,Mobile,2024,14,0,Organic Search,1
+50,Male,Rural,147,27,1,1,185,14,463,0,False,7,1448,Mobile,1004,13,1,Email,0
+19,Other,Rural,248,36,12,3,218,6,188,0,True,6,907,Mobile,331,6,5,Social Media,0
+25,Other,Rural,462,8,14,2,99,19,169,0,False,10,394,Tablet,1705,6,1,Email,0
+48,Female,Rural,34,21,1,1,10,16,204,0,False,2,1941,Mobile,1157,1,1,Paid Ads,0
+47,Female,Urban,595,43,17,2,197,6,168,0,False,1,327,Tablet,698,0,1,Social Media,0
+18,Other,Urban,275,15,16,2,439,16,146,0,True,2,1265,Tablet,479,0,0,Organic Search,0
+67,Male,Urban,386,4,5,2,212,9,247,0,True,2,1788,Tablet,2381,6,4,Email,1
+47,Female,Urban,139,2,18,1,474,11,483,0,True,10,1446,Tablet,1060,3,2,Paid Ads,0
+22,Other,Suburban,449,5,11,4,338,5,101,0,False,10,1525,Desktop,578,12,0,Email,2
+63,Female,Rural,459,35,1,1,69,7,367,0,False,7,1375,Tablet,1970,6,2,Organic Search,0
+41,Other,Suburban,596,17,15,5,420,18,388,0,False,10,1005,Desktop,3098,10,0,Organic Search,2
+56,Other,Urban,572,4,7,3,285,5,413,0,True,2,909,Tablet,132,5,5,Paid Ads,1
+36,Other,Suburban,246,15,16,3,248,18,13,0,True,1,900,Desktop,228,2,1,Organic Search,0
+68,Female,Urban,492,31,14,5,213,0,392,0,True,5,1788,Desktop,2582,13,3,Email,2
+27,Female,Suburban,527,7,1,1,365,2,327,0,True,9,1312,Mobile,1570,5,1,Paid Ads,0
+29,Male,Rural,362,29,15,4,319,9,221,0,True,6,1096,Tablet,2025,7,3,Email,2
+49,Male,Urban,143,35,18,3,15,12,163,0,True,7,742,Tablet,366,14,4,Email,0
+20,Female,Urban,551,41,15,4,239,19,142,0,True,6,1266,Desktop,1645,8,1,Paid Ads,2
+67,Other,Urban,324,7,0,1,150,5,312,0,False,9,16,Mobile,271,2,0,Organic Search,0
+19,Female,Rural,465,13,9,4,92,14,33,0,True,5,1264,Desktop,449,9,0,Paid Ads,2
+53,Female,Rural,352,49,19,1,328,19,36,0,False,7,0,Desktop,258,15,2,Paid Ads,0
+51,Female,Urban,281,45,13,3,371,12,345,0,False,1,122,Desktop,2373,1,1,Email,0
+40,Other,Rural,581,44,2,5,411,6,288,0,True,10,1656,Desktop,601,14,4,Organic Search,0
+30,Other,Suburban,450,36,8,2,322,10,240,0,True,5,1027,Desktop,916,3,1,Organic Search,0
+32,Female,Suburban,588,12,0,4,370,14,113,0,False,4,1242,Desktop,3121,8,1,Email,0
+51,Female,Urban,170,39,20,5,460,8,227,0,True,6,390,Mobile,3211,11,5,Social Media,2
+56,Female,Urban,415,44,7,1,405,5,315,0,True,3,1073,Tablet,1773,6,2,Social Media,0
+30,Female,Suburban,553,10,14,4,197,2,218,0,True,5,1415,Mobile,2007,12,3,Paid Ads,2
+32,Male,Urban,438,46,19,5,388,10,90,0,True,2,1499,Desktop,922,3,5,Organic Search,2
+55,Male,Rural,427,10,11,4,305,11,294,0,True,1,260,Tablet,100,13,4,Organic Search,2
+50,Male,Urban,316,43,9,3,153,13,226,0,False,3,258,Desktop,1634,12,0,Organic Search,0
+63,Female,Rural,327,4,5,5,269,18,254,0,True,1,713,Desktop,3225,8,2,Email,0
+41,Male,Rural,13,15,3,3,440,4,344,0,True,5,1147,Tablet,129,5,0,Paid Ads,1
+59,Female,Urban,283,33,8,1,134,19,324,0,False,5,1229,Tablet,879,12,0,Email,0
+23,Other,Rural,480,27,18,5,363,19,11,0,False,2,578,Mobile,2696,7,3,Paid Ads,2
+41,Male,Urban,550,23,10,3,164,14,314,0,False,5,1784,Mobile,2956,5,1,Organic Search,0
+40,Female,Rural,138,49,14,5,191,11,254,0,True,1,519,Tablet,1598,9,0,Organic Search,2
+62,Other,Urban,293,25,16,1,118,2,391,0,False,1,1259,Desktop,3000,10,1,Paid Ads,0
+57,Other,Suburban,419,34,16,2,235,8,455,0,True,7,672,Tablet,897,3,5,Organic Search,0
+56,Male,Suburban,323,1,0,1,366,1,309,0,False,10,254,Tablet,3478,5,4,Paid Ads,0
+34,Female,Suburban,440,48,2,2,349,18,375,0,False,2,1514,Mobile,3196,12,1,Organic Search,0
+52,Male,Urban,497,14,13,1,289,7,397,0,False,8,393,Desktop,213,3,4,Social Media,0
+43,Other,Urban,240,21,17,3,475,16,347,0,True,2,394,Desktop,838,9,0,Organic Search,0
+31,Male,Suburban,581,34,19,3,3,12,367,0,True,5,87,Desktop,2328,12,1,Social Media,0
+34,Male,Urban,579,41,11,5,448,4,113,0,True,9,572,Tablet,1140,15,3,Paid Ads,2
+34,Female,Suburban,364,42,20,1,93,12,399,0,False,2,747,Mobile,560,14,5,Social Media,0
+25,Other,Suburban,516,30,0,3,437,0,326,0,False,10,12,Tablet,2369,15,1,Paid Ads,0
+25,Male,Rural,52,16,3,4,434,14,329,0,True,10,1635,Tablet,3594,15,0,Paid Ads,0
+25,Male,Suburban,418,44,8,2,186,4,220,0,True,1,944,Mobile,3450,5,1,Email,0
+66,Female,Rural,587,5,5,1,427,13,438,0,True,10,693,Mobile,1530,9,1,Social Media,0
+31,Female,Urban,467,10,5,3,406,6,475,0,True,5,300,Mobile,1097,7,1,Paid Ads,1
+44,Female,Rural,151,20,9,2,338,15,178,0,True,6,52,Mobile,2493,7,0,Social Media,0
+57,Female,Suburban,208,33,6,3,53,12,258,0,True,9,370,Desktop,626,13,1,Social Media,1
+38,Other,Urban,97,14,16,3,472,16,355,0,False,4,1586,Desktop,648,8,1,Social Media,0
+60,Male,Rural,556,49,8,4,391,1,369,0,True,7,369,Mobile,2135,6,4,Email,2
+47,Male,Suburban,403,32,12,3,425,15,216,0,False,9,1316,Mobile,1571,11,1,Social Media,0
+31,Female,Suburban,520,50,4,1,178,5,294,0,True,2,1949,Desktop,755,3,1,Organic Search,0
+59,Male,Suburban,54,17,7,3,244,11,144,0,True,10,820,Tablet,1995,12,2,Paid Ads,1
+31,Male,Urban,108,33,12,2,124,13,125,0,True,7,1609,Mobile,3125,14,1,Social Media,0
+40,Male,Rural,234,34,16,2,2,1,498,0,False,4,892,Tablet,819,10,3,Paid Ads,0
+39,Male,Urban,495,4,11,1,243,13,350,0,False,9,1653,Mobile,2639,1,0,Email,0
+65,Other,Rural,410,42,13,3,249,5,115,0,True,2,954,Mobile,1997,10,3,Social Media,0
+50,Other,Urban,230,28,5,1,233,15,410,0,False,1,352,Mobile,2645,13,1,Paid Ads,0
+46,Other,Suburban,151,43,15,1,487,3,94,0,True,5,1172,Tablet,1801,12,3,Social Media,0
+59,Other,Suburban,243,39,8,4,122,3,137,0,False,8,1870,Desktop,865,10,0,Social Media,2
+22,Other,Rural,480,50,15,1,15,13,12,0,True,10,1227,Desktop,3001,5,0,Paid Ads,0
+54,Female,Urban,346,39,13,4,263,2,398,0,False,2,796,Tablet,2623,2,5,Organic Search,2
+59,Female,Suburban,458,37,3,1,493,1,87,0,True,6,1909,Tablet,2187,15,3,Email,0
+70,Male,Rural,213,14,2,1,448,14,258,0,True,5,342,Desktop,2720,4,5,Paid Ads,0
+64,Other,Urban,350,7,13,3,492,19,39,0,True,7,32,Desktop,1770,13,3,Organic Search,0
+38,Male,Rural,155,46,4,4,48,15,43,0,False,4,884,Desktop,1999,14,0,Email,0
+48,Other,Rural,148,47,3,3,264,6,484,0,False,1,157,Tablet,1375,7,3,Social Media,1
+48,Female,Urban,383,1,14,1,199,16,314,0,False,4,380,Desktop,2165,1,0,Paid Ads,0
+24,Other,Urban,19,39,0,4,321,13,178,0,True,10,514,Tablet,3403,2,2,Social Media,0
+20,Female,Urban,565,3,12,2,139,16,258,0,False,1,1953,Desktop,2162,13,2,Organic Search,0
+34,Other,Rural,418,11,19,1,104,14,401,0,False,7,1486,Desktop,2162,7,1,Email,0
+32,Male,Rural,223,39,0,2,371,10,123,0,True,5,897,Desktop,2907,13,1,Organic Search,0
+41,Other,Rural,160,22,19,4,318,17,181,0,False,6,946,Desktop,3026,15,0,Email,2
+51,Female,Rural,464,22,3,3,213,13,479,0,False,1,948,Tablet,2628,6,0,Paid Ads,1
+22,Other,Urban,517,9,7,3,12,19,251,0,True,7,1077,Desktop,868,1,2,Organic Search,1
+22,Male,Suburban,343,3,16,4,58,18,112,0,False,5,189,Desktop,1708,2,0,Organic Search,2
+26,Male,Urban,114,25,8,1,333,17,10,0,True,9,1506,Desktop,2632,13,5,Organic Search,0
+32,Female,Rural,483,13,19,5,219,10,192,0,True,4,778,Mobile,1101,4,3,Social Media,2
+57,Female,Urban,159,28,3,5,464,7,46,0,False,3,296,Tablet,1183,15,1,Paid Ads,0
+61,Male,Rural,375,13,4,3,395,17,10,0,False,3,1061,Mobile,2732,8,4,Paid Ads,1
+33,Other,Rural,339,14,19,5,427,0,184,0,True,10,1548,Tablet,2097,8,3,Organic Search,2
+56,Other,Rural,574,19,8,4,492,19,53,0,True,4,1022,Tablet,1289,14,4,Social Media,2
+25,Female,Suburban,416,12,20,1,455,2,487,0,True,3,1924,Tablet,1995,4,5,Organic Search,0
+22,Female,Rural,221,42,5,2,451,0,250,0,False,10,235,Mobile,712,12,1,Organic Search,1
+60,Female,Urban,17,19,17,5,85,12,20,0,False,6,1290,Mobile,391,3,0,Email,2
+25,Female,Urban,436,37,15,4,27,2,167,0,False,1,1436,Mobile,758,6,3,Organic Search,2
+40,Other,Suburban,155,29,0,3,414,7,191,0,True,10,1808,Mobile,3460,8,1,Paid Ads,0
+35,Female,Suburban,114,35,17,2,439,18,435,0,False,1,168,Mobile,1516,7,0,Social Media,0
+37,Female,Suburban,318,43,19,3,354,18,411,0,True,7,1144,Desktop,2243,8,2,Social Media,0
+69,Female,Urban,290,32,16,1,279,16,467,0,True,1,678,Mobile,798,8,1,Paid Ads,0
+65,Male,Urban,261,12,10,4,425,0,460,0,False,6,128,Desktop,3307,7,2,Paid Ads,2
+39,Other,Suburban,75,7,15,1,42,11,46,0,True,3,315,Tablet,2363,6,2,Paid Ads,0
+31,Male,Rural,67,28,14,3,190,15,406,0,True,5,880,Mobile,144,11,3,Paid Ads,0
+40,Other,Rural,514,40,4,1,175,14,359,0,True,1,888,Tablet,1835,5,1,Social Media,0
+49,Male,Urban,108,24,4,4,389,8,283,0,True,4,303,Mobile,3175,0,5,Paid Ads,0
+51,Male,Rural,105,43,10,4,204,15,359,0,True,9,1992,Tablet,2868,13,2,Organic Search,2
+28,Male,Rural,573,40,2,5,200,18,162,0,True,6,1874,Desktop,2780,5,2,Organic Search,0
+61,Male,Suburban,84,16,18,4,281,10,347,0,False,3,756,Desktop,947,6,5,Email,2
+46,Female,Rural,201,30,16,4,333,13,62,0,True,9,1083,Mobile,2107,7,5,Social Media,2
+52,Female,Suburban,167,14,8,1,248,1,95,0,True,2,235,Desktop,388,11,3,Social Media,0
+37,Male,Urban,60,50,13,1,214,8,283,0,True,7,1640,Desktop,196,8,2,Email,0
+49,Male,Rural,162,20,17,1,198,18,204,0,True,6,1083,Tablet,3458,13,0,Social Media,0
+61,Other,Urban,586,2,16,5,434,13,377,0,False,4,417,Mobile,753,2,0,Social Media,2
+25,Male,Urban,423,43,2,5,189,12,277,0,True,2,1411,Desktop,2861,11,2,Social Media,0
+64,Male,Rural,362,43,4,5,206,9,149,0,True,1,557,Desktop,1014,13,0,Paid Ads,0
+66,Other,Urban,246,33,20,1,44,8,279,0,False,5,1672,Mobile,3395,9,2,Social Media,0
+40,Male,Urban,453,9,16,3,135,14,148,0,True,1,367,Mobile,1857,12,2,Organic Search,0
+68,Female,Urban,588,43,14,3,409,19,239,0,True,10,1437,Mobile,136,6,1,Email,0
+53,Female,Rural,292,1,20,2,69,8,347,0,True,10,396,Mobile,177,4,3,Organic Search,0
+41,Other,Urban,259,4,7,5,14,0,321,0,False,6,76,Mobile,2517,8,5,Social Media,0
+61,Female,Rural,238,2,6,4,450,17,465,0,False,10,939,Mobile,2661,6,0,Social Media,0
+49,Male,Suburban,18,14,13,3,101,19,165,0,True,5,780,Mobile,601,2,1,Organic Search,0
+54,Male,Urban,429,48,7,1,389,3,340,0,True,3,250,Desktop,2590,11,1,Organic Search,0
+58,Male,Urban,217,8,8,4,487,7,33,0,True,4,319,Desktop,3074,7,2,Email,2
+45,Male,Urban,188,7,3,5,129,1,160,0,True,5,1486,Tablet,1878,5,0,Paid Ads,0
+38,Female,Suburban,365,29,14,5,282,19,500,0,True,2,482,Mobile,557,13,1,Email,2
+64,Other,Rural,34,19,14,5,439,8,339,0,False,3,1062,Tablet,323,6,3,Social Media,2
+39,Other,Suburban,570,48,6,5,411,19,19,0,True,4,491,Mobile,1619,8,0,Paid Ads,0
+34,Female,Rural,281,41,9,2,399,3,181,0,False,5,744,Desktop,1669,10,0,Paid Ads,0
+33,Male,Rural,560,48,0,3,109,12,204,0,False,2,1902,Mobile,1068,4,4,Organic Search,0
+25,Female,Rural,181,42,3,4,152,1,490,0,False,10,93,Tablet,1317,8,0,Organic Search,0
+42,Other,Rural,146,19,1,2,269,0,158,0,True,3,803,Mobile,2545,5,3,Organic Search,0
+56,Female,Rural,229,39,1,3,495,1,200,0,True,3,209,Mobile,3363,10,4,Organic Search,0
+66,Female,Suburban,598,33,19,2,389,9,321,0,True,5,50,Mobile,1546,0,4,Organic Search,0
+42,Male,Urban,350,12,6,4,250,8,406,0,True,2,744,Tablet,320,7,4,Email,0
+20,Other,Rural,27,1,5,1,355,16,263,0,False,4,961,Mobile,1100,10,3,Organic Search,0
+57,Female,Rural,253,14,15,2,48,4,283,0,False,4,565,Mobile,2927,6,4,Social Media,0
+50,Male,Suburban,169,6,1,1,283,18,313,0,True,2,285,Desktop,3468,13,5,Paid Ads,0
+60,Other,Urban,325,18,1,2,117,17,269,0,True,6,1343,Tablet,3526,15,0,Paid Ads,0
+68,Male,Urban,177,10,11,2,2,16,396,0,True,7,1171,Desktop,1279,13,4,Organic Search,0
+25,Other,Suburban,557,12,3,3,313,2,98,0,True,6,1277,Mobile,2628,7,2,Organic Search,1
+63,Other,Urban,78,13,5,2,454,2,449,0,False,9,997,Tablet,1116,15,0,Organic Search,1
+60,Male,Urban,309,16,20,5,117,16,426,0,True,7,644,Desktop,994,3,4,Paid Ads,2
+39,Other,Suburban,68,29,20,1,62,18,216,0,True,4,1260,Desktop,826,6,5,Paid Ads,0
+32,Female,Rural,285,19,0,5,106,5,371,0,True,2,1587,Tablet,961,13,2,Email,0
+64,Female,Urban,231,6,19,5,65,13,428,0,False,7,970,Desktop,2216,0,2,Organic Search,2
+53,Female,Rural,112,14,13,3,220,14,455,0,True,2,14,Mobile,2342,13,3,Email,0
+37,Male,Rural,585,26,5,3,225,6,307,0,False,3,717,Mobile,332,2,3,Paid Ads,1
+66,Other,Urban,139,36,9,4,436,1,309,0,False,8,901,Desktop,3549,0,1,Paid Ads,2
+50,Female,Urban,217,17,6,2,266,4,148,0,False,7,1233,Mobile,3530,5,5,Organic Search,1
+48,Female,Suburban,163,28,16,3,436,17,481,0,True,7,1456,Mobile,113,0,0,Social Media,0
+68,Other,Suburban,440,15,12,3,111,7,40,0,True,10,562,Tablet,1626,2,3,Email,0
+66,Male,Urban,316,7,17,1,240,10,466,0,True,9,1192,Desktop,3050,6,4,Email,0
+62,Male,Suburban,207,35,20,2,144,17,29,0,True,3,1471,Mobile,1408,2,1,Paid Ads,0
+64,Other,Rural,247,17,0,4,310,3,262,0,True,9,512,Mobile,1959,11,1,Email,0
+41,Other,Suburban,52,20,13,2,115,11,278,0,False,1,1271,Mobile,734,3,0,Email,0
+55,Female,Rural,281,26,1,3,344,16,121,0,True,6,1727,Mobile,3447,15,0,Organic Search,0
+34,Female,Urban,234,17,17,4,250,14,141,0,True,6,1671,Desktop,3050,13,1,Email,2
+32,Male,Suburban,402,31,4,5,444,15,257,0,False,4,1060,Desktop,2956,12,1,Organic Search,0
+68,Other,Rural,541,26,8,1,297,15,381,0,True,6,555,Mobile,1429,0,4,Organic Search,0
+47,Other,Urban,294,30,1,4,387,9,299,0,False,2,1198,Desktop,2082,4,1,Social Media,0
+67,Other,Urban,549,16,12,3,187,10,154,0,False,5,184,Tablet,2602,10,3,Paid Ads,0
+53,Female,Urban,459,11,6,5,165,12,168,0,False,10,1812,Mobile,2073,5,0,Organic Search,0
+20,Male,Urban,262,9,10,3,69,7,216,0,False,1,882,Tablet,146,14,5,Paid Ads,0
+48,Other,Rural,51,19,11,2,383,3,299,0,False,5,355,Mobile,3560,4,1,Paid Ads,0
+63,Male,Suburban,138,23,20,1,223,9,28,0,False,4,56,Tablet,2416,0,0,Organic Search,0
+27,Female,Urban,228,10,1,4,407,10,285,0,False,10,516,Desktop,3154,12,1,Paid Ads,0
+37,Female,Rural,40,7,16,5,71,7,256,0,False,3,508,Tablet,1575,6,0,Email,2
+40,Female,Suburban,532,49,1,3,390,15,392,0,True,9,1050,Desktop,1625,8,0,Email,0
+27,Male,Urban,128,44,14,3,492,15,215,0,True,10,605,Desktop,542,14,0,Email,0
+36,Other,Rural,464,6,9,1,412,12,56,0,False,10,1226,Tablet,104,15,0,Organic Search,0
+27,Other,Suburban,281,21,0,2,122,1,316,0,True,3,48,Desktop,1234,15,5,Paid Ads,0
+22,Other,Urban,168,8,20,2,281,7,156,0,False,2,202,Desktop,3379,3,1,Paid Ads,0
+18,Other,Urban,303,42,13,3,287,6,235,0,True,4,1043,Mobile,2383,2,5,Organic Search,0
+42,Male,Rural,329,21,19,1,254,5,496,0,True,8,1876,Desktop,2475,15,2,Paid Ads,0
+36,Female,Urban,41,25,18,5,209,9,490,0,False,7,257,Tablet,1571,6,5,Organic Search,2
+39,Female,Rural,553,5,15,2,347,0,170,0,True,5,210,Desktop,3593,13,0,Paid Ads,0
+63,Female,Rural,496,6,8,4,350,14,235,0,True,8,972,Mobile,1462,12,1,Email,2
+21,Male,Urban,246,27,16,3,112,15,116,0,True,5,309,Tablet,455,0,4,Paid Ads,0
+24,Male,Rural,48,35,8,3,493,2,468,0,True,2,1838,Mobile,2850,6,5,Organic Search,0
+27,Male,Suburban,587,31,20,2,104,16,409,0,False,5,1875,Mobile,316,3,0,Paid Ads,0
+57,Male,Suburban,365,45,4,2,97,2,34,0,False,2,1529,Desktop,2105,5,1,Social Media,1
+53,Other,Urban,156,6,8,2,303,6,229,0,True,5,552,Mobile,3237,12,5,Social Media,0
+22,Other,Rural,10,13,20,5,2,9,176,0,True,7,1798,Tablet,2750,11,5,Social Media,2
+44,Male,Urban,474,23,11,4,2,7,249,0,True,1,609,Mobile,276,10,5,Email,2
+58,Male,Rural,212,39,13,4,66,4,323,0,True,3,30,Tablet,3399,0,4,Organic Search,2
+22,Other,Urban,352,37,18,3,412,14,29,0,True,8,1820,Tablet,276,5,0,Organic Search,0
+18,Female,Rural,186,28,1,4,180,6,330,0,False,3,630,Desktop,3571,2,5,Email,0
+50,Other,Suburban,388,24,19,5,247,16,398,0,False,1,1863,Mobile,2821,8,5,Email,2
+40,Female,Rural,258,11,9,5,216,12,177,0,False,9,1891,Mobile,2414,9,3,Social Media,2
+33,Male,Rural,169,29,2,2,298,18,169,0,True,9,1736,Mobile,3155,5,4,Paid Ads,0
+37,Female,Urban,218,27,2,5,411,12,415,0,True,10,981,Mobile,781,2,3,Paid Ads,0
+19,Other,Rural,544,21,20,2,307,11,331,0,True,9,535,Desktop,119,8,1,Social Media,0
+20,Female,Suburban,123,1,6,2,245,7,114,0,False,5,785,Mobile,938,5,5,Social Media,1
+66,Male,Suburban,489,46,6,1,454,2,421,0,False,3,788,Desktop,1110,3,0,Email,0
+44,Other,Urban,256,3,11,2,28,10,241,0,False,8,443,Tablet,3173,15,3,Social Media,0
+43,Male,Urban,326,7,20,2,340,17,65,0,False,8,1877,Mobile,1519,5,2,Organic Search,0
+50,Male,Urban,289,6,3,3,248,16,435,0,True,4,853,Tablet,2742,15,3,Email,1
+58,Male,Urban,82,17,19,4,119,10,186,0,False,4,1176,Desktop,3487,6,2,Email,2
+66,Female,Suburban,361,2,9,1,133,1,466,0,True,8,1830,Tablet,130,8,1,Social Media,0
+39,Male,Rural,153,2,1,1,450,4,435,0,False,2,1987,Desktop,347,3,3,Social Media,0
+70,Other,Rural,197,32,2,2,398,18,407,0,True,2,1170,Desktop,2427,4,3,Organic Search,0
+31,Male,Suburban,550,12,14,1,388,8,328,0,True,5,1776,Mobile,3440,5,0,Organic Search,0
+42,Female,Rural,465,22,18,3,291,6,209,0,False,7,1752,Desktop,95,3,1,Organic Search,0
+37,Male,Suburban,255,3,6,2,395,16,157,0,True,3,1231,Mobile,2619,1,5,Email,1
+67,Male,Suburban,447,5,14,4,244,12,289,0,True,1,1822,Mobile,1716,2,4,Email,2
+56,Female,Rural,324,7,5,5,62,10,443,0,False,10,1409,Tablet,2587,11,3,Paid Ads,0
+36,Male,Urban,124,2,17,5,44,9,462,0,True,8,328,Mobile,1705,2,1,Email,2
+42,Female,Suburban,328,15,14,2,399,0,242,0,True,8,958,Desktop,2693,8,3,Social Media,0
+43,Other,Rural,492,4,6,4,17,10,186,0,False,7,672,Tablet,1499,10,1,Social Media,0
+67,Female,Rural,304,18,19,4,167,19,389,0,True,6,1692,Desktop,2790,5,2,Paid Ads,2
+22,Female,Rural,48,11,19,1,312,8,452,0,False,10,1883,Tablet,1446,6,2,Social Media,0
+20,Male,Rural,360,17,19,1,55,6,336,0,False,9,1583,Tablet,3282,8,0,Paid Ads,0
+51,Female,Urban,152,28,17,2,330,0,240,0,True,3,137,Mobile,3291,2,1,Email,0
+22,Male,Rural,563,36,13,2,15,14,222,0,True,6,1864,Desktop,75,5,4,Organic Search,0
+34,Male,Urban,22,35,18,1,21,19,50,0,True,6,970,Mobile,1470,1,5,Paid Ads,0
+33,Other,Suburban,124,41,17,4,209,1,164,0,True,7,1100,Tablet,592,1,2,Email,2
+58,Other,Suburban,357,1,20,4,86,9,224,0,True,7,1700,Tablet,2968,3,1,Paid Ads,2
+52,Female,Suburban,230,47,20,2,250,14,23,0,False,4,887,Mobile,992,0,3,Social Media,0
+19,Male,Suburban,249,34,13,3,228,2,432,0,True,10,1763,Tablet,3227,7,2,Social Media,0
+22,Female,Urban,457,22,0,5,15,1,202,0,True,2,1310,Desktop,1947,6,4,Organic Search,0
+21,Male,Urban,588,35,0,4,30,9,451,0,True,5,1665,Tablet,3081,3,0,Social Media,0
+65,Other,Suburban,181,44,13,2,134,1,449,0,True,5,1797,Tablet,2919,11,4,Social Media,0
+45,Other,Rural,368,35,20,1,39,9,42,0,True,2,1048,Desktop,1031,2,3,Paid Ads,0
+53,Female,Urban,324,31,1,4,196,16,232,0,True,4,1155,Desktop,3016,0,2,Organic Search,0
+31,Male,Urban,449,15,7,3,303,17,152,0,False,8,416,Mobile,2997,3,4,Organic Search,1
+49,Other,Urban,428,18,19,1,316,15,67,0,False,9,723,Mobile,1188,3,3,Social Media,0
+37,Other,Suburban,564,20,18,2,468,14,39,0,True,1,1244,Tablet,3413,1,2,Organic Search,0
+39,Other,Urban,187,37,13,4,452,10,125,0,False,6,1528,Desktop,3470,13,2,Email,2
+39,Male,Rural,331,14,9,2,267,11,406,0,False,10,1344,Mobile,580,2,0,Email,0
+33,Female,Suburban,161,23,8,4,297,14,415,0,True,6,1590,Mobile,843,3,2,Paid Ads,2
+36,Male,Rural,186,11,14,4,443,0,64,0,True,2,687,Mobile,1745,0,4,Organic Search,2
+21,Female,Urban,188,45,11,5,145,19,264,0,False,6,1497,Tablet,2628,0,0,Email,2
+53,Other,Urban,352,26,13,1,482,12,33,0,False,9,530,Desktop,885,9,2,Email,0
+52,Other,Suburban,34,7,3,3,471,16,378,0,False,5,547,Desktop,965,5,3,Paid Ads,1
+50,Male,Suburban,473,23,13,1,50,2,477,0,False,8,1897,Desktop,82,7,2,Paid Ads,0
+40,Male,Suburban,295,47,2,5,49,11,456,0,True,3,663,Tablet,421,9,3,Social Media,0
+38,Male,Urban,92,18,10,5,239,13,227,0,False,7,1388,Mobile,640,15,2,Paid Ads,2
+63,Other,Rural,184,35,14,1,240,4,25,0,True,2,880,Desktop,211,14,2,Social Media,0
+53,Male,Urban,339,44,8,5,53,12,254,0,False,1,840,Tablet,1261,7,4,Email,2
+26,Other,Suburban,492,4,4,5,183,1,436,0,False,9,1301,Mobile,2242,11,1,Organic Search,0
+36,Male,Rural,102,50,8,2,484,11,333,0,False,8,493,Tablet,2802,6,2,Paid Ads,0
+63,Female,Suburban,515,13,12,4,160,11,61,0,True,5,390,Mobile,3530,7,0,Email,2
+66,Other,Rural,421,2,20,4,448,4,258,0,True,1,1515,Mobile,3264,12,1,Social Media,2
+42,Male,Urban,116,30,4,3,418,15,148,0,True,1,1505,Desktop,2566,3,4,Social Media,1
+52,Male,Urban,33,24,4,4,225,1,101,0,True,2,1485,Desktop,1088,1,1,Social Media,0
+20,Other,Urban,192,10,12,4,225,16,311,0,False,3,166,Mobile,1869,4,1,Email,2
+56,Other,Rural,526,11,14,1,401,15,390,0,False,7,1448,Desktop,496,7,4,Social Media,0
+46,Other,Urban,244,36,4,3,496,16,333,0,True,8,667,Mobile,1604,3,0,Social Media,1
+33,Other,Suburban,90,32,0,1,7,6,334,0,False,10,8,Desktop,984,12,5,Social Media,0
+55,Other,Rural,424,15,13,4,361,14,267,0,False,8,1144,Mobile,2792,14,4,Email,2
+58,Other,Rural,496,22,2,4,464,7,191,0,True,4,1845,Desktop,293,9,3,Email,0
+50,Female,Suburban,550,2,1,1,196,4,118,0,False,6,1562,Desktop,2378,0,4,Paid Ads,0
+31,Other,Suburban,321,21,10,3,486,14,371,0,False,10,363,Desktop,159,8,1,Social Media,0
+69,Female,Suburban,592,18,15,4,325,14,381,0,False,1,579,Desktop,3402,3,0,Social Media,2
+42,Male,Rural,173,17,15,1,244,1,40,0,False,5,1596,Tablet,926,1,1,Social Media,0
+38,Other,Suburban,323,16,20,3,457,12,360,0,True,4,1234,Tablet,2322,5,3,Email,0
+36,Other,Urban,71,15,14,4,29,11,87,0,False,8,1598,Desktop,1648,9,0,Paid Ads,2
+62,Other,Rural,312,5,6,3,0,18,403,0,False,6,1199,Desktop,214,11,5,Email,1
+30,Other,Urban,180,41,1,1,302,17,279,0,True,4,1853,Desktop,485,7,2,Paid Ads,0
+58,Female,Rural,112,21,17,2,266,13,493,0,False,2,254,Mobile,3574,7,2,Paid Ads,0
+38,Female,Suburban,20,46,4,5,188,16,23,0,False,3,1555,Desktop,412,3,2,Organic Search,0
+31,Other,Urban,55,17,1,5,432,3,301,0,False,4,196,Mobile,3393,1,0,Paid Ads,0
+54,Male,Urban,330,33,1,1,308,4,305,0,True,10,1665,Mobile,1170,1,4,Organic Search,0
+30,Female,Rural,552,3,15,4,352,16,455,0,False,1,1721,Tablet,562,5,1,Organic Search,2
+61,Male,Suburban,510,29,20,2,95,2,253,0,True,8,1649,Tablet,709,8,3,Paid Ads,0
+52,Other,Suburban,420,5,15,3,415,0,460,0,False,3,1069,Mobile,799,1,1,Email,0
+27,Other,Rural,49,25,5,2,8,2,86,0,True,1,1588,Tablet,990,3,1,Organic Search,1
+52,Male,Rural,220,6,13,4,333,11,134,0,True,4,1584,Tablet,3336,2,0,Paid Ads,2
+36,Male,Suburban,289,49,16,5,434,11,451,0,True,2,421,Desktop,2847,9,0,Email,2
+19,Male,Rural,497,35,17,3,372,16,12,0,False,3,1180,Tablet,2898,2,5,Paid Ads,0
+60,Female,Rural,533,42,18,2,230,3,481,0,True,2,1207,Desktop,2173,14,3,Email,0
+50,Female,Suburban,83,11,15,2,280,19,78,0,True,5,1490,Tablet,1421,15,1,Email,0
+54,Other,Rural,181,40,17,3,491,16,92,0,False,3,680,Tablet,995,1,3,Email,0
+37,Male,Rural,193,44,6,3,91,12,197,0,False,2,1235,Desktop,905,9,3,Paid Ads,1
+26,Other,Urban,262,17,12,3,154,5,255,0,False,10,1177,Desktop,2229,12,2,Paid Ads,0
+46,Female,Suburban,521,36,17,1,419,14,418,0,False,6,812,Desktop,898,10,1,Organic Search,0
+51,Male,Suburban,91,37,0,1,308,19,234,0,False,2,105,Tablet,393,2,4,Paid Ads,0
+53,Female,Suburban,481,26,1,2,457,4,213,0,False,7,628,Mobile,3572,11,2,Organic Search,0
+19,Male,Rural,279,14,18,1,398,5,372,0,False,1,463,Tablet,797,10,3,Social Media,0
+69,Male,Suburban,26,39,15,2,364,6,168,0,False,1,1904,Mobile,1014,3,3,Paid Ads,0
+57,Female,Rural,86,20,1,4,218,2,270,0,True,8,414,Mobile,2007,8,3,Social Media,0
+28,Female,Rural,566,25,8,5,479,19,334,0,True,3,1418,Desktop,1585,0,4,Paid Ads,2
+42,Other,Rural,435,31,4,3,50,12,429,0,False,9,186,Mobile,1544,7,0,Email,1
+34,Other,Suburban,83,20,16,2,256,10,255,0,True,9,1601,Desktop,1566,14,2,Organic Search,0
+54,Male,Suburban,394,46,3,1,343,1,69,0,False,1,1143,Mobile,482,7,5,Organic Search,0
+60,Male,Urban,392,32,13,3,37,5,70,0,True,10,536,Desktop,1841,15,4,Paid Ads,0
+31,Female,Rural,549,13,16,4,277,13,84,0,True,1,409,Tablet,3198,13,1,Email,2
+29,Male,Suburban,167,34,9,1,131,18,377,0,False,9,753,Desktop,3085,6,5,Organic Search,0
+40,Male,Rural,536,42,4,5,396,8,128,0,True,7,1711,Desktop,1738,9,4,Social Media,0
+42,Other,Suburban,313,14,14,5,93,19,259,0,False,2,1710,Desktop,2471,10,2,Social Media,2
+48,Male,Rural,290,21,12,2,26,9,286,0,False,1,1393,Tablet,2007,7,0,Social Media,0
+23,Female,Urban,497,27,9,2,347,19,455,0,True,3,1143,Tablet,1004,4,3,Paid Ads,0
+49,Other,Rural,444,14,15,5,104,4,326,0,True,3,1848,Mobile,3549,13,4,Organic Search,2
+56,Female,Urban,423,32,5,3,483,15,66,0,True,9,465,Tablet,1949,12,2,Organic Search,1
+44,Female,Suburban,137,43,14,1,126,4,207,0,False,9,138,Tablet,1494,5,5,Email,0
+46,Female,Rural,362,14,20,3,287,2,152,0,True,3,1767,Mobile,595,15,3,Organic Search,0
+41,Other,Rural,556,37,9,1,401,6,203,0,True,5,1356,Desktop,210,9,5,Email,0
+65,Male,Urban,551,5,14,1,226,17,35,0,False,6,1737,Desktop,2379,9,2,Organic Search,0
+65,Other,Urban,91,50,9,5,305,16,420,0,False,5,349,Tablet,212,15,1,Paid Ads,2
+24,Female,Suburban,532,6,13,2,429,5,177,0,False,9,1292,Desktop,3195,10,2,Paid Ads,0
+45,Female,Rural,296,3,12,2,291,12,474,0,False,5,426,Desktop,418,5,2,Email,0
+18,Male,Rural,210,39,3,3,108,11,186,0,False,4,274,Tablet,3410,8,0,Organic Search,1
+26,Male,Rural,206,4,5,3,408,5,65,0,False,1,1501,Tablet,1515,4,4,Organic Search,1
+18,Female,Suburban,34,25,3,1,389,10,459,0,True,8,1764,Tablet,919,13,0,Email,0
+35,Other,Suburban,524,29,5,3,387,7,261,0,False,4,1963,Desktop,2153,3,1,Social Media,1
+62,Female,Urban,570,31,7,2,107,4,385,0,True,8,509,Mobile,2284,3,3,Email,1
+67,Female,Rural,103,26,11,2,27,8,411,0,False,8,739,Mobile,2045,6,5,Paid Ads,0
+37,Other,Rural,579,49,8,1,166,5,245,0,True,4,1963,Tablet,1848,4,1,Email,0
+34,Female,Rural,279,28,18,3,387,0,363,0,False,7,1975,Desktop,3464,3,2,Paid Ads,0
+45,Female,Rural,28,23,15,5,499,7,122,0,False,8,1147,Desktop,3557,12,2,Email,2
+54,Female,Urban,485,11,13,3,249,14,34,0,True,5,261,Tablet,1412,13,0,Social Media,0
+35,Female,Urban,46,6,9,1,364,7,50,0,False,5,874,Tablet,278,2,0,Social Media,0
+32,Male,Rural,398,28,3,2,378,15,460,0,True,2,804,Mobile,1119,9,0,Organic Search,1
+68,Female,Urban,329,28,20,5,436,12,119,0,False,7,109,Mobile,2508,2,0,Social Media,2
+58,Female,Suburban,430,42,17,1,190,4,388,0,True,6,619,Tablet,3534,2,2,Organic Search,0
+23,Male,Urban,279,45,17,5,365,12,418,0,True,3,414,Desktop,3587,8,1,Paid Ads,2
+21,Other,Urban,223,24,7,4,337,19,32,0,False,4,254,Desktop,212,12,4,Social Media,0
+34,Female,Urban,228,46,13,4,436,11,160,0,False,10,920,Tablet,3150,2,2,Email,2
+63,Male,Rural,592,27,20,2,439,10,269,0,True,3,1003,Tablet,2681,0,2,Social Media,0
+38,Other,Rural,141,8,12,4,190,16,60,0,False,1,152,Mobile,1963,1,0,Paid Ads,2
+29,Male,Suburban,83,9,14,5,279,17,295,0,False,6,434,Desktop,1283,0,1,Organic Search,2
+54,Male,Rural,16,28,0,3,222,17,432,0,False,7,773,Tablet,3339,10,1,Organic Search,0
+23,Female,Rural,495,34,20,1,222,8,230,0,False,10,1647,Mobile,417,0,2,Organic Search,0
+70,Male,Rural,90,44,18,5,94,11,215,0,False,10,1249,Desktop,3182,2,3,Organic Search,2
+62,Male,Rural,577,20,13,3,44,4,317,0,False,8,1983,Tablet,3078,0,0,Paid Ads,0
+37,Female,Urban,304,47,1,4,496,19,461,0,False,1,449,Tablet,1863,3,2,Paid Ads,0
+62,Female,Urban,82,42,6,1,499,7,385,0,True,7,781,Tablet,1722,13,5,Paid Ads,0
+27,Male,Suburban,95,11,10,5,65,11,314,0,False,4,506,Tablet,260,13,0,Paid Ads,2
+36,Female,Suburban,570,42,7,2,97,14,131,0,True,10,249,Mobile,3008,9,3,Social Media,1
+39,Male,Suburban,436,21,15,1,383,11,52,0,True,5,232,Desktop,1479,5,1,Organic Search,0
+28,Male,Urban,405,7,10,1,260,9,144,0,True,5,1864,Tablet,3548,10,2,Email,0
+60,Male,Urban,208,41,2,3,244,10,28,0,True,5,94,Mobile,2359,4,0,Email,0
+41,Male,Suburban,223,14,6,2,3,17,361,0,False,9,217,Tablet,243,6,3,Organic Search,1
+18,Other,Rural,150,6,12,5,261,16,51,0,False,7,606,Mobile,465,9,2,Paid Ads,2
+50,Other,Urban,519,15,9,4,278,3,234,0,True,8,1826,Tablet,2962,15,4,Paid Ads,2
+40,Male,Rural,372,15,7,5,233,4,348,0,True,9,855,Tablet,3144,6,3,Email,0
+64,Male,Suburban,67,20,15,4,140,6,269,0,True,8,1563,Tablet,1832,2,1,Email,2

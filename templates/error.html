@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - AI Use Case Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Use Case Generator</h1>
+            <p class="subtitle">Error Occurred</p>
+        </header>
+        
+        <div class="card">
+            <div class="error-icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            
+            <h2 class="error-title">An error occurred during processing</h2>
+            
+            <div class="error-message">
+                {{ error }}
+            </div>
+            
+            <div class="trace-container">
+                <div class="trace-title" onclick="toggleTrace()" id="trace-toggle">
+                    <span>Technical Details</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="error-trace" id="error-trace" style="display: none;">
+{{ trace }}
+                </div>
+            </div>
+            
+            <div class="btn-container">
+                <a href="{{ url_for('upload_file') }}" class="btn btn-primary">
+                    <i class="fas fa-upload"></i> Upload Another File
+                </a>
+                
+                <button onclick="window.history.back()" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Go Back
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleTrace() {
+            const trace = document.getElementById('error-trace');
+            const toggle = document.getElementById('trace-toggle');
+            
+            if (trace.style.display === 'none') {
+                trace.style.display = 'block';
+                toggle.classList.remove('collapsed');
+            } else {
+                trace.style.display = 'none';
+                toggle.classList.add('collapsed');
+            }
+        }
+    </script>
+</body>
+</html>

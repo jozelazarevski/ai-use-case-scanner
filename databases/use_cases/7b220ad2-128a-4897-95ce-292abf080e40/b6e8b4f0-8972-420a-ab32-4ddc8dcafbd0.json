@@ -1,0 +1,114 @@
+{
+  "id": "b6e8b4f0-8972-420a-ab32-4ddc8dcafbd0",
+  "user_id": "7b220ad2-128a-4897-95ce-292abf080e40",
+  "filename": "Maternal_Health_Risk_Data_Set.csv",
+  "proposals": [
+    {
+      "title": "Maternal Health Risk Level Prediction",
+      "description": "This use case focuses on predicting the maternal health risk level ('low risk', 'mid risk', 'high risk') for expectant mothers based on their physiological data. An AI model, specifically a classification algorithm, will be trained on historical data including age, blood pressure (systolic and diastolic), blood sugar levels, body temperature, and heart rate.\n\nThe model will learn patterns and correlations between these input features and the resulting risk level. Once trained, the model can be used to assess the risk for new patients in real-time or batch processing. This predictive capability allows healthcare providers to identify patients requiring closer monitoring or specific interventions earlier, potentially improving maternal and fetal outcomes.\n\nIntegrating this model into clinical workflows could involve flagging high-risk patients in electronic health records (EHR) systems or providing risk scores during prenatal checkups. This facilitates proactive and personalized care strategies, optimizing resource allocation towards patients who need it most.",
+      "kpis": [
+        "Model Accuracy : Percentage of correctly classified risk levels (high, mid, low).",
+        "High-Risk Recall : Percentage of actual high-risk cases correctly identified by the model.",
+        "Reduction in Adverse Events : Measure the decrease in maternal complications or emergencies for the monitored population.",
+        "Timeliness of Intervention : Average time saved between risk identification and intervention initiation.",
+        "Clinician Adoption Rate : Percentage of clinicians actively using the risk prediction tool in their workflow."
+      ],
+      "business_value": "Provides early identification of high-risk pregnancies, enabling timely interventions and personalized care plans. This can lead to improved maternal and fetal outcomes, reduced healthcare costs associated with emergency care and complications, and better allocation of clinical resources.",
+      "target_variable": "RiskLevel",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a predicted risk level ('low risk', 'mid risk', 'high risk') for a given patient based on their input features. Often, classification models also provide probabilities associated with each class. For example, for a patient with specific vitals (Age=30, SystolicBP=135, DiastolicBP=88, BS=12, BodyTemp=98, HeartRate=75), the model might predict 'high risk' with the following probabilities: P(high risk)=0.75, P(mid risk)=0.20, P(low risk)=0.05. This indicates a strong confidence in the 'high risk' prediction, prompting closer clinical attention.",
+      "target variable understanding": "The 'RiskLevel' variable is categorical and indicates the assessed level of health risk for the mother. It has three distinct possible values or prediction outcomes: 'low risk', 'mid risk', and 'high risk'. Understanding this variable is crucial for stratifying patients and tailoring healthcare interventions based on predicted risk severity."
+    },
+    {
+      "title": "Predictive Modeling of Systolic Blood Pressure",
+      "description": "This use case aims to predict a patient's systolic blood pressure (SystolicBP) based on other available physiological and demographic data, such as age, diastolic blood pressure, blood sugar, body temperature, and heart rate. A regression model will be trained to understand the relationships between these variables and SystolicBP.\n\nPredicting SystolicBP can be valuable in scenarios where direct measurement might be intermittent or delayed. It can help in identifying trends or potential anomalies in blood pressure that might require further investigation. For instance, if the model consistently predicts a higher SystolicBP than expected for a patient's profile, it could signal an underlying issue even before a direct measurement confirms hypertension.\n\nThe model could supplement monitoring systems, providing estimated values between actual readings or flagging significant deviations from predicted norms based on the patient's current state.",
+      "kpis": [
+        "Mean Absolute Error (MAE) : Average absolute difference between predicted and actual SystolicBP values.",
+        "Root Mean Squared Error (RMSE) : Square root of the average squared difference between predicted and actual values, penalizing larger errors.",
+        "R-squared (R\u00b2) : Proportion of the variance in SystolicBP that is predictable from the input features.",
+        "Reduction in Monitoring Gaps : Decrease in the time intervals where BP estimates are unavailable.",
+        "Correlation with Clinical Assessment : Degree of agreement between model predictions and clinician assessments of BP trends."
+      ],
+      "business_value": "Offers a non-invasive way to estimate Systolic Blood Pressure trends between measurements, potentially aiding in early detection of hypertension or hypotension risks. It can supplement remote patient monitoring and provide clinicians with additional data points for assessment, potentially improving the management of cardiovascular health during pregnancy.",
+      "target_variable": "SystolicBP",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a continuous numerical value representing the predicted Systolic Blood Pressure (e.g., 135 mmHg). For a patient with input features (Age=28, DiastolicBP=75, BS=6.5, BodyTemp=98, HeartRate=72), the model might predict a SystolicBP of 118. This predicted value can be compared against clinical thresholds (e.g., >140 mmHg indicating hypertension) or the patient's historical data to assess their current cardiovascular status. A prediction significantly higher or lower than baseline could trigger an alert.",
+      "target variable understanding": "The 'SystolicBP' variable is a continuous numerical value representing the pressure in blood vessels when the heart beats (measured in mmHg). Predictions will be specific numerical values reflecting the model's estimate of this pressure. Analyzing this target helps understand the expected range and distribution of systolic blood pressure in the patient population."
+    },
+    {
+      "title": "Predictive Modeling of Diastolic Blood Pressure",
+      "description": "Similar to the SystolicBP use case, this involves predicting a patient's diastolic blood pressure (DiastolicBP) using other physiological data like age, systolic blood pressure, blood sugar, body temperature, and heart rate. A regression model learns the complex interplay between these factors to estimate DiastolicBP.\n\nMonitoring DiastolicBP is crucial as elevated levels can indicate significant cardiovascular risk. This model can provide estimated DiastolicBP values, helping to track trends and identify potential risks, especially in settings where continuous monitoring isn't feasible. It acts as a supplementary tool for clinicians.\n\nSignificant deviations between the predicted DiastolicBP and the patient's baseline or expected values based on their profile could warrant closer clinical scrutiny or more frequent direct measurements.",
+      "kpis": [
+        "Mean Absolute Error (MAE) : Average absolute difference between predicted and actual DiastolicBP values.",
+        "Root Mean Squared Error (RMSE) : Measure of the magnitude of prediction errors for DiastolicBP.",
+        "R-squared (R\u00b2) : Percentage of DiastolicBP variance explained by the model.",
+        "Alert Accuracy for Abnormal DBP : Accuracy of model-triggered alerts for potentially abnormal diastolic pressures.",
+        "User Satisfaction (Clinician) : Feedback scores from clinicians on the utility of the DBP predictions."
+      ],
+      "business_value": "Complements SystolicBP prediction by providing estimates for Diastolic Blood Pressure, offering a more complete view of potential blood pressure issues like hypertension. Aids in continuous risk assessment and supports clinical decision-making, especially in remote or resource-limited settings.",
+      "target_variable": "DiastolicBP",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a continuous numerical value for the predicted Diastolic Blood Pressure (e.g., 85 mmHg). For a patient with features (Age=35, SystolicBP=140, BS=13, BodyTemp=98, HeartRate=70), the model might predict a DiastolicBP of 92. This prediction can be assessed against clinical thresholds (e.g., >90 mmHg indicating hypertension) or the patient's own history. A predicted value consistently above normal levels could indicate heightened risk.",
+      "target variable understanding": "The 'DiastolicBP' variable is a continuous numerical value representing the pressure in blood vessels when the heart rests between beats (measured in mmHg). Predictions are specific numerical estimates of this pressure. Understanding its distribution and relationship with other factors is key to assessing cardiovascular health."
+    },
+    {
+      "title": "Blood Sugar Level Estimation",
+      "description": "This use case involves developing a regression model to estimate a patient's blood sugar (BS) level based on factors like age, blood pressure, body temperature, and heart rate. Gestational diabetes is a common concern during pregnancy, and monitoring blood sugar is essential.\n\nWhile this model cannot replace direct blood glucose measurements (like finger pricks or continuous glucose monitors), it could potentially identify individuals who might benefit from more frequent or earlier screening for gestational diabetes based on predicted BS levels derived from other routinely collected vital signs. It could serve as an initial screening indicator or highlight patients whose physiological profile suggests a higher likelihood of abnormal glucose metabolism.\n\nThe model's predictions could flag patients for confirmatory glucose testing or closer observation, particularly if their predicted BS levels are unexpectedly high given their other physiological parameters.",
+      "kpis": [
+        "Mean Absolute Error (MAE) : Average absolute difference between predicted and actual Blood Sugar levels.",
+        "Root Mean Squared Error (RMSE) : Standard deviation of the prediction errors for Blood Sugar.",
+        "Correlation Coefficient : Strength and direction of the linear relationship between predicted and actual BS levels.",
+        "Accuracy in Flagging High BS Risk : Percentage of patients correctly identified as potentially having high BS requiring testing.",
+        "Reduction in Undiagnosed Gestational Diabetes Cases : Measure if the tool contributes to earlier or increased detection rates."
+      ],
+      "business_value": "Provides a non-invasive estimation of blood sugar levels, potentially serving as an early indicator for gestational diabetes risk based on commonly measured vitals. This could prompt earlier diagnostic testing and management, improving outcomes for both mother and baby by addressing hyperglycemia sooner.",
+      "target_variable": "BS",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model predicts a numerical Blood Sugar value (e.g., 14.5 mmol/L or mg/dL, depending on the unit implicit in the 'BS' column). For a patient with features (Age=40, SystolicBP=130, DiastolicBP=85, BodyTemp=98, HeartRate=80), the model might predict BS = 16. This prediction would be compared against thresholds for hyperglycemia or gestational diabetes (e.g., fasting BS > 5.1-5.3 mmol/L or postprandial levels). A high predicted value suggests a need for formal glucose testing.",
+      "target variable understanding": "The 'BS' variable is a numerical value representing blood sugar concentration. The units are not specified but are likely mmol/L or mg/dL based on typical ranges. Predictions will be continuous numerical estimates. Understanding the clinical thresholds for normal, pre-diabetic, and diabetic ranges is crucial for interpreting the model's output in a maternal health context."
+    },
+    {
+      "title": "Heart Rate Prediction Based on Physiological State",
+      "description": "This use case focuses on predicting a patient's heart rate (HeartRate) using other available data such as age, blood pressure, blood sugar, and body temperature. A regression model is trained to capture the relationship between these variables and the resulting heart rate.\n\nHeart rate is a key vital sign reflecting cardiovascular status and stress levels. Predicting heart rate based on other factors can help establish expected baseline ranges for individuals or identify deviations that might indicate distress, infection (often correlated with temperature and heart rate), dehydration, or other physiological changes. Anomalies between predicted and measured heart rate could trigger alerts.\n\nThis could be useful in remote monitoring situations to estimate heart rate when direct measurement is unavailable or to provide context to measured heart rate (e.g., is the measured heart rate expected given the patient's other vitals?).",
+      "kpis": [
+        "Mean Absolute Error (MAE) : Average absolute difference between predicted and actual Heart Rate values (in bpm).",
+        "Root Mean Squared Error (RMSE) : Measure of the typical error magnitude in heart rate predictions.",
+        "R-squared (R\u00b2) : Proportion of heart rate variability explained by the model.",
+        "Anomaly Detection Rate : Success rate in identifying significant deviations between predicted and measured heart rates.",
+        "Clinical Correlation : Agreement between model-flagged heart rate anomalies and clinically confirmed events."
+      ],
+      "business_value": "Estimates expected heart rate based on other vitals, helping to identify anomalies or unexpected tachycardia/bradycardia that might signal underlying issues like infection, stress, or cardiovascular problems. Supports remote monitoring and provides context for interpreting measured heart rates.",
+      "target_variable": "HeartRate",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a predicted Heart Rate as a numerical value (e.g., 85 bpm). For a patient with features (Age=25, SystolicBP=130, DiastolicBP=80, BS=15, BodyTemp=98), the model might predict HeartRate = 82 bpm. If the actual measured heart rate is significantly different (e.g., 110 bpm), this discrepancy between prediction and measurement could indicate an issue requiring investigation, even if the measured rate itself isn't extremely high in absolute terms.",
+      "target variable understanding": "The 'HeartRate' variable is a numerical value representing beats per minute (bpm). It's typically treated as continuous for regression. Predictions are numerical estimates of bpm. Understanding the normal range (usually 60-100 bpm at rest, but can vary) and factors influencing it (age, fitness, stress, illness) is key to interpretation."
+    },
+    {
+      "title": "Patient Phenotyping using Unsupervised Clustering",
+      "description": "This use case applies unsupervised machine learning, specifically clustering algorithms, to identify distinct patient subgroups based on their physiological profiles without using the pre-defined 'RiskLevel'. The model groups patients with similar characteristics (Age, SystolicBP, DiastolicBP, BS, BodyTemp, HeartRate) together.\n\nThese automatically identified clusters might reveal novel patient phenotypes or groupings that differ from the traditional 'low', 'mid', 'high' risk categories. For example, a cluster might emerge characterized by young age but high blood pressure and borderline blood sugar, representing a specific risk profile that warrants a unique management approach. Analyzing the characteristics of each cluster can provide new insights into maternal health patterns.\n\nThis approach can help in hypothesis generation for further research, refining existing risk stratification methods, or identifying patient groups who might respond differently to interventions.",
+      "kpis": [
+        "Cluster Silhouette Score : Measures how similar an object is to its own cluster compared to other clusters (higher is better).",
+        "Davies-Bouldin Index : Measures the average similarity ratio of each cluster with its most similar cluster (lower is better).",
+        "Cluster Stability : Consistency of cluster assignments across different data samples or algorithm runs.",
+        "Clinical Relevance of Clusters : Expert assessment of whether the identified clusters represent meaningful and distinct patient subgroups.",
+        "Separation of Known Risk Levels : How well the clusters separate patients who were originally labeled low, mid, or high risk (even though the label wasn't used for clustering)."
+      ],
+      "business_value": "Discovers hidden patterns and natural groupings within the patient population based on physiological data, potentially revealing novel patient phenotypes or risk profiles not captured by existing categories. This can lead to new research directions, more nuanced patient stratification, and tailored care strategies.",
+      "target_variable": "N/A (Features: Age, SystolicBP, DiastolicBP, BS, BodyTemp, HeartRate)",
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "hard",
+      "prediction_interpretation": "The model assigns each patient to a specific cluster (e.g., Cluster 1, Cluster 2, Cluster 3). Interpretation involves analyzing the characteristics of patients within each cluster. For example, Cluster 1 might contain younger patients with normal vitals, Cluster 2 might contain older patients with high blood pressure and high blood sugar, and Cluster 3 might group patients with high body temperature and heart rate, potentially indicating infection risk. A new patient would be assigned to the cluster whose members have the most similar physiological profile.",
+      "target variable understanding": "In clustering, there isn't a single predefined target variable. Instead, the goal is to identify groups (clusters) based on the similarity of input features (Age, SystolicBP, DiastolicBP, BS, BodyTemp, HeartRate). The 'prediction' is the cluster assignment for each patient. The number of unique predictions corresponds to the number of clusters identified by the algorithm (e.g., 3, 4, or 5 distinct groups)."
+    }
+  ],
+  "created_at": "2025-04-15T22:13:07.295896",
+  "metadata": {
+    "file_path": "uploads\\Maternal_Health_Risk_Data_Set.csv",
+    "proposal_count": 6
+  }
+}

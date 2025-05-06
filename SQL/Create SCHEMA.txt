@@ -1,0 +1,101 @@
+-- Create extension for UUID support
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Users table
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    username VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(256) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP WITH TIME ZONE,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- Create indexes on users table
+CREATE INDEX idx_users_username ON users(username);
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_created_at ON users(created_at);
+
+-- Models table
+CREATE TABLE models (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    model_path VARCHAR(255) NOT NULL,
+    model_type VARCHAR(50),
+    target_variable VARCHAR(100),
+    accuracy FLOAT,
+    feature_names JSONB,
+    feature_importance JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create indexes on models table
+CREATE INDEX idx_models_user_id ON models(user_id);
+CREATE INDEX idx_models_model_type ON models(model_type);
+CREATE INDEX idx_models_target_variable ON models(target_variable);
+CREATE INDEX idx_models_created_at ON models(created_at);
+
+-- Use cases table
+CREATE TABLE use_cases (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    filename VARCHAR(255) NOT NULL,
+    file_path VARCHAR(255),
+    proposals JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    metadata JSONB
+);
+
+-- Create indexes on use_cases table
+CREATE INDEX idx_use_cases_user_id ON use_cases(user_id);
+CREATE INDEX idx_use_cases_created_at ON use_cases(created_at);
+
+-- Embeddings table
+CREATE TABLE embeddings (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    model_id UUID NOT NULL REFERENCES models(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    embed_path VARCHAR(255),
+    settings JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create indexes on embeddings table
+CREATE INDEX idx_embeddings_user_id ON embeddings(user_id);
+CREATE INDEX idx_embeddings_model_id ON embeddings(model_id);
+CREATE INDEX idx_embeddings_created_at ON embeddings(created_at);
+
+-- Prediction logs table
+CREATE TABLE prediction_logs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    model_id UUID NOT NULL REFERENCES models(id) ON DELETE CASCADE,
+    input_data JSONB,
+    prediction_result JSONB,
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create indexes on prediction_logs table
+CREATE INDEX idx_prediction_logs_user_id ON prediction_logs(user_id);
+CREATE INDEX idx_prediction_logs_model_id ON prediction_logs(model_id);
+CREATE INDEX idx_prediction_logs_timestamp ON prediction_logs(timestamp);
+
+-- Create function to automatically update updated_at timestamp
+CREATE OR REPLACE FUNCTION update_modified_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create trigger to update the updated_at column in the models table
+CREATE TRIGGER update_models_updated_at
+BEFORE UPDATE ON models
+FOR EACH ROW
+EXECUTE FUNCTION update_modified_column();

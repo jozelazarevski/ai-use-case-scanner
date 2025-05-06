@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Use Case Proposals</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .proposal-card {
+            transition: transform 0.2s;
+            height: 100%;
+        }
+        .proposal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+        .badge {
+            font-size: 85%;
+            margin-right: 0.5rem;
+        }
+        .card-header {
+            border-bottom: none;
+            background-color: #f8f9fa;
+        }
+        .business-benefits, .kpis {
+            padding-left: 1.2rem;
+            margin-bottom: 0;
+        }
+        .business-benefits li, .kpis li {
+            margin-bottom: 0.5rem;
+        }
+        .card-text {
+            line-height: 1.6;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+            margin-top: 2rem;
+        }
+        .empty-state i {
+            font-size: 3rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+        .section-heading {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #495057;
+        }
+        .business-value {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #28a745;
+            margin-top: 1rem;
+        }
+        .prediction-interpretation {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #17a2b8;
+            margin-top: 1rem;
+        }
+        .complexity-badge {
+            display: inline-block;
+            padding: 0.35em 0.65em;
+            font-size: 0.85em;
+            font-weight: 600;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 50rem;
+            margin-left: 0.5rem;
+        }
+        .complexity-easy {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .complexity-medium {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .complexity-hard {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .card-body {
+            overflow-y: auto;
+            max-height: 700px;
+        }
+        .implementation-details {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            background-color: rgba(0,0,0,0.03);
+        }
+    </style>
+</head>
+<body>
+{% from 'user_menu_component.html' import render_user_menu %}
+{{ render_user_menu() }}
+    <div class="container mt-4 mb-5">
+        <h1 class="mb-4">AI Use Case Proposals for {{ filename }}</h1>
+        
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="target-info card p-4 shadow-sm">
+                    <h4>Dataset Analysis</h4>
+                    {% if proposals and proposals|length > 0 %}
+                        <p>The system has analyzed your dataset and identified {{ proposals|length }} potential AI use case{% if proposals|length != 1 %}s{% endif %}.</p>
+                        <p class="text-muted">Each proposal identifies a specific target variable to predict and suggests an appropriate model type based on the data characteristics.</p>
+                    {% else %}
+                        <p>The system has analyzed your dataset but couldn't identify any potential AI use cases.</p>
+                        <p class="text-muted">Please check your dataset or try uploading a different file with more features.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        {% if proposals and proposals|length > 0 %}
+            <div class="row">
+                {% for proposal in proposals %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm proposal-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">{{ proposal.title }}</h5>
+                            {% if proposal.use_case_implementation_complexity %}
+                                <span class="complexity-badge complexity-{{ proposal.use_case_implementation_complexity|lower }}">
+                                    {{ proposal.use_case_implementation_complexity|capitalize }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                {% if proposal.target_variable and proposal.target_variable != "Unknown" %}
+                                    <span class="badge bg-primary">Target: {{ proposal.target_variable }}</span>
+                                {% endif %}
+                                {% if proposal.model_type and proposal.model_type != "auto" %}
+                                    <span class="badge bg-secondary">Model: {{ proposal.model_type|capitalize }}</span>
+                                {% endif %}
+                            </div>
+                            
+                            {% if proposal.description %}
+                                <p class="card-text">{{ proposal.description }}</p>
+                            {% endif %}
+                            
+                            {% if proposal.business_value %}
+                                <div class="business-value">
+                                    <h6 class="section-heading">Business Value</h6>
+                                    <p class="mb-0">{{ proposal.business_value }}</p>
+                                </div>
+                            {% endif %}
+                            
+                            {% if proposal.prediction_interpretation %}
+                                <div class="prediction-interpretation">
+                                    <h6 class="section-heading">Prediction Interpretation</h6>
+                                    <p class="mb-0">{{ proposal.prediction_interpretation }}</p>
+                                </div>
+                            {% endif %}
+                            
+                            {% if proposal.kpis and proposal.kpis|length > 0 %}
+                                <h6 class="section-heading">Key Performance Indicators:</h6>
+                                <ul class="kpis">
+                                    {% for kpi in proposal.kpis %}
+                                        {% if kpi %}
+                                            <li>{{ kpi }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-white">
+							<div class="d-grid">
+								<button class="btn btn-primary train-model-btn" 
+										data-proposal-index="{{ loop.index0 }}" 
+										data-model-type="{{ 
+											'classification' if proposal.model_type in ['auto', 'sentiment_analysis'] 
+											else proposal.model_type if proposal.model_type 
+											else 'classification' 
+										}}">
+										<i class="bi bi-graph-up me-2"></i>Train Model
+								</button>
+							</div>
+						</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="bi bi-search"></i>
+                <h3>No AI Use Cases Found</h3>
+                <p class="text-muted">We couldn't identify any suitable AI use cases based on your dataset.</p>
+                <a href="/" class="btn btn-primary mt-3">Upload Another Dataset</a>
+            </div>
+        {% endif %}
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+     
+	<script>
+	$(document).ready(function() {
+    $('.train-model-btn').on('click', function() {
+        var $button = $(this);
+        var proposalIndex = $button.data('proposal-index');
+        var modelType = $button.data('model-type') || 'classification';
+        
+        console.log('Training Model:', {
+            proposalIndex: proposalIndex,
+            modelType: modelType
+        });
+        
+        // Show loading state
+        $button.prop('disabled', true)
+               .html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Training...');
+        
+        $.ajax({
+            url: '/train_model/' + modelType,
+            type: 'POST',
+            data: {
+                proposal_index: proposalIndex
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success && response.redirect) {
+                    window.location.href = response.redirect;
+                } else {
+                    alert(response.error || 'Unexpected server response');
+                    $button.prop('disabled', false)
+                           .html('<i class="bi bi-graph-up me-2"></i>Train Model');
+                }
+            },
+            error: function(xhr, status, error) {
+                var errorMessage = 'Error starting model training';
+                try {
+                    var errorResponse = JSON.parse(xhr.responseText);
+                    errorMessage = errorResponse.error || errorMessage;
+                } catch(e) {
+                    errorMessage = xhr.responseText || errorMessage;
+                }
+                
+                console.error('Training Error:', {
+                    status: status,
+                    error: error,
+                    responseText: xhr.responseText
+                });
+                
+                alert(errorMessage);
+                $button.prop('disabled', false)
+                       .html('<i class="bi bi-graph-up me-2"></i>Train Model');
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

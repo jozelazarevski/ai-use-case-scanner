@@ -1,0 +1,127 @@
+{
+  "id": "c3d7504e-4a04-4889-8cc2-f860f3a0aa9f",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "bank-full.csv",
+  "proposals": [
+    {
+      "title": "Predicting Term Deposit Subscription Likelihood",
+      "description": "This use case focuses on predicting whether a bank client will subscribe to a term deposit based on their demographic information, account details, and past campaign interactions. By analyzing variables such as age, job, marital status, education level, account balance, existing loans (housing, personal), contact information, and previous campaign outcomes, the AI model can identify patterns associated with successful subscriptions.\n\nThe model will learn from historical data where the outcome ('y') is known. It will assess the combined influence of factors like recent contact duration, number of contacts in the current campaign, and days passed since the last contact in previous campaigns. This allows the bank to prioritize contacting clients who exhibit characteristics similar to those who have subscribed in the past.\n\nImplementing this model enables the marketing team to optimize campaign resource allocation. Instead of a broad approach, they can focus efforts on leads identified by the model as having a higher probability of conversion, improving campaign efficiency and return on investment.",
+      "kpis": [
+        "Conversion Rate Improvement : Increase in the percentage of contacted clients subscribing to the term deposit.",
+        "Campaign ROI : Improvement in the return on investment for term deposit marketing campaigns.",
+        "Lead Prioritization Accuracy : Accuracy of the model in identifying high-propensity leads compared to random or traditional methods.",
+        "Reduction in Cost Per Acquisition (CPA) : Decrease in the average cost to acquire a new term deposit subscriber."
+      ],
+      "business_value": "Increases the effectiveness of marketing campaigns by focusing resources on clients most likely to subscribe to a term deposit. This leads to higher conversion rates, improved campaign ROI, and potentially lower customer acquisition costs.",
+      "target_variable": "y",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a probability score (e.g., 0 to 1) indicating the likelihood of a client subscribing ('yes'). A threshold (e.g., 0.5 or adjusted based on business goals) is set. If the probability for a client is above the threshold, they are predicted to subscribe ('yes'); otherwise, they are predicted not to ('no'). Example: A client receives a score of 0.78. If the threshold is 0.5, the prediction is 'yes', suggesting they are a high-priority lead for the term deposit campaign. Another client with a score of 0.21 would be predicted 'no'.",
+      "target variable understanding": "The target variable 'y' indicates whether the client subscribed to a term deposit ('yes' or 'no'). This is a binary categorical variable. It represents the ultimate success outcome of the marketing contact for this specific product. The model will predict one of these two outcomes ('yes' or 'no')."
+    },
+    {
+      "title": "Predicting Customer Credit Default Status",
+      "description": "This use case aims to predict whether a customer has credit in default based on their available profile information. The model utilizes features such as age, job type, marital status, education level, account balance, and whether they possess housing or personal loans to assess the likelihood of default.\n\nBy analyzing historical data, the AI learns the patterns and combinations of factors that correlate with a client having defaulted ('yes') versus not ('no'). This predictive capability can serve as an early warning system or a risk assessment tool, although it's based on the current default status rather than predicting future defaults.\n\nUnderstanding the factors associated with existing defaults can help the bank refine its credit assessment processes for new applicants or manage relationships with existing clients exhibiting high-risk profiles according to the model.",
+      "kpis": [
+        "Default Identification Accuracy : Accuracy of the model in correctly identifying clients currently in default.",
+        "Risk Profile Accuracy : Correlation between model predictions and actual client default status.",
+        "Identification of Key Default Indicators : Insights into which client attributes are most strongly associated with default status.",
+        "False Positive/Negative Rate : Monitoring the rate of incorrectly classifying clients regarding their default status."
+      ],
+      "business_value": "Provides insights into the characteristics associated with existing credit default. While based on current status, it can inform risk assessment frameworks, potentially aiding in the identification of client segments with higher default association, although it doesn't predict future behavior.",
+      "target_variable": "default",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model predicts whether a customer is currently in default ('yes' or 'no'). It might output a probability or directly the class label. Example: For customer A, the model predicts 'no' (default status), suggesting they are not currently recorded as having credit in default based on their profile. For customer B, the model predicts 'yes', indicating their profile characteristics align with those historically associated with being in default.",
+      "target variable understanding": "The target variable 'default' indicates whether the client has credit in default ('yes' or 'no'). It is a binary categorical variable reflecting a past or current credit status. The model will predict one of these two states based on the client's other attributes. There are two unique prediction outcomes: 'yes' or 'no'."
+    },
+    {
+      "title": "Predicting Housing Loan Status",
+      "description": "This use case focuses on predicting whether a customer currently has a housing loan based on their other characteristics. The AI model analyzes variables such as age, job, marital status, education, account balance, personal loan status, and contact history to identify patterns associated with having a housing loan.\n\nBy training on the provided data, the model learns which combinations of client attributes are commonly found among those with ('yes') versus those without ('no') a housing loan. This can be useful for understanding the bank's current customer base and the typical profile of a mortgage holder within this dataset.\n\nWhile not predicting future loan applications, this model can help the bank understand correlations. For instance, it might reveal if specific job types or education levels are strongly associated with having a housing loan, which could inform targeted marketing for other products or services to this group.",
+      "kpis": [
+        "Prediction Accuracy : Overall accuracy of the model in correctly classifying clients based on their housing loan status.",
+        "Feature Importance Scores : Identification of the client attributes most predictive of having a housing loan.",
+        "Segment Profile Analysis : Understanding the demographic and financial characteristics of clients predicted to have housing loans versus those who don't.",
+        "Cross-Selling Opportunity Identification : Using predicted housing loan status ('no') combined with other factors to potentially identify candidates for mortgage offers (indirectly)."
+      ],
+      "business_value": "Helps understand the profile of existing customers with housing loans versus those without. This understanding can inform customer segmentation strategies and potentially identify correlations useful for marketing other relevant financial products (e.g., home insurance) to existing mortgage holders or identifying potential mortgage candidates among those predicted not to have one.",
+      "target_variable": "housing",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts whether a customer has a housing loan ('yes' or 'no'). The output will be a classification label. Example: For customer X, the model predicts 'yes', suggesting their profile (e.g., age, job, balance) matches patterns common among clients with housing loans in the dataset. For customer Y, the prediction is 'no', indicating their profile is more typical of clients without a housing loan.",
+      "target variable understanding": "The target variable 'housing' indicates if the client has an existing housing loan ('yes' or 'no'). This is a binary categorical variable reflecting the client's current product holding status. The model aims to classify clients into one of these two groups based on their other features. There are two unique prediction outcomes: 'yes' or 'no'."
+    },
+    {
+      "title": "Predicting Personal Loan Status",
+      "description": "This use case involves using AI to predict whether a bank client currently holds a personal loan. The model leverages other available data points, including age, job, marital status, education level, account balance, housing loan status, and campaign contact history.\n\nThe objective is to identify the characteristics and patterns that differentiate clients who have a personal loan ('yes') from those who do not ('no'). The model learns these associations from the historical data provided in the dataset.\n\nUnderstanding the profile of customers with personal loans can assist the bank in various ways. It can help in segmenting customers for marketing campaigns related to loan consolidation, credit limit increases, or other credit products. It also provides insights into the overlap between personal loan holders and other factors like housing loans or default status.",
+      "kpis": [
+        "Prediction Accuracy : The percentage of clients correctly classified regarding their personal loan status.",
+        "Attribute Correlation Insights : Understanding which demographic or financial factors are strongly correlated with having a personal loan.",
+        "Customer Segment Characterization : Defining the typical profile of clients predicted to have personal loans.",
+        "Model Lift : Improvement in identifying personal loan holders compared to random selection."
+      ],
+      "business_value": "Provides insights into the characteristics of customers who currently have personal loans. This can be valuable for targeted marketing of related financial products (e.g., credit cards, loan top-ups), customer segmentation, and understanding the financial profile of different customer groups within the bank's portfolio.",
+      "target_variable": "loan",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model predicts whether a customer currently has a personal loan ('yes' or 'no'). It outputs a class label for each client. Example: Customer A is predicted as 'yes', meaning their attributes (e.g., job, balance, age) align with patterns observed in clients holding personal loans. Customer B is predicted as 'no', suggesting their profile is more characteristic of clients without a personal loan.",
+      "target variable understanding": "The target variable 'loan' indicates if the client has an existing personal loan ('yes' or 'no'). It is a binary categorical variable representing the status of holding a specific type of credit product. The model will classify clients into one of these two categories. There are two unique prediction outcomes: 'yes' or 'no'."
+    },
+    {
+      "title": "Predicting Customer Account Balance",
+      "description": "This use case utilizes AI to predict the account balance of a bank customer based on their demographic, professional, and behavioral data. The model analyzes variables like age, job, marital status, education, default status, housing and personal loan status, and potentially past campaign interaction metrics (though their predictive power for balance might be limited).\n\nThe goal is to build a regression model that estimates the numerical value of a client's account balance. By learning from the relationships between client characteristics and their known balances in the training data, the model can generate predictions for clients where this information might be used for segmentation or potential value estimation.\n\nPredicting balance can help the bank identify potentially high-value customers based on their profile, even without direct balance information in some contexts. It can also be used to understand which factors correlate most strongly with higher or lower balances, informing strategies for wealth management services or targeted savings product offers.",
+      "kpis": [
+        "Mean Absolute Error (MAE) : Average absolute difference between predicted and actual balances.",
+        "Root Mean Squared Error (RMSE) : Square root of the average squared difference between predicted and actual balances, penalizing larger errors more.",
+        "R-squared (Coefficient of Determination) : Proportion of the variance in the balance that is predictable from the input features.",
+        "Correlation of Predicted vs Actual Balance : How well the predicted balances rank order the customers compared to actual balances.",
+        "Identification of High/Low Balance Indicators : Understanding which features strongly predict high or low account balances."
+      ],
+      "business_value": "Allows the bank to estimate customer account balances based on other known attributes. This can be valuable for customer valuation, segmentation (e.g., identifying potential high-net-worth individuals based on profile), targeted marketing for investment or savings products, and understanding the drivers of account balance levels across the customer base.",
+      "target_variable": "balance",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a predicted numerical value representing the estimated account balance for a customer. Example: For customer Z, based on their age, job ('management'), education ('tertiary'), and loan status, the model might predict a balance of \u20ac15,500. This prediction can be compared to actual balances (if available) or used as an estimate for segmentation or targeting purposes. It's important to note the potential error range (e.g., using MAE or RMSE).",
+      "target variable understanding": "The target variable 'balance' is a numerical, continuous variable representing the average yearly balance in euros. It can range from negative values (indicating debt or overdraft) to large positive values. The model aims to predict this specific numerical value. The number of unique prediction outcomes is theoretically infinite within the range of possible balances, although practically it will be limited by the model's output precision."
+    },
+    {
+      "title": "Customer Segmentation Using Clustering",
+      "description": "This use case applies unsupervised learning (clustering) to group customers into distinct segments based on their shared characteristics. Instead of predicting a specific outcome, the AI identifies natural groupings within the data using variables like age, job, marital status, education, balance, housing loan status, and personal loan status.\n\nThe algorithm partitions the customer base into a predetermined or algorithmically determined number of clusters, where customers within a cluster are more similar to each other than to those in other clusters based on the selected features. Analyzing the characteristics of each cluster (e.g., average age, common job types, typical balance range, loan prevalence) reveals different customer personas.\n\nThese identified segments can be used by the bank to tailor marketing messages, develop specific product bundles, design targeted retention strategies, or personalize customer service approaches. Understanding these organic groupings helps move beyond simple demographic splits to more nuanced, behavior-driven segmentation.",
+      "kpis": [
+        "Cluster Purity/Homogeneity : Measure of the degree to which clusters contain data points with similar characteristics (if ground truth labels were available for validation, otherwise assessed qualitatively).",
+        "Cluster Separation/Silhouette Score : Measure of how distinct clusters are from each other.",
+        "Segment Profile Clarity : How well-defined and interpretable the characteristics of each identified customer segment are.",
+        "Targeted Campaign Performance Lift : Improvement in marketing campaign results when using cluster-based targeting compared to generic approaches.",
+        "Segment Stability : Consistency of cluster assignments when the model is retrained or applied to new data samples."
+      ],
+      "business_value": "Identifies distinct customer groups with similar characteristics and behaviors without prior definition. This enables more effective and personalized marketing, product development, and customer relationship management strategies tailored to the specific needs and profiles of each segment, leading to improved engagement and profitability.",
+      "target_variable": "N/A (Clustering is unsupervised)",
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model assigns each customer to a specific cluster (e.g., Cluster 1, Cluster 2, etc.). Interpretation involves analyzing the characteristics of the customers within each cluster. Example: Customer A is assigned to Cluster 3. Analysis reveals Cluster 3 typically consists of middle-aged (45-55) clients in management roles, with high balances, tertiary education, and housing loans but no personal loans. This profile suggests they might be receptive to investment product offers. Customer B, assigned to Cluster 1 (e.g., younger clients, lower balances, renters), would receive different, more appropriate marketing messages.",
+      "target variable understanding": "There is no single target variable for clustering. The goal is to group rows (customers) based on similarities across multiple input variables (e.g., 'age', 'job', 'balance', 'housing', 'loan'). The output is a cluster assignment (e.g., an integer label like 1, 2, 3...) for each customer. The number of unique prediction outcomes is equal to the number of clusters identified (k)."
+    },
+    {
+      "title": "Analyzing Previous Campaign Outcome Drivers",
+      "description": "This use case focuses on understanding the factors associated with the outcomes of previous marketing campaigns. The AI model uses client information available at the time of the previous contact, including demographics (`age`, `job`, `marital`, `education`), financial status (`balance`, `default`, `housing`, `loan`), and previous campaign interaction details (`pdays`, `previous`) to predict the outcome of that *previous* campaign (`poutcome`).\n\nThe possible outcomes recorded in `poutcome` are 'failure', 'nonexistent', 'success', and 'unknown'. By predicting these outcomes based on other features (excluding the current campaign details like `duration`, `campaign`, `y`), the bank can gain insights into what characterized successful or unsuccessful interactions in past efforts.\n\nThis analysis helps in understanding historical campaign dynamics. For example, identifying if clients contacted after a short `pdays` (days since last contact) were more likely to result in 'success' previously, or if certain demographic groups consistently led to 'failure' outcomes in past campaigns. These insights can inform the design and targeting strategy for future campaigns.",
+      "kpis": [
+        "Prediction Accuracy for 'poutcome' : How accurately the model classifies the outcome of the previous campaign.",
+        "Feature Importance for Past Outcomes : Identifying which client attributes or past contact metrics were most predictive of 'success', 'failure', etc.",
+        "Historical Success Profile Identification : Characterizing the profile of clients who had successful outcomes in previous campaigns.",
+        "Historical Failure Profile Identification : Characterizing the profile of clients who had failure outcomes in previous campaigns.",
+        "Model Lift for Identifying Past Success : Improvement in identifying previously successful contacts compared to random chance."
+      ],
+      "business_value": "Provides data-driven insights into the factors that correlated with success or failure in past marketing campaigns. This historical analysis helps refine future campaign strategies, improve targeting by understanding profiles associated with past success, and potentially avoid repeating ineffective approaches identified through past failures.",
+      "target_variable": "poutcome",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model predicts the outcome of the *previous* marketing campaign for a given client profile, choosing from 'failure', 'nonexistent', 'success', or 'unknown'. Example: Based on a client's profile and their `pdays` and `previous` values, the model might predict 'success' for their `poutcome`. This suggests that clients with similar characteristics and previous contact history tended to have successful outcomes in past campaigns. Another client might be predicted as 'failure', indicating their profile aligns with historically unsuccessful past campaign interactions.",
+      "target variable understanding": "The target variable 'poutcome' represents the outcome of the previous marketing campaign. It is a categorical variable with four unique values: 'failure', 'nonexistent', 'success', and 'unknown'. It provides historical context about past interactions. The model will predict one of these four outcomes based on the client's profile and potentially their past contact history ('pdays', 'previous')."
+    }
+  ],
+  "created_at": "2025-04-17T23:01:17.256521",
+  "metadata": {
+    "file_path": "uploads\\bank-full.csv",
+    "proposal_count": 7
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "c3d2aa9a-1f52-4d1c-ad82-0b2c651c4e0e": {
+    "id": "c3d2aa9a-1f52-4d1c-ad82-0b2c651c4e0e",
+    "model_id": "62c56b85-723e-427b-96fd-d291d2c913cc",
+    "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+    "name": "joze2 App",
+    "path": "model_embeddings\\c3d2aa9a-1f52-4d1c-ad82-0b2c651c4e0e",
+    "settings": {
+      "show_confidence": true,
+      "allow_file_upload": true,
+      "custom_theme": "dark"
+    },
+    "created_at": "2025-04-14T21:49:54.835492"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "id": "b453bfd7-494b-4cd8-b7e3-e2147a9b616b",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "Online_Retail.xlsx",
+  "proposals": [
+    {
+      "title": "AI-Powered Purchase Quantity Prediction",
+      "description": "This use case focuses on predicting the quantity of a specific item that a customer is likely to purchase in a single transaction line. The prediction is based on historical data including the item's identifier (StockCode), its listed unit price (UnitPrice), the customer making the purchase (CustomerID), and the customer's location (Country).\n\nBy analyzing past transaction patterns, the AI model learns how these factors influence the quantity ordered for different products. For instance, certain customer segments or customers from specific countries might tend to buy particular items in larger quantities, or higher unit prices might correlate with lower quantities. The model aims to capture these relationships to provide an estimate of the expected quantity for future or ongoing transactions, potentially considering the product Description as an additional feature if treated as categorical.",
+      "kpis": [
+        "Mean Absolute Error (MAE) Reduction: Lowering the average error between predicted and actual quantities purchased per transaction line.",
+        "Stockout Rate Reduction: Decreasing the frequency of specific products being unavailable due to inaccurate demand forecasting.",
+        "Inventory Holding Cost Reduction: Minimizing costs associated with storing excess stock predicted using the model.",
+        "Forecast Accuracy Improvement: Increasing the percentage of quantity predictions falling within an acceptable error margin (e.g., +/- 10%) of the actual quantity."
+      ],
+      "business_value": "Provides significant value in inventory management by enabling more accurate demand forecasting at a granular level (per item, per customer segment/location). This leads to optimized stock levels, reducing both the risk of lost sales due to stockouts and the costs associated with overstocking (storage, capital tied up, potential obsolescence). Improved forecasting can also inform purchasing decisions and supply chain logistics.",
+      "target_variable": "Quantity",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a numerical value representing the predicted quantity for a specific item in a transaction context. For example, if the inputs are StockCode '22728', UnitPrice 3.75, CustomerID '17850', and Country 'UK', the model might predict a Quantity of 4. This suggests that, based on past data, a customer like 17850 from the UK buying this specific item at this price is likely to purchase 4 units. If the model predicts a negative number, like -1, it indicates an expected return based on the input patterns (assuming returns are included in the training data with negative quantities). Decision-making should consider the confidence level or prediction interval if provided by the model.",
+      "target variable understanding": "The target variable `Quantity` is numerical and represents the number of units of a specific product (`StockCode`) bought or returned in a single line item of an invoice (`InvoiceNo`). Positive values indicate a purchase, while negative values typically indicate a return. The model will learn to predict this numerical value based on other features. Predictions will be continuous numbers, potentially including negative values if the model learns patterns associated with returns. The range and distribution of `Quantity` (potentially skewed, including outliers and negative values) influence model choice and evaluation."
+    },
+    {
+      "title": "Predictive Unit Price Estimation for Products",
+      "description": "This use case involves developing an AI model to predict the UnitPrice of a product based on transactional context. The model utilizes features such as the product identifier (StockCode), the quantity being ordered (Quantity), the specific customer making the purchase (CustomerID), and the geographical location of the customer (Country).\n\nThe goal is to understand how these factors collectively influence the pricing of items in individual transactions. For example, the model could learn if bulk purchases (higher Quantity) correlate with lower unit prices, if certain customers receive preferential pricing, or if prices vary significantly by Country. This predictive capability can be used to estimate expected prices, identify potential pricing anomalies, or inform pricing strategies.",
+      "kpis": [
+        "Root Mean Squared Error (RMSE) Minimization: Reducing the standard deviation of the errors between predicted and actual unit prices.",
+        "Pricing Anomaly Detection Rate: Increasing the percentage of successfully identified transactions where the actual UnitPrice significantly deviates from the predicted price.",
+        "Price Consistency Improvement: Reducing the variance in unit prices for the same product under similar conditions (quantity, customer segment, country).",
+        "MAE Percentage: Expressing the Mean Absolute Error as a percentage of the average UnitPrice to understand relative prediction accuracy."
+      ],
+      "business_value": "Offers valuable insights for pricing management and financial control. It can support dynamic pricing models by estimating appropriate prices based on transaction characteristics. Furthermore, it serves as a tool for identifying potential data entry errors or inconsistencies in pricing application (e.g., discounts not applied correctly, unusual price points). By comparing predicted prices to actual prices, businesses can flag transactions for review, ensuring pricing accuracy and potentially uncovering specific customer or regional pricing sensitivities.",
+      "target_variable": "UnitPrice",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a predicted numerical value for the UnitPrice. For instance, given inputs like StockCode '85123A', Quantity 12, CustomerID '12347', and Country 'Iceland', the model might predict a UnitPrice of 2.45. This suggests that, based on historical trends, this is the expected price per unit for this item under these circumstances. If the actual UnitPrice in a transaction is significantly different (e.g., 0.50 or 5.00), it might warrant investigation as a potential discount, promotion, data error, or a unique pricing situation not captured by the model's general patterns.",
+      "target variable understanding": "The target variable `UnitPrice` is numerical, representing the price of one unit of a specific product (`StockCode`) within a transaction line. It can have zero or positive values. Predicting `UnitPrice` helps understand pricing dynamics based on factors like product, quantity, customer, and location. The model will output continuous numerical predictions representing the expected price per item. Understanding the distribution of prices (e.g., presence of many low-value items, some high-value items, potential zero prices for samples/adjustments) is crucial for modeling."
+    },
+    {
+      "title": "Customer Segmentation Based on Purchasing Behavior",
+      "description": "This use case employs unsupervised learning (clustering) to group customers (identified by CustomerID) into distinct segments based on their purchasing patterns. The clustering algorithm analyzes features derived directly from the transaction data, such as the typical Quantity of items purchased per order line, the average UnitPrice of products they buy, and their Country of origin.\n\nThe objective is to identify naturally occurring groups of customers who exhibit similar behavior without pre-defining the segments. For example, the algorithm might identify segments like 'High Volume, Low Price Buyers', 'Low Volume, High Price Buyers', 'International Occasional Shoppers', etc. These segments can then be analyzed to understand their characteristics and value.",
+      "kpis": [
+        "Silhouette Score: Measuring how well-separated and compact the resulting customer clusters are (higher score is better).",
+        "Cluster Size Distribution: Analyzing the number of customers assigned to each segment to ensure meaningful and balanced groups.",
+        "Intra-cluster Variance Reduction: Minimizing the diversity of purchasing behavior (Quantity, UnitPrice) within each cluster.",
+        "Inter-cluster Distance Maximization: Maximizing the difference in purchasing behavior between different customer segments."
+      ],
+      "business_value": "Enables data-driven customer relationship management and targeted marketing strategies. By understanding the distinct purchasing behaviors of different segments, businesses can tailor promotions, product recommendations, and communication channels more effectively. This can lead to increased campaign ROI, improved customer loyalty, and better allocation of marketing resources. It also helps identify high-value customer segments that warrant special attention or retention efforts.",
+      "target_variable": "N/A (clustering is unsupervised)",
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model assigns each CustomerID to a specific cluster (e.g., Cluster 0, Cluster 1, Cluster 2...). The interpretation comes from analyzing the characteristics of the customers within each cluster. For example, one might find that Cluster 0 predominantly contains UK customers who buy large quantities of low-priced items frequently, while Cluster 1 consists of customers from various European countries who buy smaller quantities of higher-priced items less often. So, if CustomerID '17850' is assigned to Cluster 0, it implies this customer shares the behavioral traits defined for that segment (bulk UK buyer). The number and nature of clusters are determined during the modeling process.",
+      "target variable understanding": "There is no single target variable to predict. Instead, the goal is to group `CustomerID`s based on similarities in their associated `Quantity`, `UnitPrice`, and `Country` data (potentially aggregated per customer if preprocessing were allowed, but here likely using line-item data implicitly or requiring assumptions about how to represent a customer). The 'prediction' is the cluster label assigned to each customer. The number of unique 'predictions' is the number of clusters identified by the algorithm (e.g., 3, 5, 10 segments)."
+    },
+    {
+      "title": "Predicting Customer's Country Based on Purchase Details",
+      "description": "This use case involves building a classification model to predict the Country associated with a transaction or customer based on their purchasing details. The model uses features like the specific products bought (StockCode), the quantity of each item (Quantity), the unit prices (UnitPrice), and potentially the product descriptions (Description treated as categorical) and the CustomerID.\n\nThe aim is to see if purchasing patterns are distinct enough to infer the likely geographical origin of the order. For example, certain products might be significantly more popular in specific countries, or the combination of items, quantities, and price points might form a signature associated with a particular country. This could be used to validate geographical data or understand product appeal.",
+      "kpis": [
+        "Classification Accuracy: Measuring the overall percentage of correctly predicted countries.",
+        "F1-Score per Country: Assessing prediction performance for each country, especially important for imbalanced datasets (where some countries have few transactions).",
+        "Confusion Matrix Analysis: Understanding which countries are frequently confused with each other.",
+        "Top-N Accuracy: Measuring if the correct country is among the top N predictions made by the model."
+      ],
+      "business_value": "Provides insights into the geographical distribution of product preferences and purchasing behaviors. It can serve as a validation tool for customer-provided country information or help infer location when missing. Understanding which products/patterns strongly correlate with specific countries can inform international marketing campaigns, localization efforts, and logistical planning. It might also flag transactions for review if the predicted country strongly contradicts other available information.",
+      "target_variable": "Country",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a predicted Country name for a given set of transaction inputs. For instance, if the inputs describe a purchase including StockCode 'POSTAGE', Quantity 3, UnitPrice 18.00, and CustomerID '12352', the model might predict the Country 'Norway' with a certain confidence score (e.g., 80%). This prediction suggests that the observed purchasing pattern strongly aligns with patterns previously seen from customers in Norway. Comparing this prediction to the actual recorded country can confirm expectations or highlight potential discrepancies.",
+      "target variable understanding": "The target variable `Country` is categorical, representing the geographic location associated with the customer or transaction. The model learns to map combinations of input features (StockCode, Quantity, UnitPrice, CustomerID, Description) to one of these country labels. The number of unique predictions the model can make corresponds to the number of distinct countries present in the training dataset (e.g., 'United Kingdom', 'Germany', 'France', 'EIRE', 'Spain', etc.). Class imbalance is likely, with the UK probably dominating the dataset."
+    },
+    {
+      "title": "Product Stock Code Prediction from Transaction Context",
+      "description": "This use case aims to predict the specific product StockCode involved in a transaction line based on other available details. The AI model uses features like the Quantity purchased, the UnitPrice, the CustomerID making the purchase, the transaction Date (potentially components like month or day of week if usable directly), and the Country.\n\nThe goal is to infer the most likely product being transacted given its context. For instance, knowing a specific customer in a particular country bought 2 items at a price of \u00a31.55 each might strongly suggest a limited set of possible StockCodes. This could be useful for data validation, suggesting products during manual order entry, or analyzing contextual drivers for specific product purchases.",
+      "kpis": [
+        "Top-1 Accuracy: The percentage of times the model's single most likely prediction matches the actual StockCode.",
+        "Top-N Accuracy: The percentage of times the actual StockCode is within the model's top N predictions (e.g., top 5).",
+        "Mean Reciprocal Rank (MRR): Measuring the average rank of the correct StockCode among the predictions.",
+        "Reduction in Data Entry Errors: Tracking if using the model's suggestions leads to fewer incorrect StockCodes being entered."
+      ],
+      "business_value": "Offers potential benefits in operational efficiency and data quality. It could act as a verification layer, flagging transactions where the recorded StockCode seems unlikely given the context (quantity, price, customer). For systems involving manual entry, it could speed up the process by suggesting likely StockCodes. Furthermore, analyzing the model's feature importances could reveal non-obvious relationships between customer types, locations, price points, and specific products.",
+      "target_variable": "StockCode",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "hard",
+      "prediction_interpretation": "The model predicts the most probable StockCode(s) for a given transaction line's context. Example: Inputs are Quantity 6, UnitPrice 2.55, CustomerID '17850', Country 'UK'. The model might output a ranked list: 1. '85123A' (75% probability), 2. '84406B' (10% probability), 3. '21731' (5% probability). This suggests '85123A' is the most likely product given the context. If the actual StockCode recorded was something different with very low predicted probability, it might indicate an unusual purchase or a data error.",
+      "target variable understanding": "The target variable `StockCode` is categorical and represents unique product identifiers. This variable typically has very high cardinality (thousands of unique products). Predicting `StockCode` means identifying the specific product involved in a transaction based on other details. The model will output one of the many distinct `StockCode` values found in the data as its prediction. The large number of possible outcomes makes this a challenging classification task."
+    },
+    {
+      "title": "Product Description Classification Based on Transaction Data",
+      "description": "This use case focuses on predicting the textual `Description` of a product involved in a transaction line. The model uses other features from the transaction, specifically the `StockCode`, `Quantity`, `UnitPrice`, `CustomerID`, and `Country`.\n\nThe primary goal is often data consistency checking: given a `StockCode` and its transaction context, does the model predict a `Description` that matches the one recorded? Discrepancies could indicate errors in the catalog (e.g., wrong description associated with a stock code) or in the transaction record. It might also explore if descriptions associated with a StockCode vary subtly based on customer segment or location, although typically Description is tied directly to StockCode.",
+      "kpis": [
+        "Exact Match Accuracy: Percentage of predictions where the predicted Description exactly matches the actual Description.",
+        "Inconsistency Detection Rate: Percentage of known StockCode-Description mismatches correctly flagged by the model.",
+        "Character Error Rate (CER) / Word Error Rate (WER): Metrics to measure similarity if exact matches are rare, treating it more like a text generation/correction task.",
+        "Confidence Score Analysis: Evaluating the model's confidence when predicted and actual descriptions differ."
+      ],
+      "business_value": "Contributes to maintaining data integrity within the product catalog and transaction records. By identifying potential inconsistencies between StockCodes and Descriptions, it helps ensure accuracy in reporting, customer communication (invoices, packing slips), and website listings. While less common, analyzing prediction patterns might offer subtle insights into how product descriptions resonate or are associated differently across various contexts.",
+      "target_variable": "Description",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "hard",
+      "prediction_interpretation": "The model predicts the most likely `Description` string given the input features. For example, input: StockCode '22728', Quantity 2, UnitPrice 3.75, CustomerID '17850', Country 'UK'. The model might predict 'ALARM CLOCK BAKELIKE PINK' with 95% probability. If the actual description in the data for this line item was 'VINTAGE ALARM CLOCK', this mismatch would be flagged. The interpretation hinges on comparing the predicted text to the actual text, primarily for consistency checking.",
+      "target variable understanding": "The target variable `Description` is textual/categorical, providing a human-readable description of the product. Like `StockCode`, it can have high cardinality, although multiple StockCodes might sometimes share descriptions, or minor variations might exist. Predicting this text based on other transaction features is challenging due to the textual nature and high number of unique values. The model predicts one of the unique description strings from the dataset."
+    }
+  ],
+  "created_at": "2025-04-17T16:27:24.993727",
+  "metadata": {
+    "file_path": "uploads\\Online_Retail.xlsx",
+    "proposal_count": 6
+  }
+}

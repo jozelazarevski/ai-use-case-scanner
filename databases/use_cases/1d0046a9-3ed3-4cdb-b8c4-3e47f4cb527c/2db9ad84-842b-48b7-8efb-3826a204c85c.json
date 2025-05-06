@@ -1,0 +1,142 @@
+{
+  "id": "2db9ad84-842b-48b7-8efb-3826a204c85c",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "california_housing_test.csv",
+  "proposals": [
+    {
+      "title": "Predicting Median House Value in California Blocks",
+      "description": "This use case focuses on predicting the median house value for a specific block in California based on various demographic, geographic, and housing characteristics. An AI regression model will be trained using features like longitude, latitude, median housing age, total rooms, total bedrooms, population, number of households, and median income.\n\nThe model will learn the complex relationships between these factors and the resulting median house value. This predictive capability can be valuable for real estate investors, urban planners, and policymakers to understand property valuation trends, identify undervalued or overvalued areas, and make informed decisions regarding development, zoning, and resource allocation.",
+      "kpis": [
+        "Model Accuracy (MAE/RMSE): Measure the average error between predicted and actual median house values.",
+        "Prediction Latency: Measure the time taken by the model to generate a prediction for a new block.",
+        "Feature Importance Score: Identify which factors (e.g., median income, location) most significantly influence house value predictions.",
+        "Reduction in Valuation Discrepancies: Track the decrease in differences between model predictions and manual appraisals over time.",
+        "User Satisfaction Rate: Collect feedback from stakeholders (e.g., investors, planners) on the usefulness and reliability of the predictions."
+      ],
+      "business_value": "Provides accurate, data-driven estimates of property values, enabling better investment decisions, fair property taxation assessment, targeted real estate marketing, and informed urban planning. Reduces reliance on manual, time-consuming appraisals for large-scale analysis.",
+      "target_variable": "median_house_value",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a single numerical value representing the predicted median house value for a given block in USD. For example, if the model predicts 250000.00 for a block with specific input features, it means the AI estimates the typical house value in that block to be $250,000 based on the patterns learned from the data. This value can be compared against market listings or expert appraisals.",
+      "target variable understanding": "The target variable 'median_house_value' represents the median value (in USD) of all houses within a specific geographic block. It's a continuous numerical variable reflecting the central tendency of property prices in that area. Predictions will be specific dollar amounts, providing granular estimates rather than broad categories. The number of unique potential predictions is theoretically very large, covering a wide range of possible dollar values."
+    },
+    {
+      "title": "Estimating Median Income Level for California Blocks",
+      "description": "This use case aims to estimate the median income of households within a specific California block using AI. A regression model will leverage geographic location (longitude, latitude), housing characteristics (age, total rooms, total bedrooms), demographic data (population, households), and importantly, the median house value of the block.\n\nUnderstanding the interplay between property values, housing density, and location to predict income levels can be crucial for socioeconomic analysis, targeted marketing, and resource allocation by government agencies or businesses. The model identifies patterns indicating how these features correlate with the economic status of residents in a block.",
+      "kpis": [
+        "Model Accuracy (MAE/RMSE): Measure the average difference between the predicted median income and the actual median income (in tens of thousands of USD).",
+        "Correlation Coefficient (R-squared): Assess how well the model explains the variance in median income based on the input features.",
+        "Prediction Throughput: Measure the number of blocks for which income can be estimated per unit of time.",
+        "Identification Rate of Target Income Brackets: Evaluate the model's ability to correctly predict if a block's income falls within specific predefined ranges (e.g., low, middle, high)."
+      ],
+      "business_value": "Enables businesses to identify areas with specific purchasing power for targeted marketing campaigns. Helps government agencies and non-profits understand economic stratification, allocate social services effectively, and plan infrastructure development based on the predicted economic status of different neighborhoods.",
+      "target_variable": "median_income",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model predicts a single numerical value representing the estimated median income for households in a block, typically expressed in tens of thousands of US dollars per year. For instance, a prediction of 4.5 signifies an estimated median income of $45,000. This figure indicates the typical income level for the area, allowing comparison between different blocks.",
+      "target variable understanding": "The target variable 'median_income' is a continuous numerical value representing the median income of households within a block, scaled down by a factor of 10,000 (e.g., 3.5 represents $35,000). It reflects the economic earning power of the residents. The model will predict specific income values, allowing for fine-grained economic analysis. The number of unique potential predictions is large, covering a continuous range of income levels."
+    },
+    {
+      "title": "Predicting Block-Level Population Size",
+      "description": "This use case involves using AI to predict the total population residing within a specific California block. A regression model will be trained using geographic coordinates, housing stock details (median age, total rooms, total bedrooms), household count, median income, and median house value.\n\nThe model aims to learn the relationships between these features and the number of people living in a block. This prediction is valuable for infrastructure planning (utilities, transportation, schools), emergency services resource allocation, and business planning (estimating local market size).",
+      "kpis": [
+        "Model Accuracy (MAE/RMSE): Measure the average absolute or squared difference between the predicted and actual population count.",
+        "Percentage Error: Calculate the average prediction error relative to the actual population size.",
+        "Resource Allocation Efficiency: Assess if using population predictions leads to more efficient allocation of public services or business resources compared to previous methods.",
+        "Correlation with Household Count: Verify that population predictions maintain a logical relationship with the number of households."
+      ],
+      "business_value": "Provides data-driven estimates of population density for areas where census data might be outdated or unavailable at a granular block level. Supports better planning for public services, infrastructure development, retail site selection, and disaster preparedness by estimating the number of people potentially affected.",
+      "target_variable": "population",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a single numerical value representing the predicted total number of people residing in the block. For example, a prediction of 1500 indicates that the AI estimates approximately 1,500 individuals live in that specific block based on its characteristics. This number helps gauge the population density and service needs of the area.",
+      "target variable understanding": "The target variable 'population' is a continuous numerical count representing the total number of people living within a specific block. It reflects the demographic size of the area. The model will predict an integer-like value (though technically continuous output) representing this count. The number of unique potential predictions corresponds to the possible population sizes observed in the data range."
+    },
+    {
+      "title": "Estimating the Number of Households per Block",
+      "description": "This use case focuses on predicting the total number of households within a California block using AI. A regression model utilizes features such as geographic location, housing age, total rooms and bedrooms, total population, median income, and median house value.\n\nThe model learns how these characteristics correlate with the formation of distinct households in a block. This information is useful for utility companies planning service connections, market researchers segmenting consumer bases, and government agencies assessing housing needs and density.",
+      "kpis": [
+        "Model Accuracy (MAE/RMSE): Quantify the average error between the predicted and actual number of households.",
+        "Prediction Consistency: Ensure predicted households align logically with predicted population (e.g., population >= households).",
+        "Improvement in Service Planning: Measure if predictions lead to better accuracy in forecasting demand for household-based services (e.g., utilities, waste management).",
+        "Correlation with Housing Units (if available): Compare predictions against independent data on housing units per block."
+      ],
+      "business_value": "Offers estimates of household counts crucial for demand forecasting in utilities, telecommunications, and retail sectors. Aids urban planners in understanding housing density and occupancy patterns. Supports sociological research by providing granular data on household distribution.",
+      "target_variable": "households",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model predicts a single numerical value representing the estimated total number of households in the block. A prediction of 500 suggests the AI estimates there are approximately 500 distinct household units within that block, based on its input features. This helps understand the residential density in terms of family or individual units.",
+      "target variable understanding": "The target variable 'households' is a continuous numerical count representing the total number of distinct household units within a block. It reflects the number of occupied housing units. The model will predict an integer-like value (continuous output) for this count. The number of unique potential predictions covers the range of household counts observed in the dataset."
+    },
+    {
+      "title": "Predicting Total Bedrooms in a Block",
+      "description": "This use case employs AI to estimate the total number of bedrooms across all housing units within a specific California block. A regression model is trained using geographic location, housing age, total rooms, population, household count, median income, and median house value.\n\nBy analyzing these features, the model aims to predict the overall housing capacity in terms of sleeping quarters within a block. This can be an indicator of housing density, family sizes, or the type of housing stock prevalent in the area, useful for construction planning, real estate analysis, and demographic studies.",
+      "kpis": [
+        "Model Accuracy (MAE/RMSE): Measure the average error between predicted and actual total bedrooms.",
+        "Ratio Consistency: Check if the predicted total bedrooms maintain a reasonable ratio relative to predicted total rooms and households.",
+        "Correlation with Housing Type Data (if available): Validate predictions against external data on typical housing unit sizes (e.g., apartments vs. single-family homes).",
+        "Prediction Speed: Measure the time required to generate predictions for a large number of blocks."
+      ],
+      "business_value": "Provides an estimate of the housing stock's capacity and density within a block, which can inform real estate development strategies (e.g., identifying areas suited for larger family homes vs. smaller units). Supports demographic analysis by offering a proxy for potential household sizes or composition. Aids utility companies in estimating potential load based on dwelling sizes.",
+      "target_variable": "total_bedrooms",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a numerical value representing the estimated total count of bedrooms across all residences within the specified block. A prediction of 1200 suggests the AI estimates a combined total of 1,200 bedrooms exist in that block, based on its characteristics like total rooms, population, and housing age. This implies the scale and type of residential structures present.",
+      "target variable understanding": "The target variable 'total_bedrooms' is a continuous numerical count representing the aggregate number of bedrooms in all housing units within a block. It serves as a proxy for the overall size and capacity of the residential structures in the area. The model predicts this aggregate count as a continuous value. The number of unique potential predictions spans the range of bedroom counts found in the data."
+    },
+    {
+      "title": "Predicting Total Rooms in a Block",
+      "description": "This use case utilizes AI to predict the total number of rooms (excluding bathrooms) across all housing units within a specific California block. A regression model is developed using geographic coordinates, housing median age, total bedrooms, population, number of households, median income, and median house value.\n\nThe model learns the relationship between these characteristics and the overall size of residential structures in a block, measured by the total room count. This prediction can help urban planners, real estate developers, and infrastructure providers understand the scale of development and density in different areas.",
+      "kpis": [
+        "Model Accuracy (MAE/RMSE): Measure the average discrepancy between the predicted and actual total rooms.",
+        "Ratio of Bedrooms to Rooms: Ensure the predicted total rooms are consistently greater than or equal to the predicted total bedrooms.",
+        "Correlation with Population/Households: Check if predicted room counts align logically with population and household figures.",
+        "Improvement in Density Estimation: Assess if using these predictions enhances the accuracy of housing density metrics."
+      ],
+      "business_value": "Provides insights into the overall size and scale of housing stock within a block, complementing data on bedrooms and households. Helps real estate analysts understand the type of properties prevalent (e.g., smaller apartments vs. larger homes). Assists utility and service providers in estimating demand based on building sizes.",
+      "target_variable": "total_rooms",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model predicts a single numerical value representing the estimated total number of rooms (excluding bathrooms) across all housing units within the block. For instance, a prediction of 3000 indicates the AI estimates a combined total of 3,000 rooms exist in that block based on its input features. This serves as an indicator of the overall volume of residential space.",
+      "target variable understanding": "The target variable 'total_rooms' is a continuous numerical count representing the aggregate number of rooms (excluding bathrooms) in all housing units within a block. It reflects the overall size and scale of residential structures. The model will predict this total count as a continuous value. The number of unique potential predictions covers the range of total room counts observed."
+    },
+    {
+      "title": "Estimating Median Age of Housing Stock",
+      "description": "This use case leverages AI to estimate the median age of the housing stock within a California block. A regression model is trained using geographic location (longitude, latitude), housing characteristics (total rooms, total bedrooms), demographic data (population, households), economic indicators (median income), and property value (median house value).\n\nThe model identifies patterns that link current demographic and economic conditions, as well as housing size indicators, to the typical age of buildings in a block. This prediction is valuable for identifying areas needing renovation or redevelopment, assessing insulation and energy efficiency standards, and understanding historical development patterns.",
+      "kpis": [
+        "Model Accuracy (MAE/RMSE): Measure the average difference between the predicted and actual median housing age (in years).",
+        "Identification of Older/Newer Areas: Evaluate the model's ability to correctly classify blocks into age categories (e.g., built pre-1950, post-2000).",
+        "Correlation with Renovation Permits (if available): Compare predicted older housing stock areas with data on renovation activities.",
+        "Reduction in Manual Assessment Time: Quantify the time saved compared to manually researching building ages for large areas."
+      ],
+      "business_value": "Helps city planners identify areas with aging infrastructure potentially requiring upgrades or revitalization programs. Assists construction and renovation companies in targeting areas with older homes. Informs energy companies about potential needs for retrofitting programs based on building age.",
+      "target_variable": "housing_median_age",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a single numerical value representing the predicted median age (in years) of the houses within a specific block. For example, a prediction of 45.0 suggests that the typical house in that block is estimated to be around 45 years old, based on the learned relationship between the input features and housing age. This indicates the historical development phase of the neighborhood.",
+      "target variable understanding": "The target variable 'housing_median_age' is a continuous numerical value representing the median age, in years, of the housing units within a block. It indicates the typical construction period of the neighborhood. The model predicts this age as a continuous value. The number of unique potential predictions corresponds to the range of median ages observed in the dataset (e.g., from newly built to potentially over 50 years old)."
+    },
+    {
+      "title": "Identifying Similar Housing Blocks through Clustering",
+      "description": "This use case applies AI-driven clustering techniques to group California housing blocks based on their overall similarity across multiple dimensions. Unlike prediction tasks, clustering aims to discover natural groupings within the data without a predefined target variable. The algorithm will analyze features like location (longitude, latitude), housing age, size (rooms, bedrooms), population density (population, households), and economic status (median income, median house value).\n\nThe result will be distinct clusters, where blocks within the same cluster share similar characteristics. This is useful for identifying neighborhood archetypes, understanding regional variations, tailoring services or policies to specific types of areas, and simplifying large-scale analysis by focusing on representative cluster profiles.",
+      "kpis": [
+        "Cluster Separation Metrics (e.g., Silhouette Score): Measure how distinct and well-separated the identified clusters are.",
+        "Intra-Cluster Variance: Quantify the similarity of blocks within the same cluster (lower is better).",
+        "Inter-Cluster Distance: Quantify the dissimilarity between different clusters (higher is better).",
+        "Profile Interpretability: Assess how easily the defining characteristics of each cluster can be understood and described.",
+        "Stability of Clusters: Evaluate if clusters remain consistent when the model is retrained on slightly different data samples."
+      ],
+      "business_value": "Enables market segmentation for real estate, retail, and service industries by identifying distinct neighborhood types. Helps policymakers understand diverse community needs and tailor programs accordingly. Facilitates comparative analysis by grouping similar areas for study. Can reveal hidden patterns and relationships in housing market dynamics across the state.",
+      "target_variable": "N/A (Clustering assigns cluster labels)",
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model assigns each block to a specific cluster, represented by a label (e.g., Cluster 0, Cluster 1, Cluster 2...). Interpretation involves analyzing the average or typical values of the input features (like median income, housing age, population density) for all blocks within a given cluster. For example, 'Block X belongs to Cluster 2'. Analyzing Cluster 2 might reveal it typically contains blocks with high population density, low median income, and older housing stock. This identifies Block X as belonging to that specific neighborhood archetype.",
+      "target variable understanding": "Clustering does not use a predefined target variable from the dataset columns. Instead, it aims to create a new categorical variable: the cluster assignment. The 'prediction' is the cluster label assigned to each data point (block). The number of unique 'predictions' is equal to the number of clusters (k) determined by the algorithm or specified by the user (e.g., if k=5, there will be 5 unique cluster labels assigned)."
+    }
+  ],
+  "created_at": "2025-04-17T16:47:30.234058",
+  "metadata": {
+    "file_path": "uploads\\california_housing_test.csv",
+    "proposal_count": 8
+  }
+}

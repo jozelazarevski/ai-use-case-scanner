@@ -1,0 +1,97 @@
+{
+  "id": "36100992-b058-4e2d-b813-20ffe1cf0553",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "Warehouse_and_Retail_Sales.csv",
+  "proposals": [
+    {
+      "title": "Retail Sales Forecasting for Individual Items",
+      "description": "This use case involves developing a predictive model to forecast the `RETAIL SALES` volume for specific items (`ITEM CODE`, `ITEM DESCRIPTION`) on a monthly basis (`YEAR`, `MONTH`). The model would leverage historical sales data, item characteristics (`ITEM TYPE`), supplier information (`SUPPLIER`), and potentially related sales metrics (`RETAIL TRANSFERS`, `WAREHOUSE SALES`) as input features.\n\nBy analyzing past trends and relationships between these variables, the AI model can learn patterns associated with fluctuations in retail demand. This allows businesses to anticipate future sales volumes for each item, enabling better stock management at the retail level, optimizing shelf space allocation, and informing promotional planning to maximize revenue and minimize stockouts or overstock situations.\n\nThe model could be trained periodically (e.g., monthly or quarterly) with new data to adapt to changing market dynamics, seasonality, and consumer preferences. Different regression algorithms like ARIMA, Prophet, Linear Regression, Gradient Boosting, or Neural Networks could be employed depending on the data complexity and desired accuracy.",
+      "kpis": [
+        "Forecast Accuracy (e.g., MAPE, RMSE) : Measures the average error percentage or magnitude between predicted and actual retail sales.",
+        "Stockout Rate Reduction : Tracks the decrease in instances where items are unavailable for retail purchase due to insufficient stock.",
+        "Inventory Holding Cost Reduction : Measures the savings achieved by optimizing retail inventory levels based on forecasts.",
+        "Sales Uplift : Quantifies the increase in retail revenue potentially attributed to better availability and targeted promotions informed by forecasts.",
+        "Forecast Bias : Assesses whether the model consistently over-predicts or under-predicts sales."
+      ],
+      "business_value": "Provides accurate item-level retail sales forecasts, enabling optimized inventory management, reduced stockouts and overstocking, improved cash flow, enhanced shelf-space allocation, and more effective promotional planning, ultimately leading to increased profitability and customer satisfaction.",
+      "target_variable": "RETAIL SALES",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model will output a predicted numerical value for `RETAIL SALES` for a given item in a specific future month. For example, if the model predicts a `RETAIL SALES` value of 55.75 for 'ITEM CODE' 10434 (LAGUNITAS IPA 4/6 NR - 12OZ) for the next month, it suggests that the anticipated retail sales volume for that specific beer pack is approximately 56 units. This prediction helps inventory planners ensure adequate stock is available at retail locations to meet the expected demand.",
+      "target variable understanding": "The `RETAIL SALES` variable represents the quantity or value of items sold directly to end consumers. It is a continuous numerical variable. Predictions will be specific numerical forecasts (e.g., 15.3 units, 120.0 units) for future retail sales of an item in a given period."
+    },
+    {
+      "title": "Warehouse Sales Demand Forecasting",
+      "description": "This use case focuses on predicting the `WAREHOUSE SALES` volume for items. Warehouse sales often represent sales to other businesses (like retailers) or bulk orders. The AI model would use historical data including `YEAR`, `MONTH`, `SUPPLIER`, `ITEM CODE`, `ITEM DESCRIPTION`, `ITEM TYPE`, and potentially `RETAIL SALES` and `RETAIL TRANSFERS` as indicators of downstream demand.\n\nUnderstanding future warehouse sales demand is crucial for managing central inventory levels, optimizing warehouse operations (receiving, storing, picking), and ensuring timely fulfillment of orders to retail partners or other customers. Accurate forecasts help prevent warehouse stockouts, which can disrupt the supply chain, and avoid excess inventory, which ties up capital and increases storage costs.\n\nThe model can identify trends, seasonality, and the impact of supplier or item type on warehouse offtake. This predictive insight allows for proactive procurement from suppliers and efficient resource planning within the warehouse.",
+      "kpis": [
+        "Warehouse Forecast Accuracy (MAPE, RMSE) : Measures the prediction error for warehouse sales volume.",
+        "Warehouse Stock Turn Improvement : Tracks the efficiency of warehouse inventory management based on forecast accuracy.",
+        "Order Fulfillment Rate : Measures the percentage of warehouse orders fulfilled completely and on time.",
+        "Reduced Warehouse Holding Costs : Quantifies savings from optimizing central stock levels.",
+        "Supplier Lead Time Conformance Improvement : Assesses if better forecasting helps manage supplier orders more effectively."
+      ],
+      "business_value": "Improves warehouse inventory management by providing reliable forecasts of demand from retailers or bulk buyers. This leads to optimized stock levels, reduced carrying costs, improved order fulfillment rates, more efficient warehouse operations, and better coordination with suppliers.",
+      "target_variable": "WAREHOUSE SALES",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model predicts the expected `WAREHOUSE SALES` quantity for an item in a future period. For instance, a prediction of 250.0 for 'ITEM CODE' 10431 (VICTORY GOLDEN MONKEY 4/6 NR) for next month indicates an anticipated demand of 250 units from the warehouse (likely orders from retail stores). This informs purchasing decisions from the supplier and warehouse stocking strategy.",
+      "target variable understanding": "The `WAREHOUSE SALES` variable represents the quantity or value of items sold or shipped from the central warehouse, often to retail locations or other business entities. It is a continuous numerical variable. Predictions will be specific numerical forecasts (e.g., 5.0 units, 210.0 units) for future warehouse sales of an item."
+    },
+    {
+      "title": "Retail Transfer Movement Prediction",
+      "description": "This use case aims to predict the volume of `RETAIL TRANSFERS` for specific items between different locations (e.g., warehouse to store, store to store, though the data structure doesn't specify direction). High transfer volumes might indicate stock balancing activities, responses to localized demand spikes, or specific distribution strategies. The model would analyze `YEAR`, `MONTH`, `SUPPLIER`, `ITEM CODE`, `ITEM DESCRIPTION`, `ITEM TYPE`, `RETAIL SALES`, and `WAREHOUSE SALES` data.\n\nPredicting transfers helps in anticipating internal logistics needs and understanding stock movement patterns. For example, consistently high predicted transfers for an item to a certain (implicit) group of stores could signal a need to adjust direct shipments from the warehouse or reassess regional inventory allocation. This improves the efficiency of the internal supply chain and ensures products are available where they are most needed.\n\nBy understanding the drivers of transfers (e.g., are they driven by high retail sales in receiving locations, or by low warehouse sales indicating direct-to-store shipments?), logistics and inventory managers can optimize replenishment processes.",
+      "kpis": [
+        "Transfer Forecast Accuracy (MAPE, RMSE) : Measures the prediction error for retail transfer volumes.",
+        "Logistics Cost Reduction : Tracks savings in transportation and handling due to better planning of internal stock movements.",
+        "Improved In-Stock Availability at Store Level : Measures the impact of predicted transfers on ensuring product availability across retail locations.",
+        "Reduced Emergency Transfers : Tracks the decrease in urgent, unplanned stock movements.",
+        "Transfer Frequency Optimization : Assesses if predictions lead to more consolidated and efficient transfer schedules."
+      ],
+      "business_value": "Optimizes internal logistics and stock balancing by forecasting item transfer volumes. This leads to reduced transportation costs, improved product availability across retail outlets, minimized emergency shipments, and a more efficient internal supply chain responsive to localized demand variations.",
+      "target_variable": "RETAIL TRANSFERS",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model output is a predicted numerical value for `RETAIL TRANSFERS` for an item in a future period. A prediction of 45.0 for 'ITEM CODE' 10430 (STONE IPA 4/6 NR - 12OZ) next month suggests an expected transfer volume of 45 units. This could signal a need to prepare for significant stock movement, potentially requiring logistical planning or adjustments to inventory levels at originating/destination points.",
+      "target variable understanding": "The `RETAIL TRANSFERS` variable likely represents the quantity or value of items moved between retail locations or from a warehouse to retail locations (stock replenishment). It is a continuous numerical variable. Predictions will be specific numerical forecasts (e.g., 1.0 units, 63.0 units) for future transfer volumes of an item."
+    },
+    {
+      "title": "Item Type Classification based on Product Attributes and Sales",
+      "description": "This use case focuses on classifying an item into its `ITEM TYPE` (e.g., WINE, BEER, LIQUOR, KEGS, STR_SUPPLIES) based on other available features such as `SUPPLIER`, parts of the `ITEM DESCRIPTION`, `ITEM CODE` patterns (if any exist), and potentially sales patterns (`RETAIL SALES`, `WAREHOUSE SALES`). While the `ITEM TYPE` is provided, this model can be valuable for data validation, identifying potentially misclassified items, or automatically categorizing new items where the type might be missing or uncertain.\n\nAn AI classification model (like Logistic Regression, Support Vector Machines, Naive Bayes, or Tree-based classifiers) can learn the relationships between descriptive attributes, suppliers, and sales profiles associated with different item types. For instance, certain suppliers might predominantly deal in 'WINE', while specific keywords in the 'ITEM DESCRIPTION' (e.g., 'BOURBON', 'IPA', 'CAB') strongly indicate a particular type. Sales volumes might also differ significantly across types.\n\nImplementing this helps ensure data consistency and accuracy in product categorization, which is fundamental for reporting, analysis, and targeted marketing or inventory strategies based on product category.",
+      "kpis": [
+        "Classification Accuracy : Measures the percentage of items correctly classified into their `ITEM TYPE`.",
+        "Precision and Recall per Item Type : Assesses the model's accuracy for each specific category (e.g., how well it identifies 'WINE' without misclassifying others).",
+        "F1-Score : Provides a balanced measure of precision and recall.",
+        "Number of Misclassified Items Identified : Tracks the model's effectiveness in flagging potential data entry errors.",
+        "Confidence Score for Predictions : Measures the model's certainty in its classification for each item."
+      ],
+      "business_value": "Enhances data quality and consistency by automatically classifying items or validating existing classifications. This supports more reliable reporting, accurate category-based analysis, ensures proper regulatory handling (if applicable), and aids in streamlining the onboarding process for new products.",
+      "target_variable": "ITEM TYPE",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model will predict the most likely `ITEM TYPE` for a given item based on its features. For example, given an item with 'SUPPLIER' = 'JIM BEAM BRANDS CO', 'ITEM DESCRIPTION' containing 'BOURBON', and certain sales figures, the model might predict the `ITEM TYPE` as 'LIQUOR' with a high confidence score (e.g., 95%). If the actual data listed it as 'WINE', this prediction would flag a potential data error for review.",
+      "target variable understanding": "The `ITEM TYPE` variable is categorical, indicating the product category. The distinct values seen in the sample are 'WINE', 'BEER', 'LIQUOR', 'STR_SUPPLIES', 'KEGS'. The model will predict one of these existing categories. The number of unique predictions is limited to the number of unique item types present in the training data."
+    },
+    {
+      "title": "Clustering Items Based on Sales and Transfer Patterns",
+      "description": "This use case utilizes clustering algorithms (e.g., K-Means, DBSCAN, Hierarchical Clustering) to group items based on similarities in their sales and transfer dynamics. The model would analyze patterns across `RETAIL SALES`, `WAREHOUSE SALES`, and `RETAIL TRANSFERS` over time (`YEAR`, `MONTH`), potentially incorporating `ITEM TYPE` as a feature or analyzing clusters within types.\n\nIdentifying these clusters helps reveal distinct product performance profiles. For example, some clusters might represent 'High Retail, Low Warehouse' items (fast movers direct to consumer), 'High Warehouse, High Transfer' items (bulk distribution focus), 'Seasonal Peaks', or 'Slow Movers'. Understanding these groupings allows for differentiated inventory strategies, marketing approaches, and supply chain configurations tailored to each cluster's characteristics.\n\nInstead of managing every single item uniquely, businesses can develop strategies for item clusters, simplifying decision-making. This can also help identify outlier items that don't fit typical patterns, warranting further investigation.",
+      "kpis": [
+        "Cluster Silhouette Score : Measures how similar an item is to its own cluster compared to other clusters (higher is better).",
+        "Cluster Stability : Assesses if clusters remain consistent when the model is retrained on slightly different data.",
+        "Business Relevance of Clusters : Qualitative assessment of whether the identified clusters represent meaningful and actionable groupings (e.g., 'High Volume Staples', 'Niche Slow Movers').",
+        "Reduction in Inventory Variance within Clusters : Tracks if items within a cluster exhibit more predictable behavior after identification.",
+        "Number of Actionable Insights Derived : Counts the strategic changes implemented based on cluster analysis."
+      ],
+      "business_value": "Segments products into groups with similar sales and logistics behavior, enabling tailored inventory, marketing, and supply chain strategies for each segment. This simplifies management complexity, improves resource allocation, helps identify niche or problematic items, and can uncover previously unseen relationships between products.",
+      "target_variable": "N/A (Clustering identifies groups, doesn't predict a single variable)",
+      "model_type": "clustering",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model doesn't 'predict' a value but assigns each item (`ITEM CODE`) to a specific cluster (e.g., Cluster 0, Cluster 1, Cluster 2...). Interpreting the results involves analyzing the characteristics of the items within each cluster. For example, items in Cluster 1 might consistently show high `RETAIL SALES` but low `WAREHOUSE SALES` and `RETAIL TRANSFERS`, suggesting they are fast-moving items primarily sold directly or with very efficient direct distribution. Items in Cluster 2 might have high `WAREHOUSE SALES` and `RETAIL TRANSFERS`, indicating a different distribution model. This understanding guides strategy for items belonging to each cluster.",
+      "target variable understanding": "Clustering does not use a predefined target variable from the dataset columns. Instead, it analyzes relationships within the selected features (`RETAIL SALES`, `WAREHOUSE SALES`, `RETAIL TRANSFERS`, potentially combined with `YEAR`, `MONTH`, `ITEM TYPE`) to identify inherent groupings in the data. The output is a cluster assignment for each data point (item-month record or aggregated item profile)."
+    }
+  ],
+  "created_at": "2025-04-17T16:57:51.237359",
+  "metadata": {
+    "file_path": "uploads\\Warehouse_and_Retail_Sales.csv",
+    "proposal_count": 5
+  }
+}
