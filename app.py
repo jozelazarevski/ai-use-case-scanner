@@ -2617,47 +2617,7 @@ def home():
     }
     
     # Query the database for actual statistics
-    try:
-        # Count models
-        models_query = "SELECT COUNT(*) FROM models WHERE user_id = %s"
-        cursor = mysql.connection.cursor()
-        cursor.execute(models_query, (session.get('user_id'),))
-        stats['model_count'] = cursor.fetchone()[0]
-        
-        # Count use cases
-        use_cases_query = "SELECT COUNT(*) FROM use_cases WHERE user_id = %s"
-        cursor.execute(use_cases_query, (session.get('user_id'),))
-        stats['use_case_count'] = cursor.fetchone()[0]
-        
-        # Count embeddings
-        embeddings_query = "SELECT COUNT(*) FROM embeddings WHERE user_id = %s"
-        cursor.execute(embeddings_query, (session.get('user_id'),))
-        stats['embedding_count'] = cursor.fetchone()[0]
-        
-        # Calculate average accuracy
-        if stats['model_count'] > 0:
-            accuracy_query = """
-                SELECT AVG(CASE 
-                    WHEN JSON_EXTRACT(metadata, '$.accuracy') < 1 
-                    THEN JSON_EXTRACT(metadata, '$.accuracy') * 100
-                    ELSE JSON_EXTRACT(metadata, '$.accuracy')
-                END) as avg_accuracy
-                FROM models 
-                WHERE user_id = %s 
-                AND JSON_EXTRACT(metadata, '$.accuracy') IS NOT NULL
-            """
-            cursor.execute(accuracy_query, (session.get('user_id'),))
-            avg_accuracy = cursor.fetchone()[0]
-            
-            if avg_accuracy is not None:
-                stats['accuracy'] = f"{avg_accuracy:.1f}%"
-        
-        cursor.close()
     
-    except Exception as e:
-        # Log the error but continue loading the page
-        print(f"Error fetching dashboard stats: {e}")
-        flash(f"Could not load all dashboard statistics", "warning")
     
     return render_template('home.html', stats=stats)
 
