@@ -18,18 +18,18 @@ from ml.read_file import read_data_flexible
 #Generate additional imports according the specifications
 
 # Define the data file path
-DATA_FILE_PATH = #update this according the specifications
+DATA_FILE_PATH =[] #update this according the specifications
 MODEL_DIR = "trained_models"
 METRICS_FILE = os.path.join(MODEL_DIR, "classification_metrics.json")
 MODEL_FILE = os.path.join(MODEL_DIR, "best_default_classifier.joblib")
 REPORT_FILE = os.path.join(MODEL_DIR, "classification_report.txt")
 
 
-FEATURE_COLUMNS = #update this according the specifications
-TARGET_COLUMN = #update this according the specifications
+FEATURE_COLUMNS = []#update this according the specifications
+TARGET_COLUMN = []#update this according the specifications
 
-NUMERICAL_FEATURES = #update this according the specifications
-CATEGORICAL_FEATURES = #update this according the specifications
+NUMERICAL_FEATURES = []#update this according the specifications
+CATEGORICAL_FEATURES =[] #update this according the specifications
 
 
 def _get_feature_names(column_transformer):
