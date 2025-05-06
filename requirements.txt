@@ -1,53 +1,47 @@
 # Web Framework
-flask>=2.0.0
-flask_session>=0.4.0
-werkzeug>=2.0.0
+flask
+flask_session
+werkzeug
 
 # Data Processing
-pandas>=1.3.0
-numpy>=1.20.0
-chardet>=4.0.0  # For file encoding detection
+pandas
+numpy
+chardet
 
 # Machine Learning
-scikit-learn>=1.0.0
-joblib>=1.0.0
-xgboost>=1.5.0
-lightgbm>=3.3.2
-catboost>=1.0.0
-statsmodels>=0.13.0
-imbalanced-learn>=0.9.0  # For handling imbalanced datasets
+scikit-learn
+joblib
+xgboost
+lightgbm
+catboost
+statsmodels
+imbalanced-learn
 
 # Visualization
-matplotlib>=3.4.0
-seaborn>=0.11.0
-plotly>=5.5.0  # For interactive visualizations
+matplotlib
+seaborn
+plotly
 
 # API Integration
-requests>=2.25.0
-google-generativeai>=0.1.0
-anthropic>=0.3.0  # For Claude API integration
+requests
+google-generativeai
+anthropic
 
 # File Handling
-openpyxl>=3.0.0  # For Excel file support
-python-docx>=0.8.0  # For DOCX file support
-xlrd>=2.0.1  # For older Excel file formats
-pyarrow>=7.0.0  # For efficient DataFrame operations
+openpyxl
+python-docx
+xlrd
+pyarrow
 
 # Utilities
-python-dotenv>=0.19.1  # For environment variables
-tqdm>=4.62.0  # For progress bars
-
-# Threading and Concurrency
-threading>=3.0.0
+python-dotenv
+tqdm
 
 # Date & Time Handling
-dateutil>=2.8.2
+python-dateutil
 
 # Statistics
-scipy>=1.7.0  # For z-score and statistical functions
+scipy
 
-# Logging
-logging>=0.5.0
-
-# ML Explainability (based on your feature_importance usage)
-shap>=0.40.0
+# ML Explainability
+shap
