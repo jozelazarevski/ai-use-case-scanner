@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
 """
-App.py Dependency Tree Analyzer
+Enhanced App Dependency Tree Analyzer
 
 This script analyzes the dependency tree of app.py, showing all direct and indirect
-imports (recursive dependencies). It builds a comprehensive visualization of which
-files are imported by app.py and the full tree of dependencies.
+imports (recursive dependencies). It also identifies all files and folders that
+are NOT used by app.py and provides a comprehensive list of unused resources.
 
 Usage:
-    python app_dependency_tree.py [path_to_app.py]
+    python app_dependency_analyzer.py [path_to_app.py] [--max-depth MAX_DEPTH] [--move]
 
-Output:
-    A tree-like structure showing all dependencies of app.py
+Options:
+    path_to_app.py   Path to app.py or other Python file to analyze (default: app.py)
+    --max-depth      Maximum depth to display in the dependency tree
+    --move           Move unused files to 'unused_scripts' directory
 """
 
 import os
 import sys
 import re
 import ast
+import shutil
 from pathlib import Path
 from collections import defaultdict, deque
 import argparse
@@ -28,15 +31,20 @@ class DependencyTreeAnalyzer:
         self.app_file_path = os.path.abspath(app_file_path)
         self.root_dir = os.path.dirname(self.app_file_path)
         self.dependency_graph = defaultdict(set)
-        self.file_sizes = {}  # Initialize this attribute here
+        self.file_sizes = {}  # Initialize file sizes dictionary
         self.processed_modules = set()
         self.all_python_files = self.find_all_python_files(self.root_dir)
+        self.used_files = set()  # Will store all files used directly or indirectly
     
     def find_all_python_files(self, directory):
         """Find all Python files in the specified directory and its subdirectories."""
         python_files = []
         
         for root, _, files in os.walk(directory):
+            # Skip the unused_scripts directory if it exists
+            if 'unused_scripts' in root.split(os.sep):
+                continue
+                
             for file in files:
                 if file.endswith('.py'):
                     full_path = os.path.abspath(os.path.join(root, file))
@@ -135,7 +143,7 @@ class DependencyTreeAnalyzer:
             
             # Check if import is a module with subdirectories
             rel_path = os.path.relpath(py_file, self.root_dir)
-            if rel_path == f"{import_name.replace('.', os.sep)}.py":
+            if rel_path.replace(os.sep, '.').endswith(f"{import_name}.py"):
                 return py_file
         
         # Check for packages (directories with __init__.py)
@@ -198,6 +206,9 @@ class DependencyTreeAnalyzer:
             if path is None:
                 path = []
             
+            # Mark this file as used
+            self.used_files.add(file)
+            
             # Prevent infinite recursion due to circular dependencies
             if file in path:
                 return {"name": os.path.basename(file) + " (circular ref)", "children": [], "full_path": file}
@@ -227,6 +238,54 @@ class DependencyTreeAnalyzer:
         
         return dependency_tree
     
+    def find_unused_files(self):
+        """
+        Find all Python files that are not used by app.py directly or indirectly.
+        """
+        # If used_files is empty, run the analysis first
+        if not self.used_files:
+            self.analyze_recursive_dependencies()
+        
+        # Find files that are not in used_files
+        unused_files = [f for f in self.all_python_files if f not in self.used_files]
+        
+        # Group by directory for better organization
+        unused_by_directory = defaultdict(list)
+        for file in unused_files:
+            directory = os.path.dirname(file)
+            unused_by_directory[directory].append(file)
+        
+        return unused_by_directory
+    
+    def find_unused_directories(self):
+        """
+        Find directories that contain only unused Python files.
+        """
+        unused_dirs = set()
+        unused_by_directory = self.find_unused_files()
+        
+        for directory, files in unused_by_directory.items():
+            # Check if all Python files in this directory are unused
+            all_py_files_in_dir = [f for f in self.all_python_files if os.path.dirname(f) == directory]
+            
+            if len(all_py_files_in_dir) == len(files):
+                unused_dirs.add(directory)
+                
+                # Also check parent directories recursively
+                parent = os.path.dirname(directory)
+                while parent and parent != self.root_dir:
+                    # Check if all subdirectories of this parent are unused
+                    all_child_dirs = [d for d in unused_dirs if os.path.dirname(d) == parent]
+                    all_subdirs = [d for d in [os.path.dirname(f) for f in self.all_python_files] 
+                                  if os.path.dirname(d) == parent]
+                    
+                    if len(set(all_subdirs)) == len(all_child_dirs):
+                        unused_dirs.add(parent)
+                    
+                    parent = os.path.dirname(parent)
+        
+        return unused_dirs
+    
     def print_dependency_tree(self, tree, indent=0, max_depth=None):
         """Print the dependency tree in a visual format."""
         if max_depth is not None and indent > max_depth:
@@ -243,6 +302,64 @@ class DependencyTreeAnalyzer:
         # Print children
         for i, child in enumerate(tree["children"]):
             self.print_dependency_tree(child, indent + 1, max_depth)
+    
+    def print_unused_resources(self):
+        """Print a list of unused files and directories."""
+        unused_files_by_dir = self.find_unused_files()
+        unused_dirs = self.find_unused_directories()
+        
+        total_unused_files = sum(len(files) for files in unused_files_by_dir.values())
+        total_size = sum(self.file_sizes.get(f, 0) for files in unused_files_by_dir.values() for f in files)
+        
+        print("\n=== UNUSED RESOURCES ===")
+        
+        # Print unused directories
+        if unused_dirs:
+            print(f"\nUnused Directories ({len(unused_dirs)}):")
+            for directory in sorted(unused_dirs):
+                rel_path = os.path.relpath(directory, self.root_dir)
+                print(f"  {rel_path}")
+        
+        # Print unused files by directory
+        print(f"\nUnused Files ({total_unused_files}, {total_size/1024:.1f} KB total):")
+        
+        for directory, files in sorted(unused_files_by_dir.items()):
+            rel_dir = os.path.relpath(directory, self.root_dir)
+            print(f"\n  {rel_dir}/")
+            
+            for file in sorted(files):
+                file_name = os.path.basename(file)
+                size_kb = self.file_sizes.get(file, 0) / 1024
+                print(f"    {file_name} ({size_kb:.1f} KB)")
+    
+    def move_unused_files(self, output_dir):
+        """Move unused files to specified directory."""
+        unused_files_by_dir = self.find_unused_files()
+        moved_files = []
+        
+        # Create the output directory if it doesn't exist
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Flatten the list of unused files
+        all_unused_files = [file for files in unused_files_by_dir.values() for file in files]
+        
+        for file in all_unused_files:
+            # Create relative path structure in unused_scripts
+            rel_path = os.path.relpath(file, self.root_dir)
+            target_path = os.path.join(output_dir, rel_path)
+            
+            # Create parent directories
+            os.makedirs(os.path.dirname(target_path), exist_ok=True)
+            
+            # Move the file
+            try:
+                shutil.move(file, target_path)
+                moved_files.append((file, target_path))
+                print(f"Moved: {rel_path} -> {target_path}")
+            except Exception as e:
+                print(f"Error moving file {file}: {e}")
+        
+        return moved_files
     
     def count_unique_dependencies(self, tree, visited=None):
         """Count the number of unique dependencies in the tree."""
@@ -314,6 +431,8 @@ def main():
                         help='Path to app.py or other Python file to analyze (default: app.py)')
     parser.add_argument('--max-depth', type=int, default=None,
                         help='Maximum depth to display in the dependency tree')
+    parser.add_argument('--move', action='store_true',
+                        help='Move unused files to unused_scripts directory')
     
     args = parser.parse_args()
     app_file = args.app_file
@@ -349,6 +468,16 @@ def main():
     # Print the dependency tree
     print(f"\nDependency Tree for {os.path.basename(app_file)}:")
     analyzer.print_dependency_tree(tree, max_depth=args.max_depth)
+    
+    # Print unused resources
+    analyzer.print_unused_resources()
+    
+    # Move unused files if requested
+    if args.move:
+        print("\nMoving unused files to 'unused_scripts' directory...")
+        unused_scripts_dir = os.path.join(os.path.dirname(app_file), 'unused_scripts')
+        moved_files = analyzer.move_unused_files(unused_scripts_dir)
+        print(f"Moved {len(moved_files)} unused files to {unused_scripts_dir}")
     
     return 0
 
