@@ -4,7 +4,7 @@ import joblib
 import os
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
-from .read_file import read_data_flexible
+from read_file import read_data_flexible
 
 def predict_classification(model_path, input_data):
     """
