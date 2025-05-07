@@ -25,6 +25,8 @@ from flask_session import Session
 from dotenv import load_dotenv
 load_dotenv()
 
+
+
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)   
@@ -97,7 +99,8 @@ app.config['SESSION_COOKIE_MAX_SIZE'] = Config.SESSION_COOKIE_MAX_SIZE
 app.config['SESSION_COOKIE_SECURE'] = Config.SESSION_COOKIE_SECURE
 app.config['SESSION_COOKIE_HTTPONLY'] = Config.SESSION_COOKIE_HTTPONLY
 app.config['SESSION_COOKIE_SAMESITE'] = Config.SESSION_COOKIE_SAMESITE
-
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or os.urandom(24)
+app.config['SESSION_USE_SIGNER'] = True
 # Initialize Flask-Session
 Session(app)
 
