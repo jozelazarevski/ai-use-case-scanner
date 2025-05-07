@@ -2,12 +2,8 @@ import os
 
 class Config:
     CLAUDE_API_KEY = os.environ.get('CLAUDE_API_KEY', '')
-    ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
     GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', '')
- 
-
-   
-    SECRET_KEY='1986'
+    SECRET_KEY=  os.environ.get('SECRET_KEY','')
     
     # AI Model Selection - Choose "claude" or "gemini"
     ACTIVE_MODEL = "gemini"

@@ -2,6 +2,7 @@
 flask
 flask_session
 werkzeug
+gunicorn
 
 # Data Processing
 pandas
@@ -45,3 +46,4 @@ scipy
 
 # ML Explainability
 shap
+  

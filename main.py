@@ -22,6 +22,8 @@ import joblib
 import sys
 from flask import Flask, request, render_template, redirect, url_for, flash, jsonify, session
 from flask_session import Session
+from dotenv import load_dotenv
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -65,8 +67,6 @@ os.environ['LOKY_MAX_CPU_COUNT'] = str(os.cpu_count()) # Or any other number
 
 # Initialize Flask app
 app = Flask(__name__, static_folder='static')
-
-
  
 if not os.path.exists('static'):
     os.makedirs('static')
@@ -2622,4 +2622,5 @@ def home():
     return render_template('home.html', stats=stats)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port, debug=False)

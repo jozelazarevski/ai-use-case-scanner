@@ -1,0 +1,72 @@
+{
+  "id": "33c08370-e8a6-4300-bfc0-fadac95a9c04",
+  "user_id": "1d0046a9-3ed3-4cdb-b8c4-3e47f4cb527c",
+  "filename": "Prediction_results_-_Sheet2_1.csv",
+  "proposals": [
+    {
+      "title": "Predicting Chiller Type Based on Fault Type",
+      "description": "This AI use case aims to predict the Chiller Type based on the CPI_PENALTY_TYPE.  A classification model will be trained on historical data to identify patterns between specific fault types and the chiller type most frequently associated with them. This will assist in proactive maintenance and parts management.",
+      "kpis": [
+        "Accuracy of Chiller Type prediction: Measure the percentage of correctly predicted chiller types.",
+        "Reduction in maintenance downtime: Track the decrease in downtime caused by unexpected chiller failures.",
+        "Improved parts inventory management: Assess the effectiveness of optimized parts stocking based on predicted chiller type needs."
+      ],
+      "business_value": "This use case will improve maintenance efficiency, reduce downtime, and optimize inventory management by accurately predicting the chiller type based on the type of fault.",
+      "target_variable": "Chiller Type",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will output a predicted chiller type (e.g., YCAS, YK, YVAA).  For example, if the input is 'HIGH PRESSURE', the model might predict 'YK' as the most probable chiller type associated with this fault.  The confidence score associated with the prediction will indicate the reliability of the prediction. A low confidence score suggests uncertainty in the prediction.",
+      "target variable understanding": "The 'Chiller Type' variable has a limited number of unique values, making it suitable for classification.  The exact number of unique chiller types will depend on the data, but it's a relatively small set, making the classification task less complex."
+    },
+    {
+      "title": "Predicting Pipeline Success/Failure Based on Fault Type",
+      "description": "This AI use case focuses on predicting whether a pipeline will be successfully completed or fail based on the CPI_PENALTY_TYPE. A classification model will analyze historical data to identify relationships between different fault types and the eventual success or failure of the associated pipeline. This allows for proactive intervention and mitigation of potential issues.",
+      "kpis": [
+        "Accuracy of pipeline success/failure prediction: The percentage of correctly classified pipeline outcomes.",
+        "Reduction in pipeline failures: Quantify the decrease in the number of pipeline failures.",
+        "Improved resource allocation: Measure the efficiency gains from optimized resource allocation based on predicted outcomes."
+      ],
+      "business_value": "By predicting pipeline success or failure, the organization can allocate resources more effectively, reduce failures, and improve operational efficiency.",
+      "target_variable": "Pipeline Failed or Completed Successfully",
+      "model_type": "classification",
+      "use_case_implementation_complexity": "easy",
+      "prediction_interpretation": "The model will predict whether a pipeline will be 'Successful' or 'Failed'. For example, given a 'HIGH PRESSURE' fault, the model may predict 'Failed' with a certain probability.  A higher probability indicates a greater likelihood of failure.",
+      "target variable understanding": "The 'Pipeline Failed or Completed Successfully' variable is binary, making it a straightforward classification problem.  The model will predict one of two outcomes for each input."
+    },
+    {
+      "title": "Predicting Revenue Loss Based on Fault Type and Occurance",
+      "description": "This use case predicts the revenue loss associated with specific fault types. A regression model will be used to learn the relationship between the 'CPI_PENALTY_TYPE', 'OCCURANCE', and 'Revenue'. This allows for a better understanding of the financial impact of different fault types and helps prioritize maintenance efforts.",
+      "kpis": [
+        "Accuracy of revenue loss prediction: Measured by the Mean Absolute Error (MAE) or Root Mean Squared Error (RMSE).",
+        "Improved budget allocation: Evaluate the efficiency of budget allocation for maintenance based on predicted revenue loss.",
+        "Proactive cost reduction: Assess the impact of proactive maintenance strategies on minimizing revenue loss."
+      ],
+      "business_value": "This use case will help the organization better understand the financial impact of different fault types, allowing for better resource allocation and cost reduction strategies.",
+      "target_variable": "Revenue",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model will output a predicted revenue loss value (a numerical value).  For example, if the input is 'HIGH PRESSURE' with an occurrence of 100, the model might predict a revenue loss of $5000. The accuracy of the prediction depends on the model's performance and data quality.",
+      "target variable understanding": "The 'Revenue' variable is continuous, requiring a regression model.  The range of possible revenue losses will depend on the data, but the model will generate a numerical prediction for each fault type and occurrence."
+    },
+    {
+      "title": "Predicting SR Count Based on Fault Type",
+      "description": "This AI use case predicts the number of service requests ('SR Count') generated by different fault types. A regression model will be trained on the relationship between 'CPI_PENALTY_TYPE' and 'SR Count'. This will aid in resource planning and improved response times to service requests.",
+      "kpis": [
+        "Accuracy of SR count prediction: Measured by MAE or RMSE.",
+        "Improved resource allocation for service requests: Evaluate the efficiency of resource allocation based on predicted SR counts.",
+        "Reduced response time to service requests: Track the improvement in average response time to service requests."
+      ],
+      "business_value": "This use case allows for better resource allocation to handle service requests, improving response times and overall customer satisfaction.",
+      "target_variable": "SR Count",
+      "model_type": "regression",
+      "use_case_implementation_complexity": "medium",
+      "prediction_interpretation": "The model outputs a predicted number of service requests.  For instance, given 'HIGH PRESSURE' as input, the model might predict 5 service requests.  The accuracy reflects how closely this prediction matches actual service request counts.",
+      "target variable understanding": "The 'SR Count' variable is a count of service requests, making it suitable for regression. The model predicts a numerical value representing the expected number of service requests for a given fault type.  The range will vary based on historical data."
+    }
+  ],
+  "created_at": "2025-05-07T22:57:19.659380",
+  "metadata": {
+    "file_path": "uploads\\Prediction_results_-_Sheet2_1.csv",
+    "proposal_count": 4
+  }
+}
