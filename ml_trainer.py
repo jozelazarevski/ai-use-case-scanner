@@ -14,9 +14,12 @@ from sklearn.model_selection import train_test_split
 from ml.train_classification import train_classification_model
 from ml.train_regression import train_regression_model
 from ml.train_clustering import train_clustering_model
-
-
-def train_model_with_robust_error_handling(filepath, model_type, proposal_index=0, target_variable=None):
+# Import the save_model function
+from utils.ml_utils import save_model
+import joblib
+  
+# In ml_trainer.py
+def train_model_with_robust_error_handling(filepath, model_type, proposal_index=0, target_variable=None, user_id=None):
     """
     Wrapper function for train_model_from_file with robust error handling.
     
@@ -25,6 +28,7 @@ def train_model_with_robust_error_handling(filepath, model_type, proposal_index=
         model_type (str): Type of model to train ('classification', 'regression', 'auto')
         proposal_index (int): Index of the current proposal being processed
         target_variable (str, optional): Specific target variable to use
+        user_id (str, optional): User ID for model ownership
     
     Returns:
         dict: Training statistics or error information
@@ -41,14 +45,11 @@ def train_model_with_robust_error_handling(filepath, model_type, proposal_index=
                 'error_trace': f'Model type must be "classification" or "regression" or "clustering", got {model_type}'
             }
         
-        # Generate a default user ID if not provided
-        user_id = None
+        # Setup session data
         use_case = None
-        
-        # Try to get user_id and use_case from Flask session for clustering
         try:
             from flask import session
-            if 'user_id' in session:
+            if user_id is None and 'user_id' in session:
                 user_id = session['user_id']
             
             if 'proposals' in session and len(session['proposals']) > proposal_index:
@@ -59,78 +60,126 @@ def train_model_with_robust_error_handling(filepath, model_type, proposal_index=
             # Flask not available
             pass
         
-        # If no user_id is found, generate a unique one
+        # Generate defaults if needed
         if not user_id:
             user_id = f"auto_user_{str(uuid.uuid4())[:8]}"
-        
-        # If no use_case is found, create a default one
         if not use_case:
             use_case = f"{model_type}_project_{str(uuid.uuid4())[:8]}"
         
-        # Train the model using the appropriate function
+        # Import save_model function
+        
+        
+        training_stats = {
+            'success': True,
+            'user_id': user_id,
+            'use_case': use_case,
+            'model_type': model_type,
+            'target_variable': target_variable
+        }
+        
+        # Train model based on type
         if model_type == 'classification':
-            model_filename, features_filename, accuracy, feature_importances = train_classification_model(
+            # Assuming train_classification_model returns model and preprocessor
+            # If not, these functions would need to be modified
+            result = train_classification_model(
                 target_variable, 
                 filepath, 
                 user_id, 
                 use_case,
                 threshold=0.80,
-                use_f1_for_threshold=False 
+                use_f1_for_threshold=False,
+                return_model=True  # Added parameter to return model objects
             )
-            training_stats = {
-                'success': True,
+            
+            # Unpack the return values (will depend on your actual implementation)
+            model_filename, features_filename, accuracy, feature_importances, model, preprocessor = result
+            
+            # Save metadata to database
+            metrics = {'accuracy': accuracy}
+            model_id = save_model(
+                model=model,  # Use model directly without loading
+                preprocessor=preprocessor,
+                user_id=user_id,
+                model_name=use_case,
+                target_variable=target_variable,
+                model_type=model_type,
+                metrics=metrics,
+                feature_importances=feature_importances
+            )
+            
+            # Update training stats
+            training_stats.update({
+                'model_id': model_id,
                 'model_filename': model_filename,
                 'features_filename': features_filename,
                 'accuracy': accuracy,
-                'target_variable': target_variable,
-                'model_type': model_type,
-                'feature_importance': feature_importances,
-                'user_id': user_id,
-                'use_case': use_case
-            }
+                'feature_importance': feature_importances
+            })
+            
         elif model_type == 'regression':
-             model_filename, features_filename, r2, feature_importances = train_regression_model(
-                 target_variable, 
-                 filepath
-             )
-             training_stats = {
-                'success': True,
+            # Similar approach for regression
+            result = train_regression_model(
+                target_variable, 
+                filepath,
+                user_id,
+                use_case,
+                return_model=True
+            )
+            
+            model_filename, features_filename, r2, feature_importances, model, preprocessor = result
+            
+            metrics = {'r2_score': r2}
+            model_id = save_model(
+                model=model,
+                preprocessor=preprocessor,
+                user_id=user_id,
+                model_name=use_case,
+                target_variable=target_variable,
+                model_type=model_type,
+                metrics=metrics,
+                feature_importances=feature_importances
+            )
+            
+            training_stats.update({
+                'model_id': model_id,
                 'model_filename': model_filename,
                 'features_filename': features_filename,
                 'accuracy': r2,
-                'target_variable': target_variable,
-                'model_type': model_type,
-                'feature_importance': feature_importances,
-                'user_id': user_id,
-                'use_case': use_case
-            }
+                'feature_importance': feature_importances
+            })
+            
         elif model_type == 'clustering':
-              # Pass user_id and use_case to clustering training
-              model_filename, features_filename, kmeans = train_clustering_model(
-                  filepath, 
-                  n_clusters=None,
-                  user_id=user_id,
-                  use_case=use_case
-              )
-              training_stats = {
-                 'success': True,
-                 'model_filename': model_filename,
-                 'features_filename': features_filename,
-                 'n_clusters': kmeans.n_clusters if hasattr(kmeans, 'n_clusters') else None,
-                 'target_variable': "",
-                 'model_type': model_type,
-                 'feature_importance': "",
-                 'user_id': user_id,
-                 'use_case': use_case
-             }
-        else:
-            return {
-                'success': False,
-                'error_message': 'Invalid model type',
-                'error_trace': f'Model type must be "classification" or "regression", got {model_type}'
-            }
-        
-        
+            # Similar approach for clustering
+            result = train_clustering_model(
+                filepath, 
+                n_clusters=None,
+                user_id=user_id,
+                use_case=use_case,
+                return_model=True
+            )
+            
+            model_filename, features_filename, kmeans, model, preprocessor = result
+            
+            n_clusters = kmeans.n_clusters if hasattr(kmeans, 'n_clusters') else None
+            metrics = {'n_clusters': n_clusters}
+            model_id = save_model(
+                model=model,
+                preprocessor=preprocessor,
+                user_id=user_id,
+                model_name=use_case,
+                target_variable="",
+                model_type=model_type,
+                metrics=metrics
+            )
+            
+            training_stats.update({
+                'model_id': model_id,
+                'model_filename': model_filename,
+                'features_filename': features_filename,
+                'n_clusters': n_clusters,
+                'feature_importance': ""
+            })
+            
         return training_stats
     
     except Exception as e:

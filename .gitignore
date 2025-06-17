@@ -1,1 +1,6 @@
 .env
+uploads
+temp_models
+trained_models
+databases
+database

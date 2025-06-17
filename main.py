@@ -23,10 +23,11 @@ import sys
 from flask import Flask, request, render_template, redirect, url_for, flash, jsonify, session
 from flask_session import Session
 from dotenv import load_dotenv
+import numpy as np
 load_dotenv()
 
-
-
+# Login required decorator - imported from utils.user_auth after initialization
+from utils.user_auth import login_required
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)   
@@ -82,8 +83,9 @@ user_models_dir = os.path.join(Config.DATABASE_DIR, 'user_models')
 if not os.path.exists(user_models_dir):
     os.makedirs(user_models_dir)
 
-# Initialize user database
-init_database()
+
+
+
 
 # Load configuration from Config class
 app.config['UPLOAD_FOLDER'] = Config.UPLOAD_FOLDER
@@ -101,11 +103,7 @@ app.config['SESSION_COOKIE_HTTPONLY'] = Config.SESSION_COOKIE_HTTPONLY
 app.config['SESSION_COOKIE_SAMESITE'] = Config.SESSION_COOKIE_SAMESITE
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or os.urandom(24)
 app.config['SESSION_USE_SIGNER'] = True
-# Initialize Flask-Session
-Session(app)
 
-# Initialize authentication routes and middleware
-init_auth_routes(app)
 
 # Get active model from config
 ACTIVE_MODEL = Config.ACTIVE_MODEL.lower()
@@ -149,11 +147,20 @@ if not os.path.exists('static'):
 if not os.path.exists(Config.DATABASE_DIR):
     os.makedirs(Config.DATABASE_DIR)
 
-# Initialize user database
+#### Initialize user database and app routes
 init_database()
+init_auth_routes(app)
 
-# Login required decorator - imported from utils.user_auth after initialization
-from utils.user_auth import login_required
+@app.route('/', methods=['GET'])
+def index():
+    """Root route - redirect to login if not authenticated, otherwise to home"""
+    if 'user_id' in session:
+        # User is logged in, redirect to home dashboard
+        return redirect(url_for('home'))
+    else:
+        # User is not logged in, redirect to login
+        return redirect(url_for('login'))
+
 
 # Helper functions
 def read_script_file(script_path):
@@ -200,7 +207,8 @@ def limit_session_size(session, max_proposals=4):
         session['proposals'] = session['proposals'][:max_proposals]
         session.modified = True
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/upload', methods=['GET', 'POST'])
+@login_required
 def upload_file():
     """Handle file upload and processing."""
     if request.method == 'POST':
@@ -712,14 +720,14 @@ def training_results():
         
         # Convert NumPy types to Python native types
         if feature_importance:
-            import numpy as np
+          
             converted_feature_importance = {}
             for key, value in feature_importance.items():
                 # Convert NumPy float32/float64 to Python float
-                if isinstance(value, (np.float32, np.float64, np.float16, np.float_)):
+                if isinstance(value, (np.float32, np.float64, np.float16)):
                     converted_feature_importance[key] = float(value)
                 # Convert NumPy int types to Python int
-                elif isinstance(value, (np.int32, np.int64, np.int16, np.int8, np.int_, np.intc, np.intp)):
+                elif isinstance(value, (np.int32, np.int64, np.int16, np.int8)):
                     converted_feature_importance[key] = int(value)
                 # Convert NumPy bool to Python bool
                 elif isinstance(value, np.bool_):
@@ -1244,7 +1252,6 @@ def api_predict(embed_id):
 #### TRAIN MODEL
 @app.route('/train_model/<model_type>', methods=['POST'])
 @login_required
-
 def train_model(model_type):
     """Start the model training process"""
     try:
@@ -2346,6 +2353,7 @@ def test_model_with_file():
         print(f"Prediction error: {str(e)}\n{error_trace}")
         return redirect(url_for('model_tester'))
 
+
 #### USE CASE MANAGEMENT
 @app.route('/saved-use-cases')
 @login_required
@@ -2599,8 +2607,8 @@ def to_json_safe(obj):
 
 # Add this route to your app.py or routes.py file
 
-@app.route('/')
 @app.route('/home')
+@login_required
 def home():
     """
     Home dashboard page that serves as a central hub for the application.
