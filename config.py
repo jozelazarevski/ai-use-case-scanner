@@ -51,11 +51,22 @@ class Config:
     
     # Database Configuration
     DATABASE_DIR = os.environ.get('DATABASE_DIR', "databases")
-    DB_NAME = os.environ.get('DB_NAME', 'AIUseCase')
+    # DB_NAME = os.environ.get('DB_NAME', 'UnlokDB')
+    # DB_USER = os.environ.get('DB_USER', 'postgres')
+    # DB_PASSWORD = os.environ.get('DB_PASSWORD', 'root')
+    # DB_HOST = os.environ.get('DB_HOST', 'localhost')
+    # DB_PORT = os.environ.get('DB_PORT', '5432')
+    
+    # Support for connection string (Render uses this format)
+    DATABASE_URL = os.environ.get('DATABASE_URL', '')
+    
+    # Individual database parameters (fallback if DATABASE_URL not provided)
+    DB_NAME = os.environ.get('DB_NAME', 'UnlokDB')
     DB_USER = os.environ.get('DB_USER', 'postgres')
     DB_PASSWORD = os.environ.get('DB_PASSWORD', 'root')
     DB_HOST = os.environ.get('DB_HOST', 'localhost')
     DB_PORT = os.environ.get('DB_PORT', '5432')
+    
     
     # User account settings
     PASSWORD_MIN_LENGTH = int(os.environ.get('PASSWORD_MIN_LENGTH', '8'))

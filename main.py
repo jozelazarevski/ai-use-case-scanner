@@ -1767,77 +1767,78 @@ def init_routes(app):
         trace = request.args.get('trace', '')
         return render_template('error.html', error=error, trace=trace)
     
-    # Cleanup old files periodically
-    @app.before_request
-    def cleanup_old_files():
-        """Clean up old upload files to prevent disk space issues"""
-        # Only run occasionally to avoid overhead
-        if random.random() < 0.05:  # 5% chance on each request
-            try:
-                now = time.time()
-                for filename in os.listdir(app.config['UPLOAD_FOLDER']):
-                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                    # Remove files older than 24 hours
-                    if os.path.isfile(filepath) and now - os.path.getmtime(filepath) > 86400:
-                        os.remove(filepath)
-            except Exception as e:
-                logger.error(f"Error cleaning up files: {str(e)}")
+    # # Cleanup old files periodically
+    # @app.before_request
+    # def cleanup_old_files():
+    #     """Clean up old upload files to prevent disk space issues"""
+    #     # Only run occasionally to avoid overhead
+    #     if random.random() < 0.05:  # 5% chance on each request
+    #         try:
+    #             now = time.time()
+    #             for filename in os.listdir(app.config['UPLOAD_FOLDER']):
+    #                 filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    #                 # Remove files older than 24 hours
+    #                 if os.path.isfile(filepath) and now - os.path.getmtime(filepath) > 86400:
+    #                     os.remove(filepath)
+    #         except Exception as e:
+    #             logger.error(f"Error cleaning up files: {str(e)}")
     
         
 
-        """Verify and update the database schema if needed"""
-        logger.info("Verifying database schema...")
+    #     """Verify and update the database schema if needed"""
+    #     logger.info("Verifying database schema...")
         
-        try:
-            with get_db_connection() as conn:
-                with conn.cursor() as cursor:
-                    # Check if the models table exists
-                    cursor.execute("""
-                        SELECT EXISTS (
-                            SELECT FROM information_schema.tables 
-                            WHERE table_name = 'models'
-                        );
-                    """)
-                    table_exists = cursor.fetchone()[0]
+    #     try:
+    #         with get_db_connection() as conn:
+    #             with conn.cursor() as cursor:
+    #                 # Check if the models table exists
+    #                 cursor.execute("""
+    #                     SELECT EXISTS (
+    #                         SELECT FROM information_schema.tables 
+    #                         WHERE table_name = 'models'
+    #                     );
+    #                 """)
+    #                 result = cursor.fetchone()
+    #                 table_exists = result[0] if result else False
                     
-                    if not table_exists:
-                        logger.info("Models table does not exist. Creating it...")
-                        cursor.execute("""
-                            CREATE TABLE models (
-                                id VARCHAR(255) PRIMARY KEY,
-                                user_id VARCHAR(255) NOT NULL,
-                                name VARCHAR(255) NOT NULL,
-                                model_data BYTEA,
-                                metadata JSONB,
-                                created_at TIMESTAMP NOT NULL,
-                                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-                            )
-                        """)
-                        conn.commit()
-                        logger.info("Models table created successfully")
-                    else:
-                        # Check if model_data column exists
-                        cursor.execute("""
-                            SELECT EXISTS (
-                                SELECT FROM information_schema.columns 
-                                WHERE table_name = 'models' AND column_name = 'model_data'
-                            );
-                        """)
-                        column_exists = cursor.fetchone()[0]
+    #                 if not table_exists:
+    #                     logger.info("Models table does not exist. Creating it...")
+    #                     cursor.execute("""
+    #                         CREATE TABLE models (
+    #                             id VARCHAR(255) PRIMARY KEY,
+    #                             user_id VARCHAR(255) NOT NULL,
+    #                             name VARCHAR(255) NOT NULL,
+    #                             model_data BYTEA,
+    #                             metadata JSONB,
+    #                             created_at TIMESTAMP NOT NULL,
+    #                             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    #                         )
+    #                     """)
+    #                     conn.commit()
+    #                     logger.info("Models table created successfully")
+    #                 else:
+    #                     # Check if model_data column exists
+    #                     cursor.execute("""
+    #                         SELECT EXISTS (
+    #                             SELECT FROM information_schema.columns 
+    #                             WHERE table_name = 'models' AND column_name = 'model_data'
+    #                         );
+    #                     """)
+    #                     column_exists = cursor.fetchone()[0]
                         
-                        if not column_exists:
-                            logger.info("model_data column does not exist. Adding it...")
-                            cursor.execute("""
-                                ALTER TABLE models ADD COLUMN model_data BYTEA;
-                            """)
-                            conn.commit()
-                            logger.info("model_data column added successfully")
+    #                     if not column_exists:
+    #                         logger.info("model_data column does not exist. Adding it...")
+    #                         cursor.execute("""
+    #                             ALTER TABLE models ADD COLUMN model_data BYTEA;
+    #                         """)
+    #                         conn.commit()
+    #                         logger.info("model_data column added successfully")
                     
-                    logger.info("Database schema verification complete")
-        except Exception as e:
-            logger.error(f"Error verifying database schema: {str(e)}")
-            import traceback
-            logger.error(traceback.format_exc())
+    #                 logger.info("Database schema verification complete")
+    #     except Exception as e:
+    #         logger.error(f"Error verifying database schema: {str(e)}")
+    #         import traceback
+    #         logger.error(traceback.format_exc())
     
     def clean_metadata_for_json(metadata):
         """
@@ -3703,7 +3704,6 @@ if __name__ == '__main__':
     init_routes(app)
     
     try:
-       integrate_optimized_insights(app, Config.GOOGLE_API_KEY)
        logger.info("Optimized business insights integrated successfully")
     except Exception as e:
        logger.error(f"Failed to integrate optimized insights: {str(e)}")
