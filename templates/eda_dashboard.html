@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}EDA Dashboard - {{ filename }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2>📊 Exploratory Data Analysis Dashboard</h2>
+            <p class="text-muted">Comprehensive analysis for: <strong>{{ filename }}</strong></p>
+        </div>
+    </div>
+
+    <!-- Data Quality Overview -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-primary">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Data Quality Score</h5>
+                    <h3 class="text-primary">{{ "%.1f"|format(data_quality.quality_score) }}%</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Completeness</h5>
+                    <h3 class="text-success">{{ "%.1f"|format(data_quality.completeness_score) }}%</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-info">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Business Insights</h5>
+                    <h3 class="text-info">{{ business_insights|length }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-warning">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Correlations Found</h5>
+                    <h3 class="text-warning">{{ correlations.significant_correlations|length if correlations.significant_correlations else 0 }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Business Insights -->
+    {% if business_insights %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🎯 Business Insights</h5>
+                </div>
+                <div class="card-body">
+                    {% for insight in business_insights %}
+                    <div class="alert alert-info">
+                        <h6>{{ insight.title }}</h6>
+                        <p>{{ insight.description }}</p>
+                        {% if insight.recommendations %}
+                        <strong>Recommendations:</strong>
+                        <ul>
+                            {% for rec in insight.recommendations %}
+                            <li>{{ rec }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Correlations -->
+    {% if correlations.significant_correlations %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🔗 Significant Correlations</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Feature 1</th>
+                                    <th>Feature 2</th>
+                                    <th>Correlation</th>
+                                    <th>Strength</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for corr in correlations.significant_correlations %}
+                                <tr>
+                                    <td>{{ corr.feature1 }}</td>
+                                    <td>{{ corr.feature2 }}</td>
+                                    <td>
+                                        <span class="badge {% if corr.correlation > 0 %}badge-success{% else %}badge-danger{% endif %}">
+                                            {{ "%.3f"|format(corr.correlation) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge {% if corr.strength == 'strong' %}badge-primary{% else %}badge-secondary{% endif %}">
+                                            {{ corr.strength }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Data Quality Issues -->
+    {% if data_quality.quality_issues %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-warning">
+                <div class="card-header">
+                    <h5>⚠️ Data Quality Issues</h5>
+                </div>
+                <div class="card-body">
+                    {% for issue in data_quality.quality_issues %}
+                    <div class="alert alert-warning">{{ issue }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Anomalies -->
+    {% if anomalies.outliers %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🚨 Detected Anomalies</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Column</th>
+                                    <th>Outlier Count</th>
+                                    <th>Percentage</th>
+                                    <th>Range</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for column, data in anomalies.outliers.items() %}
+                                <tr>
+                                    <td>{{ column }}</td>
+                                    <td>{{ data.count }}</td>
+                                    <td>{{ "%.2f"|format(data.percentage) }}%</td>
+                                    <td>{{ "%.2f"|format(data.lower_bound) }} - {{ "%.2f"|format(data.upper_bound) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12">
+            <a href="{{ url_for('upload_file') }}" class="btn btn-secondary">← Back to Upload</a>
+            <a href="{{ url_for('my_models') }}" class="btn btn-primary">View My Models</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

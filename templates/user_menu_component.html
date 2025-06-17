@@ -1,79 +1,190 @@
-<!-- User Menu Component -->
+<!-- Vertical User Menu Component -->
 {% macro render_user_menu() %}
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('home') }}">
-            <i class="fas fa-brain me-2"></i>AI Use Case Generator
+<div class="sidebar d-flex flex-column bg-white shadow">
+    <!-- Logo/Brand Section -->
+    <div class="sidebar-header p-3 border-bottom">
+        <a class="sidebar-brand text-decoration-none d-flex align-items-center" href="{{ url_for('home') }}">
+            <i class="fas fa-brain me-2 text-primary fs-4"></i>
+            <span class="text-dark fw-bold">AI Use Case Generator</span>
         </a>
-        
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('home') }}">
-                        <i class="fas fa-home me-1"></i>Home
-                    </a>
-                </li>
-                {% if session.get('user_id') %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('saved_use_cases') }}">
-                        <i class="fas fa-lightbulb me-1"></i>Use Cases
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('my_models') }}">
-                        <i class="fas fa-project-diagram me-1"></i>My Models
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-
-            <div class="d-flex align-items-center">
-                {% if session.get('user_id') %}
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user-circle me-1"></i>{{ session.get('user_name', 'User') }}
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li class="dropdown-header text-muted">{{ session.get('user_email', 'user@example.com') }}</li>
-                        <li>
-                            <a class="dropdown-item" href="{{ url_for('profile') }}">
-                                <i class="fas fa-user-cog me-2"></i>Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ url_for('saved_use_cases') }}">
-                                <i class="fas fa-lightbulb me-2"></i>Use Cases
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ url_for('my_models') }}">
-                                <i class="fas fa-project-diagram me-2"></i>My Models
-                            </a>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
-                                <i class="fas fa-sign-out-alt me-2"></i>Logout
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                {% else %}
-                <div class="d-flex gap-2">
-                    <a href="{{ url_for('login') }}" class="btn btn-outline-primary">
-                        <i class="fas fa-sign-in-alt me-1"></i>Login
-                    </a>
-                    <a href="{{ url_for('register') }}" class="btn btn-primary">
-                        <i class="fas fa-user-plus me-1"></i>Register
-                    </a>
-                </div>
-                {% endif %}
-            </div>
-        </div>
     </div>
-</nav>
+    
+    <!-- Navigation Items -->
+    <nav class="sidebar-nav flex-grow-1 p-3">
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a class="nav-link sidebar-link" href="{{ url_for('home') }}">
+                    <i class="fas fa-home me-2"></i>Home
+                </a>
+            </li>
+            {% if session.get('user_id') %}
+            <li class="nav-item mb-2">
+                <a class="nav-link sidebar-link" href="{{ url_for('saved_use_cases') }}">
+                    <i class="fas fa-lightbulb me-2"></i>Use Cases
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a class="nav-link sidebar-link" href="{{ url_for('my_models') }}">
+                    <i class="fas fa-project-diagram me-2"></i>My Models
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+    <!-- User Section -->
+    <div class="sidebar-footer p-3 border-top mt-auto">
+        {% if session.get('user_id') %}
+        <div class="dropdown">
+            <button class="btn btn-light w-100 text-start dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user-circle me-2"></i>
+                <span>{{ session.get('user_name', 'User') }}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end w-100" aria-labelledby="userDropdown">
+                <li class="dropdown-header text-muted">{{ session.get('user_email', 'user@example.com') }}</li>
+                <li>
+                    <a class="dropdown-item" href="{{ url_for('profile') }}">
+                        <i class="fas fa-user-cog me-2"></i>Profile
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ url_for('saved_use_cases') }}">
+                        <i class="fas fa-lightbulb me-2"></i>Use Cases
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ url_for('my_models') }}">
+                        <i class="fas fa-project-diagram me-2"></i>My Models
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+        {% else %}
+        <div class="d-grid gap-2">
+            <a href="{{ url_for('login') }}" class="btn btn-outline-primary">
+                <i class="fas fa-sign-in-alt me-1"></i>Login
+            </a>
+            <a href="{{ url_for('register') }}" class="btn btn-primary">
+                <i class="fas fa-user-plus me-1"></i>Register
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.sidebar {
+    width: 280px;
+    min-height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.sidebar-link {
+    color: #666;
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-link:hover {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.sidebar-link.active {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    font-weight: 500;
+}
+
+.sidebar-link i {
+    width: 20px;
+    text-align: center;
+}
+
+/* Main content should have left margin to account for sidebar */
+.main-content {
+    margin-left: 280px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+    }
+    
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Toggle button for mobile */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1001;
+}
+
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        display: block;
+    }
+}
+</style>
+
+<!-- Mobile toggle button (add this to your main layout) -->
+<button class="btn btn-light sidebar-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
+
+<script>
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('show');
+}
+
+// Close sidebar on outside click (mobile)
+document.addEventListener('click', function(event) {
+    var sidebar = document.querySelector('.sidebar');
+    var toggle = document.querySelector('.sidebar-toggle');
+    
+    if (window.innerWidth <= 768 && 
+        !sidebar.contains(event.target) && 
+        !toggle.contains(event.target) && 
+        sidebar.classList.contains('show')) {
+        sidebar.classList.remove('show');
+    }
+});
+
+// Add active class to current page
+document.addEventListener('DOMContentLoaded', function() {
+    var currentPath = window.location.pathname;
+    var links = document.querySelectorAll('.sidebar-link');
+    
+    links.forEach(function(link) {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+    });
+});
+</script>
 {% endmacro %}

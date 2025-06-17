@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Model Debug View</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        pre { background: #f8f9fa; padding: 15px; border-radius: 5px; }
+        .json-key { color: #d63384; }
+        .json-string { color: #20c997; }
+        .json-number { color: #0d6efd; }
+        .json-boolean { color: #fd7e14; }
+        .json-null { color: #6c757d; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Model Debug View</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Model Details</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">ID</dt>
+                    <dd class="col-sm-9">{{ model.id }}</dd>
+                    
+                    <dt class="col-sm-3">Name</dt>
+                    <dd class="col-sm-9">{{ model.name }}</dd>
+                    
+                    <dt class="col-sm-3">Created</dt>
+                    <dd class="col-sm-9">{{ model.created_at }}</dd>
+                    
+                    <dt class="col-sm-3">Model Size</dt>
+                    <dd class="col-sm-9">{{ model.model_size_kb }} KB</dd>
+                    
+                    <dt class="col-sm-3">Target Variable</dt>
+                    <dd class="col-sm-9">{{ model.metadata.target_variable }}</dd>
+                    
+                    <dt class="col-sm-3">Model Type</dt>
+                    <dd class="col-sm-9">{{ model.metadata.model_type }}</dd>
+                </dl>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Full Metadata</h5>
+            </div>
+            <div class="card-body">
+                <pre id="json-display">{{ model.metadata|tojson(indent=2) }}</pre>
+            </div>
+        </div>
+        
+        <a href="{{ url_for('my_models') }}" class="btn btn-secondary">Back to Models</a>
+    </div>
+    
+    <script>
+        // Simple syntax highlighting for JSON
+        document.addEventListener('DOMContentLoaded', function() {
+            const jsonDisplay = document.getElementById('json-display');
+            const jsonText = jsonDisplay.textContent;
+            
+            // Replace key/value pairs with colored HTML
+            const formattedJson = jsonText
+                .replace(/"([^"]+)":/g, '<span class="json-key">"$1"</span>:')
+                .replace(/"([^"]+)"/g, '<span class="json-string">"$1"</span>')
+                .replace(/\b(\d+(\.\d+)?)\b/g, '<span class="json-number">$1</span>')
+                .replace(/\b(true|false)\b/g, '<span class="json-boolean">$1</span>')
+                .replace(/\bnull\b/g, '<span class="json-null">null</span>');
+            
+            jsonDisplay.innerHTML = formattedJson;
+        });
+    </script>
+</body>
+</html>

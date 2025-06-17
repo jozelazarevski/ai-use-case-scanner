@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Insights & Diagnostic Analysis Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #4285F4;
+            --primary-dark: #1a73e8;
+            --success-color: #34a853;
+            --warning-color: #fbbc05;
+            --danger-color: #ea4335;
+            --text-color: #202124;
+            --text-muted: #5f6368;
+            --border-color: #dadce0;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --page-bg: #f0f2f5;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Google Sans', Arial, sans-serif;
+            background-color: var(--page-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            width: 280px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            background: var(--card-bg);
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .sidebar-brand {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .sidebar-nav {
+            flex-grow: 1;
+            padding: 1rem;
+        }
+        
+        .sidebar-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .sidebar-link:hover {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+        }
+        
+        .sidebar-link.active {
+            background-color: #e8f0fe;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* Main content wrapper */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background-color: var(--page-bg);
+        }
+        
+        /* Page container */
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Dashboard header */
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(66, 133, 244, 0.25);
+        }
+        
+        .dashboard-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        /* Content wrapper */
+        .content-wrapper {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Tab Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+            gap: 0.5rem;
+        }
+        
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-tab:hover {
+            background: var(--light-bg);
+            color: var(--text-color);
+        }
+        
+        .nav-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* Loading State */
+        .loading-container {
+            text-align: center;
+            padding: 6rem 2rem;
+            display: none;
+        }
+        
+        .loading-container.active {
+            display: block;
+        }
+        
+        .loading-spinner {
+            border: 4px solid var(--light-bg);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Content Sections */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Overview Cards */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .overview-card {
+            background: var(--light-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        .overview-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .overview-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+        
+        .overview-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .overview-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        /* Analysis Sections */
+        .analysis-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-right: 1rem;
+        }
+        
+        h2 {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            min-height: 500px;
+        }
+        
+        .chart-header {
+            margin-bottom: 1rem;
+        }
+        
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .chart-subtitle {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 350px;
+        }
+        
+        .plot-container {
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            min-height: 400px;
+        }
+        
+        /* Insights */
+        .chart-insights {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f0f7ff;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .insights-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        /* AI Actions Container */
+        .ai-actions-container {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, #f0f7ff, #e6f2ff);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            border: 1px solid #d0e2ff;
+        }
+        
+        .ai-status {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Statistics Table */
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+        
+        .stats-table th,
+        .stats-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .stats-table th {
+            background-color: var(--light-bg);
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .stats-table tr:hover {
+            background-color: var(--light-bg);
+        }
+        
+        /* Controls */
+        .controls-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            color: var(--text-color);
+            font-size: 0.875rem;
+            cursor: pointer;
+            min-width: 200px;
+        }
+        
+        select:hover {
+            border-color: var(--primary-color);
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+        }
+        
+        /* Button styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+        }
+        
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+        
+        /* Mobile toggle button */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .sidebar-toggle {
+                display: block;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .page-container {
+                padding: 1rem;
+            }
+            
+            .dashboard-header {
+                padding: 2rem 1rem;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .overview-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .overview-card {
+                padding: 1rem;
+            }
+            
+            .overview-value {
+                font-size: 1.5rem;
+            }
+            
+            .nav-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .nav-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            .content-wrapper {
+                padding: 1rem;
+            }
+        }
+        
+        /* Utility classes */
+        .text-center { text-align: center; }
+        .text-muted { color: var(--text-muted); }
+        .mb-0 { margin-bottom: 0; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mb-4 { margin-bottom: 2rem; }
+    </style>
+</head>
+<body>
+    <!-- Include the user menu -->
+    {% from 'user_menu_component.html' import render_user_menu %}
+    {{ render_user_menu() }}
+    
+    <!-- Mobile toggle button -->
+    <button class="btn sidebar-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Main content wrapper -->
+    <div class="main-content">
+        <div class="page-container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h1>Business Insights & Diagnostic Analysis</h1>
+                <p>Analyzing: {{ filename }}</p>
+            </div>
+            
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Tab Navigation -->
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="showTab('overview')">
+                        <i class="fas fa-chart-bar"></i> Overview
+                    </button>
+                    <button class="nav-tab" onclick="showTab('business-insights')">
+                        <i class="fas fa-chart-line"></i> Business Insights
+                    </button>
+                    <button class="nav-tab" onclick="showTab('diagnostic')">
+                        <i class="fas fa-microscope"></i> Diagnostic Analysis
+                    </button>
+                    <button class="nav-tab" onclick="showTab('anomalies')">
+                        <i class="fas fa-exclamation-triangle"></i> Anomalies
+                    </button>
+                    <button class="nav-tab" onclick="showTab('correlations')">
+                        <i class="fas fa-project-diagram"></i> Correlations
+                    </button>
+                    <button class="nav-tab" onclick="showTab('deep-dive')">
+                        <i class="fas fa-search-plus"></i> Deep Dive
+                    </button>
+                </div>
+                
+                <!-- AI Use Cases Button -->
+                <div class="ai-actions-container">
+                    <h3 class="mb-3">Generate AI-Powered Insights</h3>
+                    <p class="text-muted mb-4">Discover potential AI use cases and actionable insights from your data</p>
+                    <button class="btn btn-primary btn-lg" onclick="generateAIUseCases()">
+                        <i class="fas fa-magic"></i> Generate AI Use Cases
+                    </button>
+                    <div id="aiUseCasesStatus" class="ai-status" style="display: none;">
+                        <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <span>Analyzing data and generating AI use cases...</span>
+                    </div>
+                </div>
+                
+                <!-- Loading State -->
+                <div class="loading-container active" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Analyzing your data...</p>
+                </div>
+                
+                <!-- Overview Tab -->
+                <div id="overview-tab" class="tab-content active">
+                    <div class="overview-grid" id="overviewStats"></div>
+                    <div class="analysis-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h2>Data Quality Report</h2>
+                        </div>
+                        <div id="dataQualityReport"></div>
+                    </div>
+                </div>
+                
+                <!-- Business Insights Tab -->
+                <div id="business-insights-tab" class="tab-content">
+                    <div class="charts-grid" id="businessChartsGrid"></div>
+                </div>
+                
+                <!-- Diagnostic Analysis Tab -->
+                <div id="diagnostic-tab" class="tab-content">
+                    <div class="analysis-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h2>Root Cause Analysis</h2>
+                        </div>
+                        <div class="controls-container">
+                            <select id="targetColumnSelect">
+                                <option value="">Select target column for analysis</option>
+                            </select>
+                        </div>
+                        <div id="rootCauseResults"></div>
+                    </div>
+                    
+                    <div class="analysis-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <h2>Statistical Summary</h2>
+                        </div>
+                        <div id="statisticalSummary"></div>
+                    </div>
+                </div>
+                
+                <!-- Anomalies Tab -->
+                <div id="anomalies-tab" class="tab-content">
+                    <div class="analysis-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <h2>Anomaly Detection</h2>
+                        </div>
+                        <div class="anomaly-tabs" id="anomalyTabs"></div>
+                        <div id="anomalyContent"></div>
+                    </div>
+                </div>
+                
+                <!-- Correlations Tab -->
+                <div id="correlations-tab" class="tab-content">
+                    <div class="analysis-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-link"></i>
+                            </div>
+                            <h2>Correlation Analysis</h2>
+                        </div>
+                        <div class="plot-container" id="correlationPlot"></div>
+                        <div id="correlationInsights"></div>
+                    </div>
+                </div>
+                
+                <!-- Deep Dive Tab -->
+                <div id="deep-dive-tab" class="tab-content">
+                    <div class="analysis-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h2>Drill-Down Analysis</h2>
+                        </div>
+                        <div class="controls-container">
+                            <div>
+                                <label for="metricSelect" class="form-label">Metric:</label>
+                                <select id="metricSelect"></select>
+                            </div>
+                            <div>
+                                <label for="dimensionSelect" class="form-label">Dimension:</label>
+                                <select id="dimensionSelect"></select>
+                            </div>
+                        </div>
+                        <div class="plot-container" id="drilldownPlot"></div>
+                    </div>
+                    
+                    <div class="analysis-section" id="timeseriesSection" style="display: none;">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h2>Time Series Analysis</h2>
+                        </div>
+                        <div class="plot-container" id="timeseriesPlot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Global variables
+        let currentData = [];
+        let numericColumns = [];
+        let categoricalColumns = [];
+        let dateColumns = [];
+        let charts = [];
+        
+        // Initialize with data from Flask
+        window.addEventListener('DOMContentLoaded', function() {
+            // Get data passed from Flask
+            const dataFromFlask = {{ data | tojson | safe }};
+            
+            if (dataFromFlask && dataFromFlask.length > 0) {
+                currentData = dataFromFlask;
+                analyzeData();
+            } else {
+                showLoading(false);
+                alert('No data available for analysis');
+            }
+        });
+        
+        // Toggle sidebar for mobile
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('show');
+        }
+        
+        // Close sidebar on outside click (mobile)
+        document.addEventListener('click', function(event) {
+            var sidebar = document.querySelector('.sidebar');
+            var toggle = document.querySelector('.sidebar-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                sidebar && toggle &&
+                !sidebar.contains(event.target) && 
+                !toggle.contains(event.target) && 
+                sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+            }
+        });
+        
+        // Tab management
+        function showTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show corresponding content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+        
+        function showLoading(show) {
+            document.getElementById('loading').classList.toggle('active', show);
+        }
+        
+        function analyzeData() {
+            if (!currentData || currentData.length === 0) {
+                showLoading(false);
+                alert('No valid data found');
+                return;
+            }
+            
+            // Identify column types
+            identifyColumnTypes();
+            
+            // Run all analyses
+            updateOverview();
+            createBusinessInsights();
+            setupDiagnosticAnalysis();
+            detectAnomalies();
+            analyzeCorrelations();
+            setupDrillDown();
+            
+            if (dateColumns.length > 0) {
+                analyzeTimeSeries();
+            }
+            
+            showLoading(false);
+        }
+        
+        function identifyColumnTypes() {
+            numericColumns = [];
+            categoricalColumns = [];
+            dateColumns = [];
+            
+            if (currentData.length === 0) return;
+            
+            Object.keys(currentData[0]).forEach(col => {
+                const samples = currentData.slice(0, 100).map(row => row[col]).filter(val => val !== null && val !== undefined && val !== '');
+                
+                if (samples.length === 0) return;
+                
+                // Check if numeric
+                const numericValues = samples.filter(val => !isNaN(parseFloat(val)) && isFinite(val));
+                if (numericValues.length > samples.length * 0.8) {
+                    numericColumns.push(col);
+                    return;
+                }
+                
+                // Check if date
+                const datePattern = /^\d{4}-\d{2}-\d{2}|\d{2}\/\d{2}\/\d{4}|^\d{2}-\d{2}-\d{4}/;
+                const dateValues = samples.filter(val => datePattern.test(String(val)));
+                if (dateValues.length > samples.length * 0.8) {
+                    dateColumns.push(col);
+                    return;
+                }
+                
+                // Otherwise categorical
+                categoricalColumns.push(col);
+            });
+        }
+        
+        function updateOverview() {
+            const totalRows = currentData.length;
+            const totalColumns = Object.keys(currentData[0] || {}).length;
+            const totalCells = totalRows * totalColumns;
+            let nullCells = 0;
+            
+            currentData.forEach(row => {
+                Object.values(row).forEach(val => {
+                    if (val === null || val === undefined || val === '') nullCells++;
+                });
+            });
+            
+            const completeness = totalCells > 0 ? ((totalCells - nullCells) / totalCells * 100).toFixed(1) : 0;
+            
+            const statsHtml = `
+                <div class="overview-card">
+                    <span class="overview-icon">📊</span>
+                    <div class="overview-label">Total Records</div>
+                    <div class="overview-value">${totalRows.toLocaleString()}</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-icon">📋</span>
+                    <div class="overview-label">Total Columns</div>
+                    <div class="overview-value">${totalColumns}</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-icon">🔢</span>
+                    <div class="overview-label">Numeric Columns</div>
+                    <div class="overview-value">${numericColumns.length}</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-icon">🏷️</span>
+                    <div class="overview-label">Categorical Columns</div>
+                    <div class="overview-value">${categoricalColumns.length}</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-icon">✅</span>
+                    <div class="overview-label">Data Completeness</div>
+                    <div class="overview-value">${completeness}%</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-icon">❌</span>
+                    <div class="overview-label">Missing Values</div>
+                    <div class="overview-value">${nullCells.toLocaleString()}</div>
+                </div>
+            `;
+            
+            document.getElementById('overviewStats').innerHTML = statsHtml;
+            
+            // Data quality report
+            const qualityReport = generateDataQualityReport();
+            document.getElementById('dataQualityReport').innerHTML = qualityReport;
+        }
+        
+        function generateDataQualityReport() {
+            let html = '<div class="table-responsive"><table class="stats-table">';
+            html += '<thead><tr><th>Column</th><th>Type</th><th>Missing</th><th>Unique Values</th><th>Quality Score</th></tr></thead><tbody>';
+            
+            Object.keys(currentData[0] || {}).forEach(col => {
+                const values = currentData.map(row => row[col]);
+                const nonNull = values.filter(v => v !== null && v !== undefined && v !== '');
+                const missing = currentData.length - nonNull.length;
+                const missingPct = currentData.length > 0 ? (missing / currentData.length * 100).toFixed(1) : 0;
+                const unique = [...new Set(nonNull)].length;
+                const qualityScore = (100 - parseFloat(missingPct)).toFixed(1);
+                
+                const type = numericColumns.includes(col) ? '🔢 Numeric' : 
+                            categoricalColumns.includes(col) ? '🏷️ Categorical' : 
+                            dateColumns.includes(col) ? '📅 Date' : '❓ Unknown';
+                
+                const scoreColor = qualityScore > 90 ? 'var(--success-color)' : 
+                                  qualityScore > 70 ? 'var(--warning-color)' : 'var(--danger-color)';
+                
+                html += `<tr>
+                    <td><strong>${col}</strong></td>
+                    <td>${type}</td>
+                    <td>${missing} (${missingPct}%)</td>
+                    <td>${unique}</td>
+                    <td style="color: ${scoreColor}; font-weight: bold;">${qualityScore}%</td>
+                </tr>`;
+            });
+            
+            html += '</tbody></table></div>';
+            return html;
+        }
+        
+        function createBusinessInsights() {
+            const chartsGrid = document.getElementById('businessChartsGrid');
+            chartsGrid.innerHTML = '';
+            
+            // Clear existing charts
+            charts.forEach(chart => {
+                if (chart && typeof chart.destroy === 'function') {
+                    chart.destroy();
+                }
+            });
+            charts = [];
+            
+            // Add summary section
+            const summaryHtml = `
+                <div class="analysis-section" style="grid-column: 1 / -1;">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h2>Dataset Summary</h2>
+                    </div>
+                    <div class="overview-grid">
+                        <div class="overview-card">
+                            <div class="overview-value">${currentData.length.toLocaleString()}</div>
+                            <div class="overview-label">Total Records</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-value">${numericColumns.length}</div>
+                            <div class="overview-label">Numeric Features</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-value">${categoricalColumns.length}</div>
+                            <div class="overview-label">Categorical Features</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-value">${dateColumns.length}</div>
+                            <div class="overview-label">Date Features</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chartsGrid.insertAdjacentHTML('beforeend', summaryHtml);
+            
+            // Create descriptive statistics table
+            if (numericColumns.length > 0) {
+                const statsTableHtml = `
+                    <div class="analysis-section" style="grid-column: 1 / -1;">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-table"></i>
+                            </div>
+                            <h2>Descriptive Statistics</h2>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="stats-table">
+                                <thead>
+                                    <tr>
+                                        <th>Variable</th>
+                                        <th>Count</th>
+                                        <th>Mean</th>
+                                        <th>Std Dev</th>
+                                        <th>Min</th>
+                                        <th>25%</th>
+                                        <th>Median</th>
+                                        <th>75%</th>
+                                        <th>Max</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="descriptiveStatsBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                chartsGrid.insertAdjacentHTML('beforeend', statsTableHtml);
+                
+                // Populate statistics
+                const tbody = document.getElementById('descriptiveStatsBody');
+                numericColumns.forEach(col => {
+                    const values = currentData
+                        .map(row => parseFloat(row[col]))
+                        .filter(v => !isNaN(v) && isFinite(v));
+                    
+                    if (values.length > 0) {
+                        const stats = calculateDetailedStats(values);
+                        tbody.innerHTML += `
+                            <tr>
+                                <td><strong>${col}</strong></td>
+                                <td>${values.length}</td>
+                                <td>${stats.mean.toFixed(2)}</td>
+                                <td>${stats.std.toFixed(2)}</td>
+                                <td>${stats.min.toFixed(2)}</td>
+                                <td>${stats.q1.toFixed(2)}</td>
+                                <td>${stats.median.toFixed(2)}</td>
+                                <td>${stats.q3.toFixed(2)}</td>
+                                <td>${stats.max.toFixed(2)}</td>
+                            </tr>
+                        `;
+                    }
+                });
+            }
+            
+            // Create charts for numeric columns
+            let chartIndex = 0;
+            numericColumns.slice(0, 6).forEach((col, index) => {
+                const chartId = `chart-${chartIndex++}`;
+                const values = currentData
+                    .map(row => parseFloat(row[col]))
+                    .filter(v => !isNaN(v) && isFinite(v));
+                
+                if (values.length > 0) {
+                    const stats = calculateDetailedStats(values);
+                    
+                    const chartHtml = `
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <div class="chart-title">${col} Distribution</div>
+                                <div class="chart-subtitle">
+                                    Mean: ${stats.mean.toFixed(2)} | 
+                                    Median: ${stats.median.toFixed(2)} | 
+                                    Std: ${stats.std.toFixed(2)}
+                                </div>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="${chartId}"></canvas>
+                            </div>
+                            <div class="chart-insights">
+                                <div class="insights-header">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <span>Statistical Insights</span>
+                                </div>
+                                ${generateChartInsights(col, stats, 'numeric')}
+                            </div>
+                        </div>
+                    `;
+                    
+                    chartsGrid.insertAdjacentHTML('beforeend', chartHtml);
+                    
+                    setTimeout(() => {
+                        createHistogram(chartId, values, col);
+                    }, 100);
+                }
+            });
+            
+            // Create charts for categorical columns
+            categoricalColumns.slice(0, 4).forEach((col, index) => {
+                const chartId = `chart-${chartIndex++}`;
+                const valueCounts = {};
+                
+                currentData.forEach(row => {
+                    const val = row[col];
+                    if (val !== null && val !== undefined && val !== '') {
+                        valueCounts[val] = (valueCounts[val] || 0) + 1;
+                    }
+                });
+                
+                const sortedCounts = Object.entries(valueCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10);
+                
+                if (sortedCounts.length > 0) {
+                    const chartHtml = `
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <div class="chart-title">${col} Distribution</div>
+                                <div class="chart-subtitle">
+                                    Top ${sortedCounts.length} of ${Object.keys(valueCounts).length} categories
+                                </div>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="${chartId}"></canvas>
+                            </div>
+                        </div>
+                    `;
+                    
+                    chartsGrid.insertAdjacentHTML('beforeend', chartHtml);
+                    
+                    setTimeout(() => {
+                        createBarChart(chartId, sortedCounts, col);
+                    }, 100);
+                }
+            });
+        }
+        
+        function calculateDetailedStats(values) {
+            const sorted = [...values].sort((a, b) => a - b);
+            const n = sorted.length;
+            
+            const mean = values.reduce((a, b) => a + b, 0) / n;
+            const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / n;
+            const std = Math.sqrt(variance);
+            
+            return {
+                mean: mean,
+                median: sorted[Math.floor(n / 2)],
+                min: sorted[0],
+                max: sorted[n - 1],
+                q1: sorted[Math.floor(n * 0.25)],
+                q3: sorted[Math.floor(n * 0.75)],
+                std: std,
+                count: n
+            };
+        }
+        
+        function generateChartInsights(columnName, stats, type) {
+            let insights = '<div style="font-size: 0.875rem;">';
+            
+            if (type === 'numeric') {
+                const cv = stats.std / Math.abs(stats.mean) * 100;
+                if (cv < 20) {
+                    insights += '<p class="mb-1">✅ Low variability indicates stable values</p>';
+                } else if (cv < 50) {
+                    insights += '<p class="mb-1">📊 Moderate variability is typical for this metric</p>';
+                } else {
+                    insights += '<p class="mb-1">⚠️ High variability suggests diverse values</p>';
+                }
+                
+                insights += `<p class="mb-0">📈 Range: ${stats.min.toFixed(2)} to ${stats.max.toFixed(2)}</p>`;
+            }
+            
+            insights += '</div>';
+            return insights;
+        }
+        
+        function createHistogram(canvasId, values, label) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const bins = Math.min(20, Math.ceil(Math.sqrt(values.length)));
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            const binWidth = (max - min) / bins;
+            
+            const histogram = Array(bins).fill(0);
+            values.forEach(value => {
+                const binIndex = Math.min(Math.floor((value - min) / binWidth), bins - 1);
+                histogram[binIndex]++;
+            });
+            
+            const labels = histogram.map((_, i) => {
+                const start = min + i * binWidth;
+                return start.toFixed(1);
+            });
+            
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Frequency',
+                        data: histogram,
+                        backgroundColor: 'rgba(66, 133, 244, 0.7)',
+                        borderColor: 'rgba(66, 133, 244, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: label
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Frequency'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            charts.push(chart);
+        }
+        
+        function createBarChart(canvasId, data, label) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d[0].length > 20 ? d[0].substring(0, 20) + '...' : d[0]),
+                    datasets: [{
+                        label: 'Count',
+                        data: data.map(d => d[1]),
+                        backgroundColor: 'rgba(52, 168, 83, 0.7)',
+                        borderColor: 'rgba(52, 168, 83, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: label
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Count'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            charts.push(chart);
+        }
+        
+        function setupDiagnosticAnalysis() {
+            const targetSelect = document.getElementById('targetColumnSelect');
+            targetSelect.innerHTML = '<option value="">Select target column for analysis</option>';
+            
+            numericColumns.forEach(col => {
+                targetSelect.innerHTML += `<option value="${col}">${col}</option>`;
+            });
+            
+            targetSelect.addEventListener('change', performRootCauseAnalysis);
+            generateStatisticalSummary();
+        }
+        
+        function performRootCauseAnalysis() {
+            const targetColumn = document.getElementById('targetColumnSelect').value;
+            if (!targetColumn) return;
+            
+            const resultsDiv = document.getElementById('rootCauseResults');
+            const values = currentData
+                .map(row => parseFloat(row[targetColumn]))
+                .filter(v => !isNaN(v) && isFinite(v));
+            
+            if (values.length === 0) {
+                resultsDiv.innerHTML = '<p>No valid numeric values found for analysis.</p>';
+                return;
+            }
+            
+            const stats = calculateDetailedStats(values);
+            const iqr = stats.q3 - stats.q1;
+            const lowerBound = stats.q1 - 1.5 * iqr;
+            const upperBound = stats.q3 + 1.5 * iqr;
+            
+            const anomalyCount = values.filter(v => v < lowerBound || v > upperBound).length;
+            const anomalyPct = (anomalyCount / values.length * 100).toFixed(1);
+            
+            let html = `
+                <h4>Analysis Results for ${targetColumn}</h4>
+                <p>Found ${anomalyCount} outliers (${anomalyPct}% of data)</p>
+                <p>Normal range: ${lowerBound.toFixed(2)} to ${upperBound.toFixed(2)}</p>
+            `;
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        function generateStatisticalSummary() {
+            const summaryDiv = document.getElementById('statisticalSummary');
+            
+            if (numericColumns.length === 0) {
+                summaryDiv.innerHTML = '<p>No numeric columns found for statistical analysis.</p>';
+                return;
+            }
+            
+            let html = '<div class="table-responsive"><table class="stats-table">';
+            html += '<thead><tr><th>Column</th><th>Mean</th><th>Median</th><th>Std Dev</th><th>Min</th><th>Max</th></tr></thead><tbody>';
+            
+            numericColumns.forEach(col => {
+                const values = currentData
+                    .map(row => parseFloat(row[col]))
+                    .filter(v => !isNaN(v) && isFinite(v));
+                
+                if (values.length > 0) {
+                    const stats = calculateDetailedStats(values);
+                    
+                    html += `<tr>
+                        <td><strong>${col}</strong></td>
+                        <td>${stats.mean.toFixed(2)}</td>
+                        <td>${stats.median.toFixed(2)}</td>
+                        <td>${stats.std.toFixed(2)}</td>
+                        <td>${stats.min.toFixed(2)}</td>
+                        <td>${stats.max.toFixed(2)}</td>
+                    </tr>`;
+                }
+            });
+            
+            html += '</tbody></table></div>';
+            summaryDiv.innerHTML = html;
+        }
+        
+        function detectAnomalies() {
+            const tabsContainer = document.getElementById('anomalyTabs');
+            const contentContainer = document.getElementById('anomalyContent');
+            
+            if (numericColumns.length === 0) {
+                contentContainer.innerHTML = '<p>No numeric columns found for anomaly detection.</p>';
+                return;
+            }
+            
+            // Implementation would go here
+            contentContainer.innerHTML = '<p>Anomaly detection analysis will be displayed here.</p>';
+        }
+        
+        function analyzeCorrelations() {
+            if (numericColumns.length < 2) {
+                document.getElementById('correlationPlot').innerHTML = 
+                    '<p class="text-center">Not enough numeric columns for correlation analysis.</p>';
+                return;
+            }
+            
+            // Calculate correlation matrix
+            const correlationMatrix = [];
+            const labels = numericColumns.slice(0, 10); // Limit to first 10 columns
+            
+            for (let i = 0; i < labels.length; i++) {
+                const row = [];
+                for (let j = 0; j < labels.length; j++) {
+                    const corr = calculateCorrelation(labels[i], labels[j]);
+                    row.push(corr);
+                }
+                correlationMatrix.push(row);
+            }
+            
+            // Create heatmap
+            const trace = {
+                z: correlationMatrix,
+                x: labels,
+                y: labels,
+                type: 'heatmap',
+                colorscale: [
+                    [0, '#ea4335'],
+                    [0.5, '#ffffff'],
+                    [1, '#34a853']
+                ],
+                showscale: true
+            };
+            
+            const layout = {
+                title: 'Correlation Matrix',
+                paper_bgcolor: 'var(--light-bg)',
+                plot_bgcolor: 'white',
+                font: { color: 'var(--text-color)' },
+                xaxis: { 
+                    tickangle: -45,
+                    side: 'bottom'
+                },
+                yaxis: {
+                    autorange: 'reversed'
+                }
+            };
+            
+            Plotly.newPlot('correlationPlot', [trace], layout, {responsive: true});
+        }
+        
+        function calculateCorrelation(col1, col2) {
+            const pairs = currentData
+                .map(row => [parseFloat(row[col1]), parseFloat(row[col2])])
+                .filter(pair => !isNaN(pair[0]) && !isNaN(pair[1]) && isFinite(pair[0]) && isFinite(pair[1]));
+            
+            if (pairs.length < 2) return 0;
+            
+            const x = pairs.map(p => p[0]);
+            const y = pairs.map(p => p[1]);
+            const n = pairs.length;
+            
+            const meanX = x.reduce((a, b) => a + b, 0) / n;
+            const meanY = y.reduce((a, b) => a + b, 0) / n;
+            
+            const num = pairs.reduce((sum, p) => sum + (p[0] - meanX) * (p[1] - meanY), 0);
+            const denX = Math.sqrt(x.reduce((sum, v) => sum + Math.pow(v - meanX, 2), 0));
+            const denY = Math.sqrt(y.reduce((sum, v) => sum + Math.pow(v - meanY, 2), 0));
+            
+            return denX === 0 || denY === 0 ? 0 : num / (denX * denY);
+        }
+        
+        function setupDrillDown() {
+            const metricSelect = document.getElementById('metricSelect');
+            const dimensionSelect = document.getElementById('dimensionSelect');
+            
+            metricSelect.innerHTML = '<option value="">Select metric</option>';
+            dimensionSelect.innerHTML = '<option value="">Select dimension</option>';
+            
+            numericColumns.forEach(col => {
+                metricSelect.innerHTML += `<option value="${col}">${col}</option>`;
+            });
+            
+            [...categoricalColumns, ...dateColumns].forEach(col => {
+                const uniqueCount = [...new Set(currentData.map(row => row[col]))].length;
+                if (uniqueCount > 1 && uniqueCount < 100) {
+                    dimensionSelect.innerHTML += `<option value="${col}">${col} (${uniqueCount} values)</option>`;
+                }
+            });
+            
+            metricSelect.addEventListener('change', updateDrillDown);
+            dimensionSelect.addEventListener('change', updateDrillDown);
+        }
+        
+        function updateDrillDown() {
+            const metric = document.getElementById('metricSelect').value;
+            const dimension = document.getElementById('dimensionSelect').value;
+            
+            if (!metric || !dimension) return;
+            
+            // Group data by dimension
+            const groups = {};
+            currentData.forEach(row => {
+                const key = row[dimension] || 'Unknown';
+                const value = parseFloat(row[metric]);
+                
+                if (!isNaN(value) && isFinite(value)) {
+                    if (!groups[key]) groups[key] = [];
+                    groups[key].push(value);
+                }
+            });
+            
+            // Calculate statistics for each group
+            const stats = Object.entries(groups)
+                .map(([key, values]) => {
+                    const sum = values.reduce((a, b) => a + b, 0);
+                    const mean = sum / values.length;
+                    
+                    // Handle negative values for "Days Since" type metrics
+                    const displayMean = metric.toLowerCase().includes('days since') ? Math.abs(mean) : mean;
+                    
+                    return {
+                        category: key,
+                        mean: displayMean,
+                        count: values.length
+                    };
+                })
+                .sort((a, b) => b.mean - a.mean)
+                .slice(0, 20);
+            
+            // Create bar chart
+            const trace = {
+                x: stats.map(s => s.category),
+                y: stats.map(s => s.mean),
+                type: 'bar',
+                marker: {
+                    color: 'rgba(66, 133, 244, 0.8)'
+                },
+                text: stats.map(s => `Count: ${s.count}<br>Avg: ${s.mean.toFixed(2)}`),
+                textposition: 'none',
+                hoverinfo: 'text'
+            };
+            
+            const layout = {
+                title: `${metric} by ${dimension}`,
+                paper_bgcolor: 'var(--light-bg)',
+                plot_bgcolor: 'white',
+                font: { color: 'var(--text-color)' },
+                xaxis: { 
+                    tickangle: -45,
+                    title: dimension
+                },
+                yaxis: { 
+                    title: `Average ${metric}`,
+                    rangemode: 'tozero'
+                },
+                margin: { l: 60, r: 30, t: 60, b: 100 }
+            };
+            
+            Plotly.newPlot('drilldownPlot', [trace], layout, {responsive: true});
+        }
+        
+        function analyzeTimeSeries() {
+            if (dateColumns.length === 0 || numericColumns.length === 0) {
+                document.getElementById('timeseriesSection').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('timeseriesSection').style.display = 'block';
+            
+            // Simple time series implementation
+            const plotDiv = document.getElementById('timeseriesPlot');
+            plotDiv.innerHTML = '<p class="text-center">Time series analysis will be displayed here.</p>';
+        }
+        
+        function generateAIUseCases() {
+            const statusDiv = document.getElementById('aiUseCasesStatus');
+            const button = event.target.closest('button');
+            
+            // Show loading status
+            statusDiv.style.display = 'block';
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            
+            // Get current file data
+            const filename = '{{ filename }}';
+            
+            // Create a form to submit data
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/generate-use-cases';
+            form.target = '_blank';
+            
+            // Add filename
+            const filenameInput = document.createElement('input');
+            filenameInput.type = 'hidden';
+            filenameInput.name = 'filename';
+            filenameInput.value = filename;
+            form.appendChild(filenameInput);
+            
+            // Add column information
+            const columnsInput = document.createElement('input');
+            columnsInput.type = 'hidden';
+            columnsInput.name = 'columns';
+            columnsInput.value = JSON.stringify({
+                numeric: numericColumns,
+                categorical: categoricalColumns,
+                date: dateColumns
+            });
+            form.appendChild(columnsInput);
+            
+            // Submit the form
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+            
+            // Reset button after delay
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-magic"></i> Generate AI Use Cases';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

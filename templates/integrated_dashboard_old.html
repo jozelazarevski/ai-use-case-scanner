@@ -1,0 +1,2299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Insights & Diagnostic Analysis Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #4285F4;
+            --primary-dark: #1a73e8;
+            --success-color: #34a853;
+            --warning-color: #fbbc05;
+            --danger-color: #ea4335;
+            --text-color: #333;
+            --text-muted: #6c757d;
+            --border-color: #dee2e6;
+            --light-bg: #f8f9fa;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f0f2f5;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Sidebar styles from user_menu_component */
+        .sidebar {
+            width: 280px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            background: white;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .sidebar-link {
+            color: #666;
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-link:hover {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .sidebar-link.active {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            font-weight: 500;
+        }
+        
+        /* Main content wrapper */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            padding: 0;
+            background: linear-gradient(180deg, #f0f2f5 0%, #e9ecef 100%);
+            position: relative;
+        }
+        
+        /* Add subtle pattern overlay */
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(66, 133, 244, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(52, 168, 83, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(251, 188, 5, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        /* Page container for centered content */
+        .page-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        /* Add subtle animation on load */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .page-container {
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        /* Content area with card appearance */
+        .content-area {
+            background: white;
+            border-radius: 0 0 16px 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            padding: 2rem;
+            margin-top: -1px;
+            position: relative;
+        }
+        
+        /* Add depth on wide screens */
+        @media (min-width: 1600px) {
+            .page-container {
+                box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
+                border-radius: 16px;
+                overflow: hidden;
+            }
+        }
+        
+        /* Header Styles */
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 3rem;
+            margin: 0;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* Navigation Bar */
+        .navbar {
+            background: white;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-right: 2rem;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Tab Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            background: white;
+            border-radius: 12px;
+            padding: 0.5rem;
+            margin: 0 auto 2rem auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+            max-width: fit-content;
+            border: 1px solid var(--border-color);
+        }
+        
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .nav-tab:hover {
+            background: var(--light-bg);
+            color: var(--primary-color);
+        }
+        
+        .nav-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* Loading State */
+        .loading-container {
+            text-align: center;
+            padding: 6rem 4rem;
+            display: none;
+            background: white;
+            border-radius: 12px;
+            margin: 2rem auto;
+            max-width: 400px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .loading-container.active {
+            display: block;
+        }
+        
+        .loading-spinner {
+            border: 4px solid var(--light-bg);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Content Sections */
+        .tab-content {
+            display: none;
+            padding: 0 1rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Cards and Grids */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin: 0 auto 2rem auto;
+            max-width: 1000px;
+        }
+        
+        .overview-card {
+            background: white;
+            border-radius: 10px;
+            padding: 0.75rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        .overview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .overview-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+        
+        .overview-label {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-bottom: 0.2rem;
+            font-weight: 500;
+        }
+        
+        .overview-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        /* Analysis Sections */
+        .analysis-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border-color);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin-right: 15px;
+            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+        }
+        
+        h2 {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-color);
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        
+        .chart-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .chart-header {
+            margin-bottom: 1rem;
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .chart-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            flex: 1;
+            min-height: 300px;
+        }
+        
+        .plot-container {
+            background: #fafbfc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            min-height: 400px;
+            border: 1px solid #e1e4e8;
+        }
+        
+        /* Insights */
+        .chart-insights {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(66, 133, 244, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .insights-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .prescription-item {
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid transparent;
+        }
+        
+        .prescription-item.insight {
+            border-left-color: var(--primary-color);
+        }
+        
+        .prescription-item.action {
+            border-left-color: var(--success-color);
+        }
+        
+        .prescription-item.warning {
+            border-left-color: var(--warning-color);
+        }
+        
+        .prescription-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .prescription-content {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        
+        /* Anomaly Styles */
+        .anomaly-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .anomaly-tab {
+            padding: 0.5rem 1rem;
+            background: var(--light-bg);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            font-size: 0.9rem;
+        }
+        
+        .anomaly-tab:hover {
+            background: rgba(66, 133, 244, 0.1);
+            border-color: var(--primary-color);
+        }
+        
+        .anomaly-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* Correlation Matrix */
+        .correlation-heatmap {
+            margin-top: 1rem;
+        }
+        
+        /* Statistics Table */
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        .stats-table th,
+        .stats-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .stats-table th {
+            background-color: var(--light-bg);
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .stats-table tr:hover {
+            background-color: rgba(66, 133, 244, 0.05);
+        }
+        
+        /* Controls */
+        .controls-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        select:hover {
+            border-color: var(--primary-color);
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+        }
+        
+        /* Insights Box */
+        .insights-box {
+            background: rgba(66, 133, 244, 0.05);
+            border: 1px solid rgba(66, 133, 244, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .insights-box h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .insight-item {
+            background: white;
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .insight-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* AI Actions Container */
+        .ai-actions-container {
+            margin: 0 auto 2rem auto;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(26, 115, 232, 0.1));
+            border-radius: 12px;
+            border: 1px solid rgba(66, 133, 244, 0.2);
+            max-width: 600px;
+        }
+        
+        .ai-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Button styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(66, 133, 244, 0.4);
+        }
+        
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Utilities */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* Responsive Design */
+        @media (min-width: 1200px) and (max-width: 1600px) {
+            .page-container {
+                max-width: 1100px;
+            }
+        }
+        
+        @media (min-width: 992px) and (max-width: 1199px) {
+            .page-container {
+                max-width: 960px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .page-container {
+                margin: 1rem auto;
+                padding: 0 1rem;
+            }
+            
+            .dashboard-header {
+                padding: 2rem 1.5rem;
+                border-radius: 12px 12px 0 0;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .overview-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+            
+            .overview-card {
+                padding: 0.5rem;
+            }
+            
+            .overview-icon {
+                font-size: 1.2rem;
+            }
+            
+            .overview-label {
+                font-size: 0.75rem;
+            }
+            
+            .overview-value {
+                font-size: 1rem;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls-container {
+                flex-direction: column;
+            }
+            
+            select {
+                width: 100%;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .nav-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .nav-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+        }
+        
+        /* Mobile toggle button */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include the user menu -->
+    {% from 'user_menu_component.html' import render_user_menu %}
+    {{ render_user_menu() }}
+    
+    <!-- Mobile toggle button -->
+    <button class="btn btn-light sidebar-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Main content wrapper -->
+    <div class="main-content">
+        <div class="page-container">
+            <div class="dashboard-header">
+                <h1>Business Insights & Diagnostic Analysis</h1>
+                <p>Analyzing: {{ filename }}</p>
+            </div>
+            
+            <div class="content-area">
+            
+            <!-- Tab Navigation -->
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showTab('overview')">📊 Overview</button>
+                <button class="nav-tab" onclick="showTab('business-insights')">💼 Business Insights</button>
+                <button class="nav-tab" onclick="showTab('diagnostic')">🔍 Diagnostic Analysis</button>
+                <button class="nav-tab" onclick="showTab('anomalies')">⚠️ Anomalies</button>
+                <button class="nav-tab" onclick="showTab('correlations')">🔗 Correlations</button>
+                <button class="nav-tab" onclick="showTab('deep-dive')">📈 Deep Dive</button>
+            </div>
+            
+            <!-- AI Use Cases Button -->
+            <div class="ai-actions-container">
+                <button class="btn btn-primary btn-lg" onclick="generateAIUseCases()">
+                    <i class="fas fa-magic"></i> Generate AI Use Cases
+                </button>
+                <div id="aiUseCasesStatus" class="ai-status" style="display: none;">
+                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span>Analyzing data and generating AI use cases...</span>
+                </div>
+                <div id="aiUseCasesResults" style="display: none;" class="mt-3">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+            
+            <!-- Loading State -->
+            <div class="loading-container active" id="loading">
+                <div class="loading-spinner"></div>
+                <p>Analyzing your data...</p>
+            </div>
+            
+            <!-- Overview Tab -->
+            <div id="overview-tab" class="tab-content active">
+                <div class="overview-grid" id="overviewStats"></div>
+                <div class="analysis-section">
+                    <div class="section-header">
+                        <div class="section-icon">📊</div>
+                        <h2>Data Quality Report</h2>
+                    </div>
+                    <div id="dataQualityReport"></div>
+                </div>
+            </div>
+            
+            <!-- Business Insights Tab -->
+            <div id="business-insights-tab" class="tab-content">
+                <div class="charts-grid" id="businessChartsGrid"></div>
+            </div>
+            
+            <!-- Diagnostic Analysis Tab -->
+            <div id="diagnostic-tab" class="tab-content">
+                <div class="analysis-section">
+                    <div class="section-header">
+                        <div class="section-icon">🔍</div>
+                        <h2>Root Cause Analysis</h2>
+                    </div>
+                    <div class="controls-container">
+                        <select id="targetColumnSelect">
+                            <option value="">Select target column for analysis</option>
+                        </select>
+                    </div>
+                    <div id="rootCauseResults"></div>
+                </div>
+                
+                <div class="analysis-section">
+                    <div class="section-header">
+                        <div class="section-icon">📊</div>
+                        <h2>Statistical Summary</h2>
+                    </div>
+                    <div id="statisticalSummary"></div>
+                </div>
+            </div>
+            
+            <!-- Anomalies Tab -->
+            <div id="anomalies-tab" class="tab-content">
+                <div class="analysis-section">
+                    <div class="section-header">
+                        <div class="section-icon">⚠️</div>
+                        <h2>Anomaly Detection</h2>
+                    </div>
+                    <div class="anomaly-tabs" id="anomalyTabs"></div>
+                    <div id="anomalyContent"></div>
+                </div>
+            </div>
+            
+            <!-- Correlations Tab -->
+            <div id="correlations-tab" class="tab-content">
+                <div class="analysis-section">
+                    <div class="section-header">
+                        <div class="section-icon">🔗</div>
+                        <h2>Correlation Analysis</h2>
+                    </div>
+                    <div class="correlation-heatmap">
+                        <div class="plot-container" id="correlationPlot"></div>
+                    </div>
+                    <div id="correlationInsights"></div>
+                </div>
+            </div>
+            
+            <!-- Deep Dive Tab -->
+            <div id="deep-dive-tab" class="tab-content">
+                <div class="analysis-section">
+                    <div class="section-header">
+                        <div class="section-icon">📈</div>
+                        <h2>Drill-Down Analysis</h2>
+                    </div>
+                    <div class="controls-container">
+                        <div>
+                            <label>Metric: </label>
+                            <select id="metricSelect"></select>
+                        </div>
+                        <div>
+                            <label>Dimension: </label>
+                            <select id="dimensionSelect"></select>
+                        </div>
+                    </div>
+                    <div class="plot-container" id="drilldownPlot"></div>
+                </div>
+                
+                <div class="analysis-section" id="timeseriesSection" style="display: none;">
+                    <div class="section-header">
+                        <div class="section-icon">📅</div>
+                        <h2>Time Series Analysis</h2>
+                    </div>
+                    <div class="plot-container" id="timeseriesPlot"></div>
+                </div>
+            </div>
+            
+            </div> <!-- End of content-area -->
+        </div> <!-- End of page-container -->
+    </div> <!-- End of main-content -->
+    
+    <script>
+        // Global variables
+        let currentData = [];
+        let numericColumns = [];
+        let categoricalColumns = [];
+        let dateColumns = [];
+        let charts = [];
+        
+        // Initialize with data from Flask
+        window.addEventListener('DOMContentLoaded', function() {
+            // Get data passed from Flask
+            const dataFromFlask = {{ data | tojson | safe }};
+            
+            if (dataFromFlask && dataFromFlask.length > 0) {
+                currentData = dataFromFlask;
+                analyzeData();
+            } else {
+                showLoading(false);
+                alert('No data available for analysis');
+            }
+        });
+        
+        // Toggle sidebar for mobile
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('show');
+        }
+        
+        // Close sidebar on outside click (mobile)
+        document.addEventListener('click', function(event) {
+            var sidebar = document.querySelector('.sidebar');
+            var toggle = document.querySelector('.sidebar-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                sidebar && toggle &&
+                !sidebar.contains(event.target) && 
+                !toggle.contains(event.target) && 
+                sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+            }
+        });
+        
+        // Tab management
+        function showTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show corresponding content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+        
+        function showLoading(show) {
+            document.getElementById('loading').classList.toggle('active', show);
+        }
+        
+        function analyzeData() {
+            if (!currentData || currentData.length === 0) {
+                showLoading(false);
+                alert('No valid data found');
+                return;
+            }
+            
+            // Identify column types
+            identifyColumnTypes();
+            
+            // Run all analyses
+            updateOverview();
+            createBusinessInsights();
+            setupDiagnosticAnalysis();
+            detectAnomalies();
+            analyzeCorrelations();
+            setupDrillDown();
+            
+            if (dateColumns.length > 0) {
+                analyzeTimeSeries();
+            }
+            
+            showLoading(false);
+        }
+        
+        function identifyColumnTypes() {
+            numericColumns = [];
+            categoricalColumns = [];
+            dateColumns = [];
+            
+            if (currentData.length === 0) return;
+            
+            Object.keys(currentData[0]).forEach(col => {
+                const samples = currentData.slice(0, 100).map(row => row[col]).filter(val => val !== null);
+                
+                // Check if numeric
+                const numericValues = samples.filter(val => typeof val === 'number' && !isNaN(val));
+                if (numericValues.length > samples.length * 0.8) {
+                    numericColumns.push(col);
+                    return;
+                }
+                
+                // Check if date
+                const datePattern = /^\d{4}-\d{2}-\d{2}|\d{2}\/\d{2}\/\d{4}|^\d{2}-\d{2}-\d{4}/;
+                const dateValues = samples.filter(val => datePattern.test(String(val)));
+                if (dateValues.length > samples.length * 0.8) {
+                    dateColumns.push(col);
+                    return;
+                }
+                
+                // Otherwise categorical
+                categoricalColumns.push(col);
+            });
+        }
+        
+        function updateOverview() {
+            const totalCells = currentData.length * Object.keys(currentData[0]).length;
+            let nullCells = 0;
+            
+            currentData.forEach(row => {
+                Object.values(row).forEach(val => {
+                    if (val === null || val === '') nullCells++;
+                });
+            });
+            
+            const completeness = ((totalCells - nullCells) / totalCells * 100).toFixed(1);
+            
+            const statsHtml = `
+                <div class="overview-card">
+                    <span class="overview-icon">📊</span>
+                    <div class="overview-label">Total Records</div>
+                    <div class="overview-value">${currentData.length.toLocaleString()}</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-icon">📋</span>
+                    <div class="overview-label">Total Columns</div>
+                    <div class="overview-value">${Object.keys(currentData[0]).length}</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-icon">🔢</span>
+                    <div class="overview-label">Numeric Columns</div>
+                    <div class="overview-value">${numericColumns.length}</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-icon">🏷️</span>
+                    <div class="overview-label">Categorical Columns</div>
+                    <div class="overview-value">${categoricalColumns.length}</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-icon">✅</span>
+                    <div class="overview-label">Data Completeness</div>
+                    <div class="overview-value">${completeness}%</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-icon">❌</span>
+                    <div class="overview-label">Missing Values</div>
+                    <div class="overview-value">${nullCells.toLocaleString()}</div>
+                </div>
+            `;
+            
+            document.getElementById('overviewStats').innerHTML = statsHtml;
+            
+            // Data quality report
+            const qualityReport = generateDataQualityReport();
+            document.getElementById('dataQualityReport').innerHTML = qualityReport;
+        }
+        
+        function generateDataQualityReport() {
+            let html = '<table class="stats-table">';
+            html += '<thead><tr><th>Column</th><th>Type</th><th>Missing</th><th>Unique Values</th><th>Quality Score</th></tr></thead><tbody>';
+            
+            Object.keys(currentData[0]).forEach(col => {
+                const values = currentData.map(row => row[col]);
+                const nonNull = values.filter(v => v !== null && v !== '');
+                const missing = currentData.length - nonNull.length;
+                const missingPct = (missing / currentData.length * 100).toFixed(1);
+                const unique = [...new Set(nonNull)].length;
+                const qualityScore = (100 - parseFloat(missingPct)).toFixed(1);
+                
+                const type = numericColumns.includes(col) ? '🔢 Numeric' : 
+                            categoricalColumns.includes(col) ? '🏷️ Categorical' : 
+                            '📅 Date';
+                
+                const scoreColor = qualityScore > 90 ? 'var(--success-color)' : 
+                                  qualityScore > 70 ? 'var(--warning-color)' : 'var(--danger-color)';
+                
+                html += `<tr>
+                    <td><strong>${col}</strong></td>
+                    <td>${type}</td>
+                    <td>${missing} (${missingPct}%)</td>
+                    <td>${unique}</td>
+                    <td style="color: ${scoreColor}; font-weight: bold;">${qualityScore}%</td>
+                </tr>`;
+            });
+            
+            html += '</tbody></table>';
+            return html;
+        }
+        
+        function createBusinessInsights() {
+            const chartsGrid = document.getElementById('businessChartsGrid');
+            chartsGrid.innerHTML = '';
+            
+            // Clear existing charts
+            charts.forEach(chart => {
+                if (chart && typeof chart.destroy === 'function') {
+                    chart.destroy();
+                }
+            });
+            charts = [];
+            
+            // Add a summary section first
+            const summaryHtml = `
+                <div class="analysis-section" style="grid-column: 1 / -1;">
+                    <div class="section-header">
+                        <div class="section-icon">📊</div>
+                        <h2>Dataset Summary</h2>
+                    </div>
+                    <div class="overview-grid" style="max-width: 800px; margin: 0 auto;">
+                        <div class="overview-card">
+                            <div class="overview-value">${currentData.length.toLocaleString()}</div>
+                            <div class="overview-label">Total Records</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-value">${numericColumns.length}</div>
+                            <div class="overview-label">Numeric Features</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-value">${categoricalColumns.length}</div>
+                            <div class="overview-label">Categorical Features</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-value">${dateColumns.length}</div>
+                            <div class="overview-label">Date Features</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chartsGrid.insertAdjacentHTML('beforeend', summaryHtml);
+            
+            let chartIndex = 0;
+            
+            // Create descriptive statistics table for all numeric columns
+            if (numericColumns.length > 0) {
+                const statsTableHtml = `
+                    <div class="analysis-section" style="grid-column: 1 / -1;">
+                        <div class="section-header">
+                            <div class="section-icon">📈</div>
+                            <h2>Descriptive Statistics</h2>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="stats-table">
+                                <thead>
+                                    <tr>
+                                        <th>Variable</th>
+                                        <th>Count</th>
+                                        <th>Mean</th>
+                                        <th>Std Dev</th>
+                                        <th>Min</th>
+                                        <th>25%</th>
+                                        <th>Median</th>
+                                        <th>75%</th>
+                                        <th>Max</th>
+                                        <th>Missing</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="descriptiveStatsBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                chartsGrid.insertAdjacentHTML('beforeend', statsTableHtml);
+                
+                // Populate descriptive statistics
+                const tbody = document.getElementById('descriptiveStatsBody');
+                numericColumns.forEach(col => {
+                    const values = currentData.map(row => row[col]).filter(v => v !== null && !isNaN(v));
+                    if (values.length > 0) {
+                        const stats = calculateDetailedStats(values);
+                        const missing = currentData.length - values.length;
+                        const missingPct = (missing / currentData.length * 100).toFixed(1);
+                        
+                        tbody.innerHTML += `
+                            <tr>
+                                <td><strong>${col}</strong></td>
+                                <td>${values.length}</td>
+                                <td>${stats.mean.toFixed(2)}</td>
+                                <td>${stats.std.toFixed(2)}</td>
+                                <td>${stats.min.toFixed(2)}</td>
+                                <td>${stats.q1.toFixed(2)}</td>
+                                <td>${stats.median.toFixed(2)}</td>
+                                <td>${stats.q3.toFixed(2)}</td>
+                                <td>${stats.max.toFixed(2)}</td>
+                                <td>${missing} (${missingPct}%)</td>
+                            </tr>
+                        `;
+                    }
+                });
+            }
+            
+            // Create charts for ALL numeric columns (not just first 4)
+            numericColumns.forEach((col, index) => {
+                const chartId = `business-chart-${chartIndex++}`;
+                const values = currentData.map(row => row[col]).filter(v => v !== null && !isNaN(v));
+                const stats = calculateDetailedStats(values);
+                
+                const chartHtml = `
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">${col} Distribution</div>
+                            <div class="chart-subtitle">
+                                Mean: ${stats.mean.toFixed(2)} | 
+                                Median: ${stats.median.toFixed(2)} | 
+                                Std: ${stats.std.toFixed(2)}
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="${chartId}"></canvas>
+                        </div>
+                        <div class="chart-insights">
+                            <div class="insights-header">
+                                <span>💡</span>
+                                <strong>Statistical Insights</strong>
+                            </div>
+                            ${generateDetailedChartInsights(col, stats, 'numeric')}
+                        </div>
+                    </div>
+                `;
+                
+                chartsGrid.insertAdjacentHTML('beforeend', chartHtml);
+                
+                setTimeout(() => {
+                    createHistogram(chartId, values, col);
+                }, 100 * (index + 1)); // Stagger chart creation
+            });
+            
+            // Create charts for ALL categorical columns (showing top categories)
+            categoricalColumns.forEach((col, index) => {
+                const chartId = `business-chart-${chartIndex++}`;
+                const valueCounts = {};
+                currentData.forEach(row => {
+                    const val = row[col];
+                    if (val !== null && val !== '') {
+                        valueCounts[val] = (valueCounts[val] || 0) + 1;
+                    }
+                });
+                
+                const sortedCounts = Object.entries(valueCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 15); // Show top 15 categories
+                
+                const uniqueCount = Object.keys(valueCounts).length;
+                const totalCount = Object.values(valueCounts).reduce((a, b) => a + b, 0);
+                
+                const chartHtml = `
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">${col} Distribution</div>
+                            <div class="chart-subtitle">
+                                Showing top ${sortedCounts.length} of ${uniqueCount} categories
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="${chartId}"></canvas>
+                        </div>
+                        <div class="chart-insights">
+                            <div class="insights-header">
+                                <span>💡</span>
+                                <strong>Category Analysis</strong>
+                            </div>
+                            ${generateDetailedChartInsights(col, { 
+                                topValues: sortedCounts, 
+                                uniqueValues: uniqueCount,
+                                totalCount: totalCount
+                            }, 'categorical')}
+                        </div>
+                    </div>
+                `;
+                
+                chartsGrid.insertAdjacentHTML('beforeend', chartHtml);
+                
+                setTimeout(() => {
+                    createBarChart(chartId, sortedCounts, col);
+                }, 100 * (numericColumns.length + index + 1));
+            });
+        }
+        
+        function calculateDetailedStats(values) {
+            const sorted = values.sort((a, b) => a - b);
+            const n = sorted.length;
+            
+            const mean = values.reduce((a, b) => a + b, 0) / n;
+            const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / n;
+            const std = Math.sqrt(variance);
+            
+            return {
+                mean: mean,
+                median: sorted[Math.floor(n / 2)],
+                min: sorted[0],
+                max: sorted[n - 1],
+                q1: sorted[Math.floor(n * 0.25)],
+                q3: sorted[Math.floor(n * 0.75)],
+                std: std,
+                count: n,
+                cv: std / mean,
+                skewness: n > 2 ? calculateSkewness(values, mean, std) : 0,
+                iqr: sorted[Math.floor(n * 0.75)] - sorted[Math.floor(n * 0.25)]
+            };
+        }
+        
+        function calculateSkewness(values, mean, std) {
+            if (std === 0) return 0;
+            const n = values.length;
+            const m3 = values.reduce((sum, val) => sum + Math.pow((val - mean) / std, 3), 0) / n;
+            return m3;
+        }
+        
+        function generateDetailedChartInsights(columnName, stats, type) {
+            let insights = '';
+            
+            if (type === 'numeric') {
+                // Distribution shape
+                insights += '<div class="prescription-item insight">';
+                if (Math.abs(stats.skewness) < 0.5) {
+                    insights += '<div class="prescription-title">📊 Normal Distribution</div>';
+                    insights += '<div class="prescription-content">The distribution is approximately normal (skewness: ' + stats.skewness.toFixed(2) + '). This suggests balanced data suitable for parametric statistical tests.</div>';
+                } else if (stats.skewness > 0.5) {
+                    insights += '<div class="prescription-title">📈 Right-Skewed Distribution</div>';
+                    insights += '<div class="prescription-content">The distribution is right-skewed (skewness: ' + stats.skewness.toFixed(2) + '). Most values cluster at the lower end with some high outliers. Consider log transformation.</div>';
+                } else {
+                    insights += '<div class="prescription-title">📉 Left-Skewed Distribution</div>';
+                    insights += '<div class="prescription-content">The distribution is left-skewed (skewness: ' + stats.skewness.toFixed(2) + '). Most values cluster at the higher end with some low outliers.</div>';
+                }
+                insights += '</div>';
+                
+                // Variability analysis
+                insights += '<div class="prescription-item insight">';
+                const cv = (stats.cv * 100).toFixed(1);
+                if (cv < 15) {
+                    insights += '<div class="prescription-title">🎯 Low Variability</div>';
+                    insights += '<div class="prescription-content">Coefficient of variation: ' + cv + '%. The data shows low variability, indicating consistent and stable values.</div>';
+                } else if (cv < 50) {
+                    insights += '<div class="prescription-title">📊 Moderate Variability</div>';
+                    insights += '<div class="prescription-content">Coefficient of variation: ' + cv + '%. The data shows moderate spread, which is typical for most business metrics.</div>';
+                } else {
+                    insights += '<div class="prescription-title">⚠️ High Variability</div>';
+                    insights += '<div class="prescription-content">Coefficient of variation: ' + cv + '%. High variability suggests diverse values or potential data quality issues. Investigate outliers.</div>';
+                }
+                insights += '</div>';
+                
+                // Range analysis
+                insights += '<div class="prescription-item action">';
+                insights += '<div class="prescription-title">📏 Range Analysis</div>';
+                insights += '<div class="prescription-content">';
+                insights += 'Data spans from ' + stats.min.toFixed(2) + ' to ' + stats.max.toFixed(2) + '. ';
+                insights += 'The interquartile range (IQR) is ' + stats.iqr.toFixed(2) + ', ';
+                insights += 'with 50% of values between ' + stats.q1.toFixed(2) + ' and ' + stats.q3.toFixed(2) + '.';
+                insights += '</div></div>';
+                
+            } else {
+                // Concentration analysis
+                const topPct = (stats.topValues[0][1] / stats.totalCount * 100).toFixed(1);
+                const top3Pct = stats.topValues.slice(0, 3).reduce((sum, v) => sum + v[1], 0) / stats.totalCount * 100;
+                
+                insights += '<div class="prescription-item insight">';
+                if (topPct > 50) {
+                    insights += '<div class="prescription-title">🎯 Highly Concentrated</div>';
+                    insights += '<div class="prescription-content">"' + stats.topValues[0][0] + '" dominates with ' + topPct + '% of records. Consider focused strategies for this dominant category.</div>';
+                } else if (top3Pct > 70) {
+                    insights += '<div class="prescription-title">📊 Concentrated Distribution</div>';
+                    insights += '<div class="prescription-content">Top 3 categories account for ' + top3Pct.toFixed(1) + '% of records. Focus on these key segments for maximum impact.</div>';
+                } else {
+                    insights += '<div class="prescription-title">🌈 Diverse Distribution</div>';
+                    insights += '<div class="prescription-content">Well-distributed across ' + stats.uniqueValues + ' categories. Consider segment-specific strategies.</div>';
+                }
+                insights += '</div>';
+                
+                // Cardinality analysis
+                insights += '<div class="prescription-item action">';
+                const cardinalityRatio = (stats.uniqueValues / stats.totalCount * 100).toFixed(1);
+                if (cardinalityRatio > 50) {
+                    insights += '<div class="prescription-title">🔑 High Cardinality</div>';
+                    insights += '<div class="prescription-content">With ' + stats.uniqueValues + ' unique values (' + cardinalityRatio + '% uniqueness), this might be an identifier field. Consider grouping or aggregation.</div>';
+                } else {
+                    insights += '<div class="prescription-title">📊 Category Distribution</div>';
+                    insights += '<div class="prescription-content">' + stats.uniqueValues + ' distinct categories provide good segmentation opportunities. The most frequent is "' + stats.topValues[0][0] + '" with ' + stats.topValues[0][1] + ' occurrences.</div>';
+                }
+                insights += '</div>';
+            }
+            
+            return insights;
+        }
+        
+        function calculateStats(values) {
+            const mean = values.reduce((a, b) => a + b, 0) / values.length;
+            const sorted = values.sort((a, b) => a - b);
+            const median = sorted[Math.floor(sorted.length / 2)];
+            const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
+            const std = Math.sqrt(variance);
+            
+            return {
+                mean: mean,
+                median: median,
+                min: Math.min(...values),
+                max: Math.max(...values),
+                std: std,
+                count: values.length
+            };
+        }
+        
+        function generateChartInsights(columnName, stats, type) {
+            let insights = '<div class="prescription-item insight">';
+            
+            if (type === 'numeric') {
+                const cv = (stats.std / stats.mean * 100).toFixed(1);
+                if (cv > 100) {
+                    insights += '<div class="prescription-title">⚠️ High Variability</div>';
+                    insights += `<div class="prescription-content">The coefficient of variation is ${cv}%, indicating significant spread in the data. Consider investigating outliers or data quality issues.</div>`;
+                } else if (cv < 20) {
+                    insights += '<div class="prescription-title">✅ Consistent Values</div>';
+                    insights += `<div class="prescription-content">Low variability (CV: ${cv}%) suggests stable and predictable values. This could indicate a well-controlled process.</div>`;
+                } else {
+                    insights += '<div class="prescription-title">📊 Normal Distribution</div>';
+                    insights += `<div class="prescription-content">The data shows moderate variability (CV: ${cv}%), which is typical for most business metrics.</div>`;
+                }
+            } else {
+                const topPct = (stats.topValues[0][1] / currentData.length * 100).toFixed(1);
+                if (topPct > 50) {
+                    insights += '<div class="prescription-title">🎯 Dominant Category</div>';
+                    insights += `<div class="prescription-content">"${stats.topValues[0][0]}" represents ${topPct}% of all records. Consider focusing strategies on this dominant segment.</div>`;
+                } else if (stats.uniqueValues > 20) {
+                    insights += '<div class="prescription-title">🌈 High Diversity</div>';
+                    insights += `<div class="prescription-content">With ${stats.uniqueValues} unique values, this field shows high diversity. Consider grouping or categorization for better analysis.</div>`;
+                } else {
+                    insights += '<div class="prescription-title">📊 Balanced Distribution</div>';
+                    insights += `<div class="prescription-content">The distribution across ${stats.uniqueValues} categories appears relatively balanced, indicating diverse representation.</div>`;
+                }
+            }
+            
+            insights += '</div>';
+            
+            // Add actionable recommendation
+            insights += '<div class="prescription-item action">';
+            insights += '<div class="prescription-title">💡 Recommendation</div>';
+            insights += '<div class="prescription-content">Perform deeper drill-down analysis to understand patterns and relationships with other variables.</div>';
+            insights += '</div>';
+            
+            return insights;
+        }
+        
+        function createHistogram(canvasId, values, label) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const bins = Math.min(20, Math.ceil(Math.sqrt(values.length)));
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            const binWidth = (max - min) / bins;
+            
+            const histogram = Array(bins).fill(0);
+            values.forEach(value => {
+                const binIndex = Math.min(Math.floor((value - min) / binWidth), bins - 1);
+                histogram[binIndex]++;
+            });
+            
+            const labels = histogram.map((_, i) => {
+                const start = min + i * binWidth;
+                return start.toFixed(1);
+            });
+            
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Frequency',
+                        data: histogram,
+                        backgroundColor: 'rgba(66, 133, 244, 0.7)',
+                        borderColor: 'rgba(66, 133, 244, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: label
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Frequency'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            charts.push(chart);
+        }
+        
+        function createBarChart(canvasId, data, label) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d[0].length > 20 ? d[0].substring(0, 20) + '...' : d[0]),
+                    datasets: [{
+                        label: 'Count',
+                        data: data.map(d => d[1]),
+                        backgroundColor: 'rgba(52, 168, 83, 0.7)',
+                        borderColor: 'rgba(52, 168, 83, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: label
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Count'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            charts.push(chart);
+        }
+        
+        function setupDiagnosticAnalysis() {
+            // Populate target column selector
+            const targetSelect = document.getElementById('targetColumnSelect');
+            targetSelect.innerHTML = '<option value="">Select target column for analysis</option>';
+            
+            numericColumns.forEach(col => {
+                targetSelect.innerHTML += `<option value="${col}">${col}</option>`;
+            });
+            
+            targetSelect.addEventListener('change', performRootCauseAnalysis);
+            
+            // Generate statistical summary
+            generateStatisticalSummary();
+        }
+        
+        function performRootCauseAnalysis() {
+            const targetColumn = document.getElementById('targetColumnSelect').value;
+            if (!targetColumn) return;
+            
+            const resultsDiv = document.getElementById('rootCauseResults');
+            const values = currentData.map(row => row[targetColumn]).filter(v => v !== null && !isNaN(v));
+            
+            // Calculate statistics
+            const stats = calculateStats(values);
+            const sorted = values.sort((a, b) => a - b);
+            const q1 = sorted[Math.floor(sorted.length * 0.25)];
+            const q3 = sorted[Math.floor(sorted.length * 0.75)];
+            const iqr = q3 - q1;
+            const lowerBound = q1 - 1.5 * iqr;
+            const upperBound = q3 + 1.5 * iqr;
+            
+            // Find anomalies
+            const anomalyIndices = [];
+            currentData.forEach((row, index) => {
+                const val = row[targetColumn];
+                if (val !== null && (val < lowerBound || val > upperBound)) {
+                    anomalyIndices.push(index);
+                }
+            });
+            
+            let html = `<h3>Root Cause Analysis for ${targetColumn}</h3>`;
+            html += `<p>Found ${anomalyIndices.length} anomalies (${(anomalyIndices.length / currentData.length * 100).toFixed(1)}%)</p>`;
+            
+            if (anomalyIndices.length > 0) {
+                // Compare anomalies with normal data
+                const anomalyData = anomalyIndices.map(i => currentData[i]);
+                const normalData = currentData.filter((_, i) => !anomalyIndices.includes(i));
+                
+                html += '<h4>Key Differences:</h4>';
+                html += '<div class="insights-box">';
+                
+                // Analyze categorical columns
+                categoricalColumns.slice(0, 5).forEach(col => {
+                    const anomalyCounts = {};
+                    const normalCounts = {};
+                    
+                    anomalyData.forEach(row => {
+                        const val = row[col];
+                        anomalyCounts[val] = (anomalyCounts[val] || 0) + 1;
+                    });
+                    
+                    normalData.forEach(row => {
+                        const val = row[col];
+                        normalCounts[val] = (normalCounts[val] || 0) + 1;
+                    });
+                    
+                    // Find significant differences
+                    const differences = [];
+                    Object.keys(anomalyCounts).forEach(key => {
+                        const anomalyPct = (anomalyCounts[key] / anomalyData.length * 100);
+                        const normalPct = (normalCounts[key] || 0) / normalData.length * 100;
+                        const diff = anomalyPct - normalPct;
+                        
+                        if (Math.abs(diff) > 10) {
+                            differences.push({ key, diff, anomalyPct });
+                        }
+                    });
+                    
+                    if (differences.length > 0) {
+                        html += `<div class="insight-item">`;
+                        html += `<strong>${col}:</strong><br>`;
+                        differences.sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
+                        differences.slice(0, 3).forEach(d => {
+                            html += `• ${d.key}: ${d.anomalyPct.toFixed(1)}% in anomalies (${d.diff > 0 ? '+' : ''}${d.diff.toFixed(1)}%)<br>`;
+                        });
+                        html += `</div>`;
+                    }
+                });
+                
+                html += '</div>';
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        function generateStatisticalSummary() {
+            const summaryDiv = document.getElementById('statisticalSummary');
+            let html = '<table class="stats-table">';
+            html += '<thead><tr><th>Column</th><th>Mean</th><th>Median</th><th>Std Dev</th><th>Min</th><th>Max</th><th>Skewness</th></tr></thead><tbody>';
+            
+            numericColumns.forEach(col => {
+                const values = currentData.map(row => row[col]).filter(v => v !== null && !isNaN(v));
+                if (values.length > 0) {
+                    const stats = calculateStats(values);
+                    const skewness = ((stats.mean - stats.median) / stats.std).toFixed(2);
+                    
+                    html += `<tr>
+                        <td><strong>${col}</strong></td>
+                        <td>${stats.mean.toFixed(2)}</td>
+                        <td>${stats.median.toFixed(2)}</td>
+                        <td>${stats.std.toFixed(2)}</td>
+                        <td>${stats.min.toFixed(2)}</td>
+                        <td>${stats.max.toFixed(2)}</td>
+                        <td>${skewness}</td>
+                    </tr>`;
+                }
+            });
+            
+            html += '</tbody></table>';
+            summaryDiv.innerHTML = html;
+        }
+        
+        function detectAnomalies() {
+            const tabsContainer = document.getElementById('anomalyTabs');
+            const contentContainer = document.getElementById('anomalyContent');
+            
+            tabsContainer.innerHTML = '';
+            contentContainer.innerHTML = '';
+            
+            numericColumns.forEach((col, index) => {
+                // Create tab
+                const tab = document.createElement('div');
+                tab.className = index === 0 ? 'anomaly-tab active' : 'anomaly-tab';
+                tab.textContent = col;
+                tab.onclick = () => showAnomalyTab(col);
+                tabsContainer.appendChild(tab);
+                
+                // Create content
+                const content = document.createElement('div');
+                content.id = `anomaly-${col}`;
+                content.className = index === 0 ? 'tab-content active' : 'tab-content';
+                content.style.display = index === 0 ? 'block' : 'none';
+                
+                // Calculate anomalies
+                const values = currentData.map(row => row[col]).filter(val => val !== null && !isNaN(val));
+                const sorted = values.sort((a, b) => a - b);
+                const q1 = sorted[Math.floor(sorted.length * 0.25)];
+                const q3 = sorted[Math.floor(sorted.length * 0.75)];
+                const iqr = q3 - q1;
+                const lower = q1 - 1.5 * iqr;
+                const upper = q3 + 1.5 * iqr;
+                
+                const anomalies = currentData.filter(row => row[col] < lower || row[col] > upper);
+                const anomalyRate = (anomalies.length / currentData.length * 100).toFixed(2);
+                
+                // Create box plot
+                const plotId = `boxplot-${col}`;
+                content.innerHTML = `
+                    <div class="overview-grid" style="margin-bottom: 2rem;">
+                        <div class="overview-card">
+                            <div class="overview-value">${anomalies.length}</div>
+                            <div class="overview-label">Anomalies Detected</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-value">${anomalyRate}%</div>
+                            <div class="overview-label">Anomaly Rate</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-value">${lower.toFixed(2)} - ${upper.toFixed(2)}</div>
+                            <div class="overview-label">Normal Range</div>
+                        </div>
+                    </div>
+                    <div class="plot-container" id="${plotId}"></div>
+                `;
+                
+                contentContainer.appendChild(content);
+                
+                // Render plot
+                setTimeout(() => {
+                    const trace = {
+                        y: values,
+                        type: 'box',
+                        name: col,
+                        boxpoints: 'outliers',
+                        marker: { color: '#4285F4' },
+                        line: { color: '#1a73e8' }
+                    };
+                    
+                    const layout = {
+                        title: `${col} Distribution with Outliers`,
+                        paper_bgcolor: 'white',
+                        plot_bgcolor: 'white',
+                        font: { color: '#333' },
+                        xaxis: { gridcolor: '#e0e0e0' },
+                        yaxis: { 
+                            gridcolor: '#e0e0e0',
+                            title: col
+                        }
+                    };
+                    
+                    Plotly.newPlot(plotId, [trace], layout, {responsive: true});
+                }, 100);
+            });
+        }
+        
+        function showAnomalyTab(column) {
+            document.querySelectorAll('.anomaly-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.textContent === column) tab.classList.add('active');
+            });
+            
+            document.querySelectorAll('#anomalyContent .tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`anomaly-${column}`).style.display = 'block';
+        }
+        
+        function analyzeCorrelations() {
+            if (numericColumns.length < 2) {
+                document.getElementById('correlationPlot').innerHTML = '<p>Not enough numeric columns for correlation analysis.</p>';
+                return;
+            }
+            
+            // Calculate correlation matrix
+            const correlationMatrix = [];
+            const labels = numericColumns;
+            
+            for (let i = 0; i < numericColumns.length; i++) {
+                const row = [];
+                for (let j = 0; j < numericColumns.length; j++) {
+                    const corr = calculateCorrelation(numericColumns[i], numericColumns[j]);
+                    row.push(corr);
+                }
+                correlationMatrix.push(row);
+            }
+            
+            // Create heatmap
+            const trace = {
+                z: correlationMatrix,
+                x: labels,
+                y: labels,
+                type: 'heatmap',
+                colorscale: [
+                    [0, '#ea4335'],
+                    [0.5, '#ffffff'],
+                    [1, '#34a853']
+                ],
+                showscale: true,
+                hoverongaps: false
+            };
+            
+            const layout = {
+                title: 'Correlation Matrix',
+                paper_bgcolor: 'white',
+                plot_bgcolor: 'white',
+                font: { color: '#333' },
+                xaxis: { 
+                    tickangle: -45,
+                    side: 'bottom'
+                },
+                yaxis: {
+                    autorange: 'reversed'
+                },
+                annotations: []
+            };
+            
+            // Add correlation values as text
+            for (let i = 0; i < labels.length; i++) {
+                for (let j = 0; j < labels.length; j++) {
+                    layout.annotations.push({
+                        x: labels[j],
+                        y: labels[i],
+                        text: correlationMatrix[i][j].toFixed(2),
+                        showarrow: false,
+                        font: { 
+                            color: Math.abs(correlationMatrix[i][j]) > 0.5 ? 'white' : 'black',
+                            size: 12
+                        }
+                    });
+                }
+            }
+            
+            Plotly.newPlot('correlationPlot', [trace], layout, {responsive: true});
+            
+            // Generate insights
+            const insights = document.getElementById('correlationInsights');
+            const strongCorrelations = [];
+            
+            for (let i = 0; i < labels.length; i++) {
+                for (let j = i + 1; j < labels.length; j++) {
+                    const corr = correlationMatrix[i][j];
+                    if (Math.abs(corr) > 0.5) {
+                        strongCorrelations.push({
+                            var1: labels[i],
+                            var2: labels[j],
+                            correlation: corr
+                        });
+                    }
+                }
+            }
+            
+            if (strongCorrelations.length > 0) {
+                let html = '<div class="insights-box"><h3>Strong Correlations Detected:</h3>';
+                strongCorrelations.sort((a, b) => Math.abs(b.correlation) - Math.abs(a.correlation));
+                strongCorrelations.forEach(item => {
+                    const type = item.correlation > 0 ? 'positive' : 'negative';
+                    const strength = Math.abs(item.correlation) > 0.7 ? 'very strong' : 'strong';
+                    html += `<div class="insight-item">
+                        <strong>${item.var1} ↔ ${item.var2}</strong>: 
+                        ${strength} ${type} correlation (${(item.correlation * 100).toFixed(0)}%)
+                    </div>`;
+                });
+                html += '</div>';
+                insights.innerHTML = html;
+            } else {
+                insights.innerHTML = '<p>No strong correlations detected (threshold: |r| > 0.5)</p>';
+            }
+        }
+        
+        function calculateCorrelation(col1, col2) {
+            const pairs = currentData
+                .filter(row => row[col1] !== null && row[col2] !== null && 
+                              !isNaN(row[col1]) && !isNaN(row[col2]))
+                .map(row => [parseFloat(row[col1]), parseFloat(row[col2])]);
+            
+            if (pairs.length < 2) return 0;
+            
+            const x = pairs.map(p => p[0]);
+            const y = pairs.map(p => p[1]);
+            const n = pairs.length;
+            
+            const meanX = x.reduce((a, b) => a + b, 0) / n;
+            const meanY = y.reduce((a, b) => a + b, 0) / n;
+            
+            const num = pairs.reduce((sum, p) => sum + (p[0] - meanX) * (p[1] - meanY), 0);
+            const denX = Math.sqrt(x.reduce((sum, v) => sum + Math.pow(v - meanX, 2), 0));
+            const denY = Math.sqrt(y.reduce((sum, v) => sum + Math.pow(v - meanY, 2), 0));
+            
+            return denX === 0 || denY === 0 ? 0 : num / (denX * denY);
+        }
+        
+        function setupDrillDown() {
+            const metricSelect = document.getElementById('metricSelect');
+            const dimensionSelect = document.getElementById('dimensionSelect');
+            
+            // Clear and populate selects
+            metricSelect.innerHTML = '<option value="">Select metric</option>';
+            dimensionSelect.innerHTML = '<option value="">Select dimension</option>';
+            
+            numericColumns.forEach(col => {
+                metricSelect.innerHTML += `<option value="${col}">${col}</option>`;
+            });
+            
+            // Add ALL columns as potential dimensions
+            const allColumns = Object.keys(currentData[0] || {});
+            
+            allColumns.forEach(col => {
+                const uniqueValues = [...new Set(currentData.map(row => row[col]))].filter(v => v !== null && v !== '').length;
+                
+                if (uniqueValues > 1) {  // Only exclude columns with single value
+                    let optionText = col;
+                    let emoji = '';
+                    
+                    // Add type indicator
+                    if (numericColumns.includes(col)) {
+                        emoji = ' 🔢';
+                        // For numeric columns, show range instead of unique count
+                        const values = currentData.map(row => row[col]).filter(v => v !== null && !isNaN(v));
+                        if (values.length > 0) {
+                            const min = Math.min(...values);
+                            const max = Math.max(...values);
+                            optionText += ` (${min.toFixed(0)}-${max.toFixed(0)})`;
+                        }
+                    } else if (dateColumns.includes(col)) {
+                        emoji = ' 📅';
+                        optionText += ` (Date)`;
+                    } else {
+                        emoji = ' 🏷️';
+                        optionText += ` (${uniqueValues} categories)`;
+                        
+                        // Add warning for high cardinality
+                        if (uniqueValues > 50) {
+                            emoji += ' ⚠️';
+                        }
+                    }
+                    
+                    dimensionSelect.innerHTML += `<option value="${col}">${optionText}${emoji}</option>`;
+                }
+            });
+            
+            // Remove old event listeners if they exist
+            metricSelect.removeEventListener('change', updateDrillDown);
+            dimensionSelect.removeEventListener('change', updateDrillDown);
+            
+            // Add new event listeners
+            metricSelect.addEventListener('change', updateDrillDown);
+            dimensionSelect.addEventListener('change', updateDrillDown);
+            
+            // If both have values, trigger initial update
+            if (metricSelect.value && dimensionSelect.value) {
+                updateDrillDown();
+            }
+        }
+        
+        function updateDrillDown() {
+            const metric = document.getElementById('metricSelect').value;
+            const dimension = document.getElementById('dimensionSelect').value;
+            
+            if (!metric || !dimension) {
+                console.log('Missing metric or dimension:', { metric, dimension });
+                return;
+            }
+            
+            console.log('Updating drill-down:', { metric, dimension });
+            
+            // Group data
+            const groups = {};
+            let validDataCount = 0;
+            
+            currentData.forEach(row => {
+                let key = row[dimension];
+                const value = row[metric];
+                
+                // Skip null/empty dimension values
+                if (key === null || key === '' || key === undefined) return;
+                
+                // Handle date dimensions - group by month/year
+                if (dateColumns.includes(dimension)) {
+                    try {
+                        const date = new Date(key);
+                        if (!isNaN(date.getTime())) {
+                            // Group by month-year
+                            key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                        }
+                    } catch (e) {
+                        // If date parsing fails, use original value
+                    }
+                }
+                
+                if (!groups[key]) {
+                    groups[key] = [];
+                }
+                
+                // Handle numeric values properly
+                if (value !== null && value !== '' && !isNaN(value)) {
+                    groups[key].push(parseFloat(value));
+                    validDataCount++;
+                }
+            });
+            
+            console.log('Groups found:', Object.keys(groups).length, 'Valid data points:', validDataCount);
+            
+            // Filter out groups with no valid data
+            const validGroups = Object.keys(groups).filter(key => groups[key].length > 0);
+            
+            if (validGroups.length === 0) {
+                document.getElementById('drilldownPlot').innerHTML = '<p style="text-align: center; padding: 2rem;">No valid data found for this combination.</p>';
+                return;
+            }
+            
+            // Calculate statistics
+        
+           const stats = validGroups.map(key => {
+    const values = groups[key];
+    // Ensure all values are positive for "Days Since" metrics
+    const positiveValues = metric.toLowerCase().includes('days since') || 
+                          metric.toLowerCase().includes('time since') ? 
+                          values.map(v => Math.abs(v)) : values;
+    
+    const sum = positiveValues.reduce((a, b) => a + b, 0);
+    const mean = sum / positiveValues.length;
+    const sorted = [...positiveValues].sort((a, b) => a - b);
+    const median = sorted[Math.floor(sorted.length / 2)];
+    
+    return {
+        category: key,
+        mean: mean,
+        median: median,
+        count: positiveValues.length,
+        sum: sum,
+        min: Math.min(...positiveValues),
+        max: Math.max(...positiveValues)
+    };
+});
+If you want a CSS
+            
+            // Sort by mean descending
+            stats.sort((a, b) => b.mean - a.mean);
+            
+            // Determine how many categories to display based on total count
+            let displayLimit = 20;
+            if (stats.length > 50) {
+                displayLimit = 30;  // Show more if there are many categories
+            }
+            
+            // Take top categories
+            const displayStats = stats.slice(0, displayLimit);
+            
+            // Add note if categories were truncated
+            let truncationNote = '';
+            if (stats.length > displayLimit) {
+                truncationNote = `<p style="text-align: center; color: #666; margin-top: 1rem;">
+                    Showing top ${displayLimit} of ${stats.length} categories. 
+                    ${stats.length - displayLimit} categories hidden for clarity.
+                </p>`;
+            }
+            
+            // Create bar chart trace
+            const barTrace = {
+                x: displayStats.map(s => s.category),
+                y: displayStats.map(s => s.mean),
+                type: 'bar',
+                name: 'Average',
+                marker: {
+                    color: displayStats.map(s => s.mean),
+                    colorscale: [
+                        [0, '#e3f2fd'],
+                        [1, '#1565c0']
+                    ],
+                    line: {
+                        color: 'rgba(66, 133, 244, 1)',
+                        width: 1
+                    }
+                },
+                text: displayStats.map(s => `Count: ${s.count}<br>Avg: ${s.mean.toFixed(2)}`),
+                textposition: 'none',
+                hoverinfo: 'text'
+            };
+            
+            // Create box plot trace for distribution
+            const boxTraces = displayStats.map((stat, i) => ({
+                y: groups[stat.category],
+                type: 'box',
+                name: stat.category,
+                boxpoints: false,
+                marker: { color: 'rgba(66, 133, 244, 0.6)' },
+                line: { color: 'rgba(66, 133, 244, 1)' },
+                showlegend: false,
+                xaxis: 'x2',
+                yaxis: 'y2'
+            }));
+            
+            const layout = {
+                title: {
+                    text: `${metric} by ${dimension}`,
+                    font: { size: 18 }
+                },
+                paper_bgcolor: 'white',
+                plot_bgcolor: 'white',
+                font: { color: '#333' },
+                xaxis: { 
+                    gridcolor: '#e0e0e0',
+                    tickangle: -45,
+                    title: dimension,
+                    automargin: true
+                },
+                yaxis: { 
+                    gridcolor: '#e0e0e0',
+                    title: `Average ${metric}`,
+                    automargin: true
+                },
+                showlegend: false,
+                margin: { l: 80, r: 50, t: 80, b: 150 },
+                height: 500
+            };
+            
+            // Create the plot
+            Plotly.newPlot('drilldownPlot', [barTrace], layout, {responsive: true});
+            
+            // Add truncation note if applicable
+            if (truncationNote) {
+                document.getElementById('drilldownPlot').insertAdjacentHTML('beforeend', truncationNote);
+            }
+            
+            // Add summary statistics below the chart
+            // First, remove any existing summary
+            const existingSummary = document.querySelector('#drilldownPlot + .insights-box');
+            if (existingSummary) {
+                existingSummary.remove();
+            }
+            
+            const summaryHtml = `
+                <div class="insights-box" style="margin-top: 1rem;">
+                    <h4>Summary Statistics</h4>
+                    <p>Total categories: ${stats.length}</p>
+                    <p>Highest average: ${displayStats[0].category} (${displayStats[0].mean.toFixed(2)})</p>
+                    <p>Lowest average: ${displayStats[displayStats.length-1].category} (${displayStats[displayStats.length-1].mean.toFixed(2)})</p>
+                    <p>Most frequent: ${stats.sort((a, b) => b.count - a.count)[0].category} (${stats[0].count} records)</p>
+                </div>
+            `;
+            
+            document.getElementById('drilldownPlot').insertAdjacentHTML('afterend', summaryHtml);
+        }
+        
+        function analyzeTimeSeries() {
+            if (dateColumns.length === 0 || numericColumns.length === 0) {
+                document.getElementById('timeseriesSection').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('timeseriesSection').style.display = 'block';
+            
+            const dateCol = dateColumns[0];
+            const metricCol = numericColumns[0];
+            
+            // Parse dates and aggregate
+            const timeData = currentData
+                .filter(row => row[dateCol] && row[metricCol] !== null)
+                .map(row => ({
+                    date: new Date(row[dateCol]),
+                    value: parseFloat(row[metricCol])
+                }))
+                .sort((a, b) => a.date - b.date);
+            
+            // Group by day
+            const dailyData = {};
+            timeData.forEach(item => {
+                const dateKey = item.date.toISOString().split('T')[0];
+                if (!dailyData[dateKey]) {
+                    dailyData[dateKey] = [];
+                }
+                dailyData[dateKey].push(item.value);
+            });
+            
+            const dates = Object.keys(dailyData);
+            const avgValues = dates.map(date => {
+                const values = dailyData[date];
+                return values.reduce((a, b) => a + b, 0) / values.length;
+            });
+            
+            // Create line chart
+            const trace = {
+                x: dates,
+                y: avgValues,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: metricCol,
+                line: { 
+                    color: '#4285F4',
+                    width: 2
+                },
+                marker: { 
+                    color: '#1a73e8',
+                    size: 6
+                }
+            };
+            
+            const layout = {
+                title: `${metricCol} Over Time`,
+                paper_bgcolor: 'white',
+                plot_bgcolor: 'white',
+                font: { color: '#333' },
+                xaxis: { 
+                    gridcolor: '#e0e0e0',
+                    title: 'Date'
+                },
+                yaxis: { 
+                    gridcolor: '#e0e0e0',
+                    title: metricCol
+                }
+            };
+            
+            Plotly.newPlot('timeseriesPlot', [trace], layout, {responsive: true});
+        }
+        
+        // Function to generate AI use cases
+        function generateAIUseCases() {
+            const statusDiv = document.getElementById('aiUseCasesStatus');
+            const resultsDiv = document.getElementById('aiUseCasesResults');
+            const button = event.target.closest('button');
+            
+            // Show loading status
+            statusDiv.style.display = 'block';
+            resultsDiv.style.display = 'none';
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            
+            // Get current file data
+            const filename = '{{ filename }}';
+            
+            // Create a form to submit data to the results page
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/generate-use-cases';
+            form.target = '_blank'; // Open in new tab
+            
+            // Add CSRF token if available
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (csrfToken) {
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrf_token';
+                csrfInput.value = csrfToken.content;
+                form.appendChild(csrfInput);
+            }
+            
+            // Add filename
+            const filenameInput = document.createElement('input');
+            filenameInput.type = 'hidden';
+            filenameInput.name = 'filename';
+            filenameInput.value = filename;
+            form.appendChild(filenameInput);
+            
+            // Add column information
+            const columnsInput = document.createElement('input');
+            columnsInput.type = 'hidden';
+            columnsInput.name = 'columns';
+            columnsInput.value = JSON.stringify({
+                numeric: numericColumns,
+                categorical: categoricalColumns,
+                date: dateColumns
+            });
+            form.appendChild(columnsInput);
+            
+            // Submit the form
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+            
+            // Reset button after a delay
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-magic"></i> Generate AI Use Cases';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

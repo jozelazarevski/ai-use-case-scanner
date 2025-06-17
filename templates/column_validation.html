@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Column Validation & Mapping - AI Use Case Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+    <style>
+        /* Additional styles specific to column validation */
+        .validation-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .dataset-info-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+        
+        .column-table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .column-table thead {
+            background-color: var(--light-bg);
+        }
+        
+        .column-table th {
+            color: var(--text-color);
+            font-weight: 600;
+            padding: 1rem;
+            border-bottom: 2px solid var(--border-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .column-table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .column-table tbody tr:hover {
+            background-color: var(--light-bg);
+        }
+        
+        .column-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .original-column-name {
+            font-family: 'Courier New', monospace;
+            background-color: var(--light-bg);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+        
+        .sample-data {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .confidence-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .confidence-high {
+            background-color: rgba(52, 168, 83, 0.1);
+            color: var(--success-color);
+        }
+        
+        .confidence-medium {
+            background-color: rgba(251, 188, 5, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .confidence-low {
+            background-color: rgba(234, 67, 53, 0.1);
+            color: var(--danger-color);
+        }
+        
+        .target-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .target-row {
+            background-color: rgba(66, 133, 244, 0.05) !important;
+        }
+        
+        .target-meaning-row {
+            background-color: rgba(66, 133, 244, 0.03);
+        }
+        
+        .target-meaning-input {
+            margin-top: 0.5rem;
+            background-color: white;
+        }
+        
+        .action-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .template-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .ai-summary {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+        }
+        
+        .ai-summary h3 {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .use-case-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .use-case-tag {
+            background-color: white;
+            color: var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            border: 1px solid var(--primary-color);
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .loading-overlay.show {
+            display: flex;
+        }
+        
+        .loading-content {
+            text-align: center;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .validation-header {
+                padding: 1.5rem;
+            }
+            
+            .column-table {
+                font-size: 0.875rem;
+            }
+            
+            .action-section {
+                flex-direction: column;
+            }
+            
+            .template-controls {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% from 'user_menu_component.html' import render_user_menu %}
+    {{ render_user_menu() }}
+    
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="container my-4">
+        <!-- Header Section -->
+        <div class="validation-header fade-in">
+            <h1><i class="fas fa-check-circle me-2"></i>Column Validation & Mapping</h1>
+            <p class="mb-0">Review and confirm AI-suggested column mappings for your dataset</p>
+            <div class="dataset-info-badge">
+                <i class="fas fa-file-alt me-2"></i>{{ filename }} • 
+                <i class="fas fa-table ms-3 me-2"></i>{{ total_rows }} rows × {{ total_columns }} columns
+            </div>
+        </div>
+        
+        <!-- Flash Messages -->
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-{{ category }}">
+                            <i class="fas {% if category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        
+        <!-- AI Summary Section -->
+        {% if dataset_summary %}
+        <div class="ai-summary slide-up">
+            <h3><i class="fas fa-brain"></i>AI Analysis Summary</h3>
+            <p class="mb-0">{{ dataset_summary }}</p>
+            {% if suggested_use_cases %}
+            <div class="use-case-tags">
+                {% for use_case in suggested_use_cases %}
+                <span class="use-case-tag">{{ use_case }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <!-- Main Card -->
+        <div class="card slide-up">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0"><i class="fas fa-columns me-2"></i>Column Mappings</h2>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" onclick="resetMappings()">
+                            <i class="fas fa-undo me-1"></i>Reset
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="autoMapAll()">
+                            <i class="fas fa-magic me-1"></i>Auto-Map
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body p-0">
+                <form id="columnMappingForm" method="post" action="{{ url_for('save_column_mappings') }}">
+                    <input type="hidden" name="filename" value="{{ filename }}">
+                    <input type="hidden" name="file_path" value="{{ file_path }}">
+                    
+                    <table class="column-table">
+                        <thead>
+                            <tr>
+                                <th>Original Column</th>
+                                <th>Mapped Name</th>
+                                <th>Data Type</th>
+                                <th style="width: 30%">Description</th>
+                                <th class="text-center">Target?</th>
+                                <th>Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for column in columns %}
+                            <tr class="{% if column.is_target %}target-row{% endif %}" data-column-index="{{ loop.index0 }}">
+                                <td>
+                                    <div class="original-column-name">{{ column.original_name }}</div>
+                                    {% if column.sample_data %}
+                                    <div class="sample-data">
+                                        {{ column.sample_data[:3] | join(', ') }}{% if column.sample_data|length > 3 %}...{% endif %}
+                                    </div>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <input type="text" 
+                                           class="form-control form-control-sm" 
+                                           name="mapped_name_{{ loop.index0 }}" 
+                                           value="{{ column.suggested_name }}"
+                                           data-original="{{ column.original_name }}">
+                                </td>
+                                <td>
+                                    <select class="form-select form-select-sm" name="data_type_{{ loop.index0 }}">
+                                        <option value="numeric" {% if column.data_type == 'numeric' %}selected{% endif %}>Numeric</option>
+                                        <option value="categorical" {% if column.data_type == 'categorical' %}selected{% endif %}>Categorical</option>
+                                        <option value="text" {% if column.data_type == 'text' %}selected{% endif %}>Text</option>
+                                        <option value="date" {% if column.data_type == 'date' %}selected{% endif %}>Date/Time</option>
+                                        <option value="boolean" {% if column.data_type == 'boolean' %}selected{% endif %}>Boolean</option>
+                                        <option value="identifier" {% if column.data_type == 'identifier' %}selected{% endif %}>Identifier</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <textarea class="form-control form-control-sm" 
+                                              name="description_{{ loop.index0 }}" 
+                                              rows="2"
+                                              placeholder="What does this column represent?">{{ column.description }}</textarea>
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox" 
+                                           class="form-check-input target-checkbox" 
+                                           name="is_target_{{ loop.index0 }}" 
+                                           {% if column.is_target %}checked{% endif %}
+                                           onchange="toggleTargetMeaning({{ loop.index0 }})">
+                                </td>
+                                <td>
+                                    <span class="confidence-badge confidence-{{ 'high' if column.confidence > 0.8 else 'medium' if column.confidence > 0.5 else 'low' }}">
+                                        {{ (column.confidence * 100) | round }}%
+                                    </span>
+                                </td>
+                            </tr>
+                            {% if column.is_target %}
+                            <tr class="target-meaning-row" id="target-meaning-{{ loop.index0 }}">
+                                <td colspan="6" class="px-4">
+                                    <label class="form-label"><strong>What does this target variable predict?</strong></label>
+                                    <input type="text" 
+                                           class="form-control target-meaning-input" 
+                                           name="target_meaning_{{ loop.index0 }}" 
+                                           value="{{ column.target_meaning or '' }}"
+                                           placeholder="e.g., Customer churn, Sales amount, Product category...">
+                                    <input type="hidden" name="original_name_{{ loop.index0 }}" value="{{ column.original_name }}">
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                    <div class="px-4 pb-4">
+                        <div class="action-section">
+                            <div class="template-controls">
+                                <select class="form-select form-select-sm" style="width: auto;" onchange="loadTemplate(this.value)">
+                                    <option value="">Load Template...</option>
+                                    {% for template in saved_templates %}
+                                    <option value="{{ template.id }}">{{ template.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="saveAsTemplate()">
+                                    <i class="fas fa-save me-1"></i>Save Template
+                                </button>
+                            </div>
+                            
+                            <div>
+                                <button type="button" class="btn btn-secondary me-2" onclick="history.back()">
+                                    <i class="fas fa-arrow-left me-1"></i>Back
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-check me-1"></i>Validate & Continue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Validating columns...</div>
+        </div>
+    </div>
+    
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <script>
+        // Store original mappings for reset functionality
+        const originalMappings = {{ columns | tojson }};
+        
+        function toggleTargetMeaning(index) {
+            const checkbox = document.querySelector(`input[name="is_target_${index}"]`);
+            const meaningRow = document.getElementById(`target-meaning-${index}`);
+            const row = document.querySelector(`tr[data-column-index="${index}"]`);
+            
+            if (checkbox.checked) {
+                if (!meaningRow) {
+                    // Create target meaning row with all fields
+                    const newRow = document.createElement('tr');
+                    newRow.className = 'target-meaning-row';
+                    newRow.id = `target-meaning-${index}`;
+                    
+                    // Get original column data for defaults
+                    const columnData = originalMappings[index];
+                    
+                    newRow.innerHTML = `
+                        <td colspan="6" class="px-4">
+                            <div class="mb-3">
+                                <label class="form-label"><strong>What does this target variable predict?</strong></label>
+                                <input type="text" 
+                                       class="form-control target-meaning-input" 
+                                       name="target_meaning_${index}" 
+                                       value="${columnData.target_meaning || ''}"
+                                       placeholder="e.g., Customer churn, Sales amount, Product category...">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Potential Use Cases:</strong></label>
+                                <textarea class="form-control" 
+                                          name="prediction_use_cases_${index}" 
+                                          rows="3"
+                                          placeholder="Enter use cases, one per line">${columnData.prediction_use_cases ? columnData.prediction_use_cases.join('\n') : ''}</textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Business Value:</strong></label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       name="business_value_${index}" 
+                                       value="${columnData.business_value || ''}"
+                                       placeholder="Explain the business impact of predicting this variable">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Recommended Model Type:</strong></label>
+                                <select class="form-select" name="model_type_${index}">
+                                    <option value="classification" ${columnData.model_type === 'classification' ? 'selected' : ''}>Classification</option>
+                                    <option value="regression" ${columnData.model_type === 'regression' ? 'selected' : ''}>Regression</option>
+                                </select>
+                            </div>
+                            
+                            <input type="hidden" name="original_name_${index}" value="${columnData.original_name}">
+                        </td>
+                    `;
+                    row.parentNode.insertBefore(newRow, row.nextSibling);
+                }
+                row.classList.add('target-row');
+            } else {
+                if (meaningRow) {
+                    meaningRow.remove();
+                }
+                row.classList.remove('target-row');
+            }
+        }
+        
+        function resetMappings() {
+            if (confirm('Reset all mappings to original column names?')) {
+                originalMappings.forEach((column, index) => {
+                    document.querySelector(`input[name="mapped_name_${index}"]`).value = column.original_name;
+                    document.querySelector(`select[name="data_type_${index}"]`).value = column.data_type;
+                    document.querySelector(`textarea[name="description_${index}"]`).value = column.description || '';
+                    const checkbox = document.querySelector(`input[name="is_target_${index}"]`);
+                    checkbox.checked = false;
+                    toggleTargetMeaning(index);
+                });
+            }
+        }
+        
+        function autoMapAll() {
+            if (confirm('Re-analyze all columns with AI?')) {
+                alert('This feature will re-analyze columns using AI (coming soon)');
+            }
+        }
+        
+        function saveAsTemplate() {
+            const templateName = prompt('Enter a name for this mapping template:');
+            if (templateName) {
+                const mappings = collectCurrentMappings();
+                // TODO: Make API call to save template
+                console.log('Saving template:', templateName, mappings);
+            }
+        }
+        
+        function loadTemplate(templateId) {
+            if (templateId) {
+                // TODO: Load template mappings
+                console.log('Loading template:', templateId);
+            }
+        }
+        
+        function collectCurrentMappings() {
+            const mappings = [];
+            originalMappings.forEach((column, index) => {
+                const mapping = {
+                    original_name: column.original_name,
+                    mapped_name: document.querySelector(`input[name="mapped_name_${index}"]`).value,
+                    data_type: document.querySelector(`select[name="data_type_${index}"]`).value,
+                    description: document.querySelector(`textarea[name="description_${index}"]`).value,
+                    is_target: document.querySelector(`input[name="is_target_${index}"]`).checked,
+                    confidence: column.confidence || 0.5
+                };
+                
+                // Add target-specific fields if it's a target column
+                if (mapping.is_target) {
+                    mapping.target_meaning = document.querySelector(`input[name="target_meaning_${index}"]`)?.value || '';
+                    
+                    const useCasesElement = document.querySelector(`textarea[name="prediction_use_cases_${index}"]`);
+                    if (useCasesElement) {
+                        mapping.prediction_use_cases = useCasesElement.value.split('\n').filter(uc => uc.trim());
+                    }
+                    
+                    const businessValueElement = document.querySelector(`input[name="business_value_${index}"]`);
+                    if (businessValueElement) {
+                        mapping.business_value = businessValueElement.value;
+                    }
+                    
+                    const modelTypeElement = document.querySelector(`select[name="model_type_${index}"]`);
+                    if (modelTypeElement) {
+                        mapping.model_type = modelTypeElement.value;
+                    }
+                }
+                
+                mappings.push(mapping);
+            });
+            return mappings;
+        }
+        
+        // Form submission
+        document.getElementById('columnMappingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading overlay
+            document.getElementById('loadingOverlay').classList.add('show');
+            
+            // Collect all mappings
+            const formData = new FormData(this);
+            const mappings = collectCurrentMappings();
+            formData.append('mappings', JSON.stringify(mappings));
+            
+            // Submit form
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    alert('Error: ' + data.error);
+                    document.getElementById('loadingOverlay').classList.remove('show');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while saving mappings');
+                document.getElementById('loadingOverlay').classList.remove('show');
+            });
+        });
+        
+        // Progress bar functionality
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = scrollTop / docHeight;
+            document.getElementById('progressBar').style.width = scrollPercent * 100 + '%';
+            
+            const backToTop = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+        
+        document.getElementById('backToTop').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDA Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #6366F1;
+            --secondary-color: #10B981;
+            --error-color: #EF4444;
+            --text-color: #374151;
+            --text-light: #6B7280;
+            --background-color: #F9FAFB;
+            --card-bg: #FFFFFF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #E5E7EB;
+            margin-bottom: 2rem;
+            gap: 2rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            color: var(--text-light);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        .chart-container {
+            margin: 1rem 0;
+        }
+        
+        .bar-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .bar-label {
+            min-width: 150px;
+            font-size: 0.9rem;
+        }
+        
+        .bar-wrapper {
+            flex: 1;
+            position: relative;
+            height: 24px;
+            background: #F3F4F6;
+            border-radius: 4px;
+            margin-right: 1rem;
+        }
+        
+        .bar {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .bar-value {
+            margin-left: auto;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+        
+        .upload-area {
+            border: 2px dashed #E5E7EB;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary-color);
+        }
+        
+        #file-input {
+            display: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: var(--error-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Exploratory Data Analysis Dashboard</h1>
+            <p>Upload a CSV file to analyze</p>
+        </div>
+        
+        <div class="upload-area" onclick="document.getElementById('file-input').click()">
+            <p>Click to upload CSV file</p>
+            <input type="file" id="file-input" accept=".csv">
+        </div>
+        
+        <div id="loading" class="loading" style="display: none;">
+            Analyzing dataset...
+        </div>
+        
+        <div id="error" class="error" style="display: none;"></div>
+        
+        <div id="dashboard" style="display: none;">
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('overview')">Overview</div>
+                <div class="tab" onclick="showTab('data-quality')">Data Quality</div>
+                <div class="tab" onclick="showTab('univariate')">Univariate Analysis</div>
+                <div class="tab" onclick="showTab('bivariate')">Bivariate Analysis</div>
+                <div class="tab" onclick="showTab('correlations')">Correlations</div>
+            </div>
+            
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-content active">
+                <div class="stats-grid" id="overview-stats"></div>
+                <div class="card">
+                    <h2>Column Summary</h2>
+                    <div id="column-summary"></div>
+                </div>
+            </div>
+            
+            <!-- Data Quality Tab -->
+            <div id="data-quality" class="tab-content">
+                <div class="card">
+                    <h2>Missing Values</h2>
+                    <div id="missing-values-chart"></div>
+                </div>
+                <div class="card">
+                    <h2>Data Types Distribution</h2>
+                    <div id="data-types-chart"></div>
+                </div>
+            </div>
+            
+            <!-- Univariate Analysis Tab -->
+            <div id="univariate" class="tab-content">
+                <div id="univariate-charts"></div>
+            </div>
+            
+            <!-- Bivariate Analysis Tab -->
+            <div id="bivariate" class="tab-content">
+                <div id="bivariate-charts"></div>
+            </div>
+            
+            <!-- Correlations Tab -->
+            <div id="correlations" class="tab-content">
+                <div class="card">
+                    <h2>Correlation Matrix</h2>
+                    <div id="correlation-matrix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+        let currentDatasetId = null;
+        let analysisData = null;
+        
+        // File upload handler
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type === 'text/csv') {
+                uploadFile(file);
+            } else {
+                showError('Please upload a CSV file');
+            }
+        });
+        
+        async function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            showLoading();
+            hideError();
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentDatasetId = data.dataset_id;
+                    await loadAllAnalysis();
+                } else {
+                    showError(data.error || 'Failed to upload file');
+                }
+            } catch (error) {
+                showError('Network error: ' + error.message);
+            }
+        }
+        
+        async function loadAllAnalysis() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/dataset/${currentDatasetId}/all`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    analysisData = data;
+                    displayDashboard();
+                } else {
+                    showError(data.error || 'Failed to load analysis');
+                }
+            } catch (error) {
+                showError('Network error: ' + error.message);
+            }
+        }
+        
+        function displayDashboard() {
+            hideLoading();
+            document.getElementById('dashboard').style.display = 'block';
+            
+            // Display overview
+            displayOverview();
+            
+            // Display data quality
+            displayDataQuality();
+            
+            // Display univariate analysis
+            displayUnivariateAnalysis();
+            
+            // Display bivariate analysis
+            displayBivariateAnalysis();
+            
+            // Display correlations
+            displayCorrelations();
+        }
+        
+        function displayOverview() {
+            const overview = analysisData.overview;
+            const statsContainer = document.getElementById('overview-stats');
+            
+            statsContainer.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${overview.total_rows.toLocaleString()}</div>
+                    <div class="stat-label">Total Rows</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${overview.total_columns}</div>
+                    <div class="stat-label">Total Columns</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${overview.missing_percentage}%</div>
+                    <div class="stat-label">Missing Values</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${overview.duplicate_rows}</div>
+                    <div class="stat-label">Duplicate Rows</div>
+                </div>
+            `;
+            
+            // Display column summary
+            const columnSummary = document.getElementById('column-summary');
+            const columns = analysisData.column_details;
+            
+            let tableHTML = `
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #E5E7EB;">Column Name</th>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #E5E7EB;">Type</th>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #E5E7EB;">Missing</th>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #E5E7EB;">Unique</th>
+                    </tr>
+            `;
+            
+            columns.slice(0, 10).forEach(col => {
+                tableHTML += `
+                    <tr>
+                        <td style="padding: 0.75rem; border-bottom: 1px solid #E5E7EB;">${col.name}</td>
+                        <td style="padding: 0.75rem; border-bottom: 1px solid #E5E7EB;">${col.category}</td>
+                        <td style="padding: 0.75rem; border-bottom: 1px solid #E5E7EB;">${col.missing}</td>
+                        <td style="padding: 0.75rem; border-bottom: 1px solid #E5E7EB;">${col.unique}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += '</table>';
+            columnSummary.innerHTML = tableHTML;
+        }
+        
+        function displayDataQuality() {
+            const quality = analysisData.data_quality;
+            
+            // Display missing values
+            const missingContainer = document.getElementById('missing-values-chart');
+            if (quality.missing_values.length > 0) {
+                let chartHTML = '<div class="chart-container">';
+                
+                quality.missing_values.forEach(item => {
+                    const width = Math.min(item.missing_percentage * 5, 100);
+                    chartHTML += `
+                        <div class="bar-container">
+                            <div class="bar-label">${item.column}</div>
+                            <div class="bar-wrapper">
+                                <div class="bar" style="width: ${width}%"></div>
+                            </div>
+                            <div class="bar-value">${item.missing_count} (${item.missing_percentage}%)</div>
+                        </div>
+                    `;
+                });
+                
+                chartHTML += '</div>';
+                missingContainer.innerHTML = chartHTML;
+            } else {
+                missingContainer.innerHTML = '<p style="text-align: center; color: var(--secondary-color);">No missing values</p>';
+            }
+            
+            // Display data types
+            const typesContainer = document.getElementById('data-types-chart');
+            let typesHTML = '<div class="chart-container">';
+            
+            Object.entries(quality.data_types).forEach(([type, count]) => {
+                const width = (count / analysisData.overview.total_columns) * 100;
+                typesHTML += `
+                    <div class="bar-container">
+                        <div class="bar-label">${type}</div>
+                        <div class="bar-wrapper">
+                            <div class="bar" style="width: ${width}%"></div>
+                        </div>
+                        <div class="bar-value">${count}</div>
+                    </div>
+                `;
+            });
+            
+            typesHTML += '</div>';
+            typesContainer.innerHTML = typesHTML;
+        }
+        
+        function displayUnivariateAnalysis() {
+            const univariate = analysisData.univariate;
+            const container = document.getElementById('univariate-charts');
+            let html = '';
+            
+            // Display categorical variables
+            html += '<div class="card"><h2>Categorical Variables</h2>';
+            Object.entries(univariate.categorical).slice(0, 6).forEach(([col, data]) => {
+                html += `<h3>${col}</h3><div class="chart-container">`;
+                
+                data.distribution.forEach(item => {
+                    const width = item.percentage;
+                    html += `
+                        <div class="bar-container">
+                            <div class="bar-label">${item.value}</div>
+                            <div class="bar-wrapper">
+                                <div class="bar" style="width: ${width}%"></div>
+                            </div>
+                            <div class="bar-value">${item.percentage}% (${item.count.toLocaleString()})</div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+            });
+            html += '</div>';
+            
+            // Display numeric variables
+            html += '<div class="card"><h2>Numeric Variables</h2>';
+            Object.entries(univariate.numeric).slice(0, 6).forEach(([col, data]) => {
+                html += `<h3>${col}</h3><div class="chart-container">`;
+                
+                data.distribution.forEach(item => {
+                    const width = item.percentage;
+                    html += `
+                        <div class="bar-container">
+                            <div class="bar-label">${item.range}</div>
+                            <div class="bar-wrapper">
+                                <div class="bar" style="width: ${width}%"></div>
+                            </div>
+                            <div class="bar-value">${item.percentage}% (${item.count.toLocaleString()})</div>
+                        </div>
+                    `;
+                });
+                
+                html += `<p style="margin-top: 1rem; color: var(--text-light);">Mean: ${data.mean}, Median: ${data.median}, Std: ${data.std}</p>`;
+                html += '</div>';
+            });
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+        
+        function displayBivariateAnalysis() {
+            const bivariate = analysisData.bivariate;
+            const container = document.getElementById('bivariate-charts');
+            
+            if (bivariate.error) {
+                container.innerHTML = `<div class="card"><p>${bivariate.error}</p></div>`;
+                return;
+            }
+            
+            let html = `<div class="card"><h2>Analysis vs ${bivariate.target}</h2>`;
+            
+            // Categorical features
+            if (Object.keys(bivariate.categorical_features).length > 0) {
+                html += '<h3>Categorical Features</h3>';
+                
+                Object.entries(bivariate.categorical_features).slice(0, 4).forEach(([feature, data]) => {
+                    html += `<h4>${feature}</h4><div class="chart-container">`;
+                    
+                    data.forEach(item => {
+                        const rate = item.rates[1] || item.rates[Object.keys(item.rates)[1]] || 0;
+                        html += `
+                            <div class="bar-container">
+                                <div class="bar-label">${item.category}</div>
+                                <div class="bar-wrapper">
+                                    <div class="bar" style="width: ${rate}%; background: var(--error-color);"></div>
+                                </div>
+                                <div class="bar-value">${rate}%</div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += '</div>';
+                });
+            }
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        function displayCorrelations() {
+            const correlations = analysisData.correlations;
+            const container = document.getElementById('correlation-matrix');
+            
+            if (correlations.error) {
+                container.innerHTML = `<p>${correlations.error}</p>`;
+                return;
+            }
+            
+            // Simple display of correlations
+            let html = '<div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse;">';
+            html += '<tr><th style="padding: 0.5rem; border: 1px solid #E5E7EB;">Variable 1</th>';
+            html += '<th style="padding: 0.5rem; border: 1px solid #E5E7EB;">Variable 2</th>';
+            html += '<th style="padding: 0.5rem; border: 1px solid #E5E7EB;">Correlation</th></tr>';
+            
+            correlations.correlations.forEach(corr => {
+                const color = corr.correlation > 0.7 ? '#10B981' : 
+                            corr.correlation < -0.7 ? '#EF4444' : '#6B7280';
+                html += `
+                    <tr>
+                        <td style="padding: 0.5rem; border: 1px solid #E5E7EB;">${corr.variable1}</td>
+                        <td style="padding: 0.5rem; border: 1px solid #E5E7EB;">${corr.variable2}</td>
+                        <td style="padding: 0.5rem; border: 1px solid #E5E7EB; color: ${color}; font-weight: bold;">
+                            ${corr.correlation}
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</table></div>';
+            container.innerHTML = html;
+        }
+        
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        function showError(message) {
+            document.getElementById('error').textContent = message;
+            document.getElementById('error').style.display = 'block';
+            hideLoading();
+        }
+        
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
