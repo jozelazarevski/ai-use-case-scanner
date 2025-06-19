@@ -47,7 +47,34 @@ class Config:
     
     # File Upload Configuration
     UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', "uploads")
-    ALLOWED_EXTENSIONS = {"txt", "pdf", "csv", "docx", "xlsx", "xls", "data"}
+    ALLOWED_EXTENSIONS = {
+    # Text/CSV formats
+    "csv", "tsv", "txt", "data", "dat",
+    
+    # Excel formats
+    "xlsx", "xls", "xlsm", "xlsb",
+    
+    # Document formats (keeping existing ones)
+    "docx", "pdf",
+    
+    # JSON formats
+    "json", "jsonl",
+    
+    # Compressed formats
+    "gz", "zip", "bz2", "xz", "tar", "tgz",
+    
+    # Binary data formats
+    "parquet", "feather", "pkl", "pickle",
+    
+    # Statistical formats
+    "sas7bdat", "dta", "sav", "zsav",
+    
+    # Database/structured formats
+    "h5", "hdf5", "hdf",
+    
+    # Web formats
+    "xml", "html", "htm"
+}
     
     # Database Configuration
     DATABASE_DIR = os.environ.get('DATABASE_DIR', "databases")
