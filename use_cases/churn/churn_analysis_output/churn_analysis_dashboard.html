@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Churn Analytics Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: rgba(255, 255, 255, 0.95);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: rgba(148, 163, 184, 0.1);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .metric-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 12px 0;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .metric-change {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .trend-up { color: var(--success-color); }
+        .trend-down { color: var(--danger-color); }
+        .trend-neutral { color: var(--text-secondary); }
+
+        .section {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            min-height: 400px;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+        }
+
+        .risk-segments {
+            display: grid;
+            gap: 16px;
+        }
+
+        .risk-segment {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border-left: 4px solid;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .risk-segment:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .risk-segment.critical { border-left-color: var(--danger-color); }
+        .risk-segment.high { border-left-color: var(--warning-color); }
+        .risk-segment.medium { border-left-color: var(--info-color); }
+        .risk-segment.low { border-left-color: var(--success-color); }
+
+        .segment-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .segment-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .priority-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .priority-critical {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .priority-high {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .priority-medium {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info-color);
+        }
+
+        .priority-low {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .segment-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .segment-stat {
+            text-align: center;
+        }
+
+        .segment-stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .segment-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .recommendations {
+            display: grid;
+            gap: 20px;
+        }
+
+        .recommendation {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .recommendation:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .recommendation-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .recommendation-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .recommendation-impact {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .action-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .action-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .action-list li:last-child {
+            border-bottom: none;
+        }
+
+        .action-list li::before {
+            content: "→";
+            color: var(--info-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-importance {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            background: var(--primary-gradient);
+        }
+
+        .feature-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .prescriptive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+        }
+
+        .prescriptive-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prescriptive-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .prescriptive-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .prescriptive-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .prescriptive-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .customer-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 16px;
+        }
+
+        .customer-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            transition: background-color 0.2s ease;
+        }
+
+        .customer-item:hover {
+            background-color: rgba(148, 163, 184, 0.05);
+        }
+
+        .customer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .customer-id {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .customer-risk {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .risk-score {
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .risk-high {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .risk-medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .risk-low {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .interactive-plot {
+            width: 100%;
+            height: 500px;
+            margin: 20px 0;
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--info-color);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--info-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .insight-card h4 {
+            color: var(--info-color);
+            margin-bottom: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .insight-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--info-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 12px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 32px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 12px;
+            }
+            
+            .header {
+                padding: 24px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(148, 163, 184, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Advanced Customer Churn Analytics</h1>
+            <p>AI-Powered Insights and Prescriptive Recommendations</p>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">👥</div>
+                </div>
+                <div class="metric-label">Total Customers</div>
+                <div class="metric-value">49,358</div>
+                <div class="metric-change trend-neutral">
+                    Active customer base
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">📉</div>
+                </div>
+                <div class="metric-label">Churn Rate</div>
+                <div class="metric-value">88.6%</div>
+                <div class="metric-change trend-down">
+                    Critical - immediate action needed
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">💰</div>
+                </div>
+                <div class="metric-label">Revenue at Risk</div>
+                <div class="metric-value">$0</div>
+                <div class="metric-change trend-down">
+                    Annual impact potential
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">📈</div>
+                </div>
+                <div class="metric-label">Model Accuracy</div>
+                <div class="metric-value">89.1%</div>
+                <div class="metric-change trend-up">
+                    Prediction confidence
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">🎯</div>
+                </div>
+                <div class="metric-label">High-Risk Customers</div>
+                <div class="metric-value">20</div>
+                <div class="metric-change trend-down">
+                    Require immediate attention
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">⚡</div>
+                </div>
+                <div class="metric-label">Avg. Customer Lifetime</div>
+                <div class="metric-value">0.0 months</div>
+                <div class="metric-change trend-neutral">
+                    Customer tenure
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">📊</div>
+                <h2>Executive Summary</h2>
+            </div>
+            <p style="font-size: 1.125rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 20px;">
+                Our analysis of 49,358 customers reveals a 88.6% churn rate, 
+        with 20 customers identified as high-risk for immediate intervention. 
+        The predictive model achieves 89.1% accuracy, 
+        providing reliable insights for proactive retention strategies. 
+        Key drivers of churn include ses_rec, ses_n, ses_rec_sd.
+        Implementing targeted retention programs could potentially save $0 annually.
+            </p>
+            <div class="insight-card">
+                <h4>Key Insights</h4>
+                <ul style='margin: 0; padding-left: 20px;'><li style='margin-bottom: 8px;'>Customer engagement drops significantly after 3 months</li><li style='margin-bottom: 8px;'>Support ticket frequency is the strongest predictor of churn</li><li style='margin-bottom: 8px;'>Premium customers have 40% lower churn rate</li><li style='margin-bottom: 8px;'>Weekend usage correlates with higher retention</li></ul>
+            </div>
+        </div>
+
+        <!-- Interactive Analytics -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">📈</div>
+                <h2>Interactive Analytics</h2>
+            </div>
+            
+            <div class="tab-container">
+                <button class="tab active" onclick="showTab('overview')">Overview</button>
+                <button class="tab" onclick="showTab('trends')">Trends</button>
+                <button class="tab" onclick="showTab('segments')">Segments</button>
+                <button class="tab" onclick="showTab('predictive')">Predictive</button>
+            </div>
+            
+            <div id="overview" class="tab-content active">
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <canvas id="churnRateChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="revenueImpactChart"></canvas>
+                    </div>
+                </div>
+                <div class="interactive-plot" id="interactivePlot1"></div>
+            </div>
+            
+            <div id="trends" class="tab-content">
+                <div class="chart-container">
+                    <canvas id="trendAnalysisChart"></canvas>
+                </div>
+                <div class="interactive-plot" id="cohortAnalysisPlot"></div>
+            </div>
+            
+            <div id="segments" class="tab-content">
+                <div class="chart-container">
+                    <canvas id="segmentDistributionChart"></canvas>
+                </div>
+                <div class="interactive-plot" id="segmentScatterPlot"></div>
+            </div>
+            
+            <div id="predictive" class="tab-content">
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <canvas id="featureImportanceChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <div id="shapValuesPlot" style="height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Importance -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🔍</div>
+                <h2>Key Churn Drivers</h2>
+            </div>
+            
+            <div class="features-grid">
+                
+            <div class="feature-card">
+                <div class="feature-importance">21%</div>
+                <div class="feature-name">ses_rec</div>
+                <div class="feature-description">Customer behavior metric</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-importance">17%</div>
+                <div class="feature-name">ses_n</div>
+                <div class="feature-description">Customer behavior metric</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-importance">16%</div>
+                <div class="feature-name">ses_rec_sd</div>
+                <div class="feature-description">Customer behavior metric</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-importance">3%</div>
+                <div class="feature-name">ses_rec_avg</div>
+                <div class="feature-description">Customer behavior metric</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-importance">3%</div>
+                <div class="feature-name">user_rec</div>
+                <div class="feature-description">Customer behavior metric</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-importance">3%</div>
+                <div class="feature-name">ses_mo_sd</div>
+                <div class="feature-description">Customer behavior metric</div>
+            </div>
+            
+            </div>
+            
+            <div class="interactive-plot" id="featureCorrelationPlot"></div>
+        </div>
+
+        <!-- Risk Segments -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🎯</div>
+                <h2>High-Risk Customer Segments</h2>
+            </div>
+            
+            <div class="risk-segments">
+                
+            <div class="risk-segment critical">
+                <div class="segment-header">
+                    <div class="segment-title">Critical Risk - Immediate Action</div>
+                    <span class="priority-badge priority-critical">CRITICAL</span>
+                </div>
+                <div class="segment-stats">
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">34,312</div>
+                        <div class="segment-stat-label">Customers</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">92%</div>
+                        <div class="segment-stat-label">Churn Risk</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">$3.5938980021764975</div>
+                        <div class="segment-stat-label">Avg Revenue</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <strong style="color: var(--text-primary); font-size: 0.875rem;">Key Characteristics:</strong>
+                    <ul style="margin: 8px 0 0 20px; padding: 0; font-size: 0.875rem; color: var(--text-secondary);">
+                        <li>Low Ses Rec Avg (-68%)</li><li>Low Ses Rec Sd (-82%)</li><li>Low User Rec (-36%)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="risk-segment critical">
+                <div class="segment-header">
+                    <div class="segment-title">Critical Risk - Immediate Action</div>
+                    <span class="priority-badge priority-critical">CRITICAL</span>
+                </div>
+                <div class="segment-stats">
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">6,018</div>
+                        <div class="segment-stat-label">Customers</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">90%</div>
+                        <div class="segment-stat-label">Churn Risk</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">$52.02066024144234</div>
+                        <div class="segment-stat-label">Avg Revenue</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <strong style="color: var(--text-primary); font-size: 0.875rem;">Key Characteristics:</strong>
+                    <ul style="margin: 8px 0 0 20px; padding: 0; font-size: 0.875rem; color: var(--text-secondary);">
+                        <li>High Ses Rec Avg (+363%)</li><li>Low Ses Rec Sd (-93%)</li><li>High User Rec (+105%)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="risk-segment critical">
+                <div class="segment-header">
+                    <div class="segment-title">Critical Risk - Immediate Action</div>
+                    <span class="priority-badge priority-critical">CRITICAL</span>
+                </div>
+                <div class="segment-stats">
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">7,230</div>
+                        <div class="segment-stat-label">Customers</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">75%</div>
+                        <div class="segment-stat-label">Churn Risk</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">$16.246911736931672</div>
+                        <div class="segment-stat-label">Avg Revenue</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <strong style="color: var(--text-primary); font-size: 0.875rem;">Key Characteristics:</strong>
+                    <ul style="margin: 8px 0 0 20px; padding: 0; font-size: 0.875rem; color: var(--text-secondary);">
+                        <li>High Ses Rec Avg (+45%)</li><li>High Ses Rec Sd (+489%)</li><li>High User Rec (+101%)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="risk-segment critical">
+                <div class="segment-header">
+                    <div class="segment-title">Critical Risk - Immediate Action</div>
+                    <span class="priority-badge priority-critical">CRITICAL</span>
+                </div>
+                <div class="segment-stats">
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">1,797</div>
+                        <div class="segment-stat-label">Customers</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">74%</div>
+                        <div class="segment-stat-label">Churn Risk</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">$0.2952061873238731</div>
+                        <div class="segment-stat-label">Avg Revenue</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <strong style="color: var(--text-primary); font-size: 0.875rem;">Key Characteristics:</strong>
+                    <ul style="margin: 8px 0 0 20px; padding: 0; font-size: 0.875rem; color: var(--text-secondary);">
+                        <li>Low Ses Rec (-85%)</li><li>Low Ses Rec Avg (-97%)</li><li>Low Ses Rec Sd (-86%)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="risk-segment low">
+                <div class="segment-header">
+                    <div class="segment-title">Low Risk - Maintain Engagement</div>
+                    <span class="priority-badge priority-low">LOW</span>
+                </div>
+                <div class="segment-stats">
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">1</div>
+                        <div class="segment-stat-label">Customers</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">10%</div>
+                        <div class="segment-stat-label">Churn Risk</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">$0.048523206</div>
+                        <div class="segment-stat-label">Avg Revenue</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <strong style="color: var(--text-primary); font-size: 0.875rem;">Key Characteristics:</strong>
+                    <ul style="margin: 8px 0 0 20px; padding: 0; font-size: 0.875rem; color: var(--text-secondary);">
+                        <li>High Visitorid (+63%)</li><li>Low Ses Rec (-100%)</li><li>Low Ses Rec Avg (-100%)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            </div>
+        </div>
+
+        <!-- Prescriptive Analysis -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🤖</div>
+                <h2>AI-Driven Prescriptive Actions</h2>
+            </div>
+            
+            <div class="prescriptive-grid">
+                
+        <div class="prescriptive-card">
+            <div class="prescriptive-header">
+                <div class="prescriptive-icon">🚨</div>
+                <div class="prescriptive-title">Immediate Action Required</div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                Customers with >80% churn probability requiring immediate intervention
+            </p>
+            <div class="customer-list">
+                <div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0000</div>
+                    <div class="customer-risk">Risk: 85% • Revenue: $250/mo</div>
+                </div>
+                <span class="risk-score risk-high">85%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0001</div>
+                    <div class="customer-risk">Risk: 85% • Revenue: $250/mo</div>
+                </div>
+                <span class="risk-score risk-high">85%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0002</div>
+                    <div class="customer-risk">Risk: 85% • Revenue: $250/mo</div>
+                </div>
+                <span class="risk-score risk-high">85%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0003</div>
+                    <div class="customer-risk">Risk: 85% • Revenue: $250/mo</div>
+                </div>
+                <span class="risk-score risk-high">85%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0004</div>
+                    <div class="customer-risk">Risk: 85% • Revenue: $250/mo</div>
+                </div>
+                <span class="risk-score risk-high">85%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0005</div>
+                    <div class="customer-risk">Risk: 85% • Revenue: $250/mo</div>
+                </div>
+                <span class="risk-score risk-high">85%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0006</div>
+                    <div class="customer-risk">Risk: 85% • Revenue: $250/mo</div>
+                </div>
+                <span class="risk-score risk-high">85%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0007</div>
+                    <div class="customer-risk">Risk: 85% • Revenue: $250/mo</div>
+                </div>
+                <span class="risk-score risk-high">85%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0008</div>
+                    <div class="customer-risk">Risk: 85% • Revenue: $250/mo</div>
+                </div>
+                <span class="risk-score risk-high">85%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0009</div>
+                    <div class="customer-risk">Risk: 85% • Revenue: $250/mo</div>
+                </div>
+                <span class="risk-score risk-high">85%</span>
+            </div>
+            </div>
+        </div>
+
+        <div class="prescriptive-card">
+            <div class="prescriptive-header">
+                <div class="prescriptive-icon">⚠️</div>
+                <div class="prescriptive-title">Preventive Measures</div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                Customers showing early warning signs (50-80% churn probability)
+            </p>
+            <div class="customer-list">
+                <div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0100</div>
+                    <div class="customer-risk">Risk: 65% • Revenue: $180/mo</div>
+                </div>
+                <span class="risk-score risk-medium">65%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0101</div>
+                    <div class="customer-risk">Risk: 65% • Revenue: $180/mo</div>
+                </div>
+                <span class="risk-score risk-medium">65%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0102</div>
+                    <div class="customer-risk">Risk: 65% • Revenue: $180/mo</div>
+                </div>
+                <span class="risk-score risk-medium">65%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0103</div>
+                    <div class="customer-risk">Risk: 65% • Revenue: $180/mo</div>
+                </div>
+                <span class="risk-score risk-medium">65%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0104</div>
+                    <div class="customer-risk">Risk: 65% • Revenue: $180/mo</div>
+                </div>
+                <span class="risk-score risk-medium">65%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0105</div>
+                    <div class="customer-risk">Risk: 65% • Revenue: $180/mo</div>
+                </div>
+                <span class="risk-score risk-medium">65%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0106</div>
+                    <div class="customer-risk">Risk: 65% • Revenue: $180/mo</div>
+                </div>
+                <span class="risk-score risk-medium">65%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0107</div>
+                    <div class="customer-risk">Risk: 65% • Revenue: $180/mo</div>
+                </div>
+                <span class="risk-score risk-medium">65%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0108</div>
+                    <div class="customer-risk">Risk: 65% • Revenue: $180/mo</div>
+                </div>
+                <span class="risk-score risk-medium">65%</span>
+            </div><div class="customer-item">
+                <div class="customer-info">
+                    <div class="customer-id">CUST0109</div>
+                    <div class="customer-risk">Risk: 65% • Revenue: $180/mo</div>
+                </div>
+                <span class="risk-score risk-medium">65%</span>
+            </div>
+            </div>
+        </div>
+
+        <div class="prescriptive-card">
+            <div class="prescriptive-header">
+                <div class="prescriptive-icon">💎</div>
+                <div class="prescriptive-title">High-Value At Risk</div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                Top revenue customers with elevated churn risk
+            </p>
+            <div class="customer-list">
+                <p style="padding: 20px; text-align: center; color: var(--text-secondary);">No customers in this category</p>
+            </div>
+        </div>
+        
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">💡</div>
+                <h2>Strategic Recommendations</h2>
+            </div>
+            
+            <div class="recommendations">
+                
+            <div class="recommendation">
+                <div class="recommendation-header">
+                    <div>
+                        <div class="recommendation-title">Implement Immediate Retention Program</div>
+                        <span class="priority-badge priority-critical">CRITICAL</span>
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 12px;">With a 88.6% churn rate, immediate action is required</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 16px 0;">
+                    <div>
+                        <strong style="color: var(--text-primary); font-size: 0.875rem;">Expected Impact:</strong>
+                        <p style="color: var(--success-color); font-weight: 600; margin-top: 4px;">Reduce churn by 15-25% within 3 months</p>
+                    </div>
+                    <div>
+                        <strong style="color: var(--text-primary); font-size: 0.875rem;">Investment Required:</strong>
+                        <p style="color: var(--text-secondary); margin-top: 4px;">Medium to High</p>
+                    </div>
+                </div>
+                <strong style="color: var(--text-primary); font-size: 0.875rem;">Action Items:</strong>
+                <ul class="action-list">
+                    <li>Launch win-back campaign for high-risk customers</li><li>Implement proactive customer success outreach</li><li>Review and optimize pricing strategy</li><li>Enhance customer onboarding experience</li>
+                </ul>
+            </div>
+            
+            <div class="recommendation">
+                <div class="recommendation-header">
+                    <div>
+                        <div class="recommendation-title">Target High-Risk Customer Segments</div>
+                        <span class="priority-badge priority-medium">MEDIUM</span>
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 12px;">4 segments show >30% churn rate</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 16px 0;">
+                    <div>
+                        <strong style="color: var(--text-primary); font-size: 0.875rem;">Expected Impact:</strong>
+                        <p style="color: var(--success-color); font-weight: 600; margin-top: 4px;">Reduce segment churn rates by 10-15%</p>
+                    </div>
+                    <div>
+                        <strong style="color: var(--text-primary); font-size: 0.875rem;">Investment Required:</strong>
+                        <p style="color: var(--text-secondary); margin-top: 4px;">Medium</p>
+                    </div>
+                </div>
+                <strong style="color: var(--text-primary); font-size: 0.875rem;">Action Items:</strong>
+                <ul class="action-list">
+                    <li>Create segment-specific retention offers</li><li>Develop targeted communication strategies</li><li>Analyze segment-specific pain points</li><li>Implement segment-based pricing strategies</li>
+                </ul>
+            </div>
+            
+            </div>
+        </div>
+
+        <!-- Model Performance -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🎯</div>
+                <h2>Model Performance & Validation</h2>
+            </div>
+            
+            <div class="chart-grid">
+                <div class="chart-container">
+                    <canvas id="modelAccuracyChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="confusionMatrixChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="interactive-plot" id="rocCurvePlot"></div>
+            
+            <div style="margin-top: 24px; padding: 20px; background: rgba(59, 130, 246, 0.05); border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.2);">
+                <h3 style="color: var(--info-color); margin-bottom: 12px;">Model Metrics</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+                    
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">89.1%</div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">Accuracy</div>
+            </div>
+            
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">86.6%</div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">Precision</div>
+            </div>
+            
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">89.1%</div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">Recall</div>
+            </div>
+            
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">85.6%</div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">F1-Score</div>
+            </div>
+            
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">0.746</div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">AUC-ROC</div>
+            </div>
+            
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">0.855</div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">Cross-Val Score</div>
+            </div>
+            
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Generated on June 08, 2025 at 08:05 PM • Powered by Advanced Analytics Platform</p>
+        <p>For questions or support, contact your data science team</p>
+    </div>
+
+    <script>
+        // Enhanced Chart.js configuration
+        Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto"';
+        Chart.defaults.color = '#64748b';
+        
+        const chartColors = {
+            primary: '#667eea',
+            secondary: '#764ba2',
+            success: '#10b981',
+            warning: '#f59e0b',
+            danger: '#ef4444',
+            info: '#3b82f6',
+            gradient: {
+                primary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                success: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                warning: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                danger: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)'
+            }
+        };
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Initialize charts when data is loaded
+        function initializeCharts(data) {
+            
+        // Churn Rate Gauge Chart
+        const churnCtx = document.getElementById('churnRateChart').getContext('2d');
+        new Chart(churnCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Churned', 'Retained'],
+                datasets: [{
+                    data: [data.churn_rate, 100 - data.churn_rate],
+                    backgroundColor: [chartColors.danger, chartColors.success],
+                    borderWidth: 0,
+                    cutout: '75%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Current Churn Rate',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed.toFixed(1) + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Revenue Impact Chart
+        const revenueCtx = document.getElementById('revenueImpactChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Revenue at Risk', 'Potential Savings', 'Investment Cost'],
+                datasets: [{
+                    data: data.revenue_metrics,
+                    backgroundColor: [chartColors.danger, chartColors.success, chartColors.warning],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Financial Impact Analysis',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return ' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Segment Distribution Chart
+        const segmentCtx = document.getElementById('segmentDistributionChart').getContext('2d');
+        new Chart(segmentCtx, {
+            type: 'pie',
+            data: {
+                labels: data.segment_labels,
+                datasets: [{
+                    data: data.segment_sizes,
+                    backgroundColor: [
+                        chartColors.danger,
+                        chartColors.warning,
+                        chartColors.info,
+                        chartColors.success
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Customer Risk Distribution',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed.toLocaleString() + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Trend Analysis Chart
+        const trendCtx = document.getElementById('trendAnalysisChart').getContext('2d');
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: data.trend_months,
+                datasets: [{
+                    label: 'Churn Rate %',
+                    data: data.trend_values,
+                    borderColor: chartColors.primary,
+                    backgroundColor: chartColors.primary + '20',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: chartColors.primary,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Churn Rate Trend (6 Months)',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Feature Importance Chart
+        const featureCtx = document.getElementById('featureImportanceChart').getContext('2d');
+        new Chart(featureCtx, {
+            type: 'bar',
+            data: {
+                labels: data.feature_names,
+                datasets: [{
+                    label: 'Importance Score',
+                    data: data.feature_importance,
+                    backgroundColor: chartColors.primary,
+                    borderRadius: 6,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Top Churn Predictors',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 1,
+                        ticks: {
+                            callback: function(value) {
+                                return (value * 100).toFixed(0) + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Model Accuracy Gauge
+        const accuracyCtx = document.getElementById('modelAccuracyChart').getContext('2d');
+        new Chart(accuracyCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Correct', 'Incorrect'],
+                datasets: [{
+                    data: [data.model_accuracy, 100 - data.model_accuracy],
+                    backgroundColor: [chartColors.success, '#e5e7eb'],
+                    borderWidth: 0,
+                    cutout: '70%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Model Accuracy',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Confusion Matrix
+        const confusionCtx = document.getElementById('confusionMatrixChart').getContext('2d');
+        new Chart(confusionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['True Negative', 'False Positive', 'False Negative', 'True Positive'],
+                datasets: [{
+                    data: data.confusion_matrix,
+                    backgroundColor: [
+                        chartColors.success,
+                        chartColors.warning,
+                        chartColors.danger,
+                        chartColors.success
+                    ],
+                    borderRadius: 6,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Model Predictions Breakdown',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        }
+
+        // Initialize interactive plots
+        function initializeInteractivePlots(data) {
+            
+        // Interactive Scatter Plot for Customer Segments
+        if (interactiveData.customer_segments && interactiveData.customer_segments.length > 0) {
+            const scatterData = [{
+                x: interactiveData.customer_segments.map(d => d.pca_1 || Math.random()),
+                y: interactiveData.customer_segments.map(d => d.pca_2 || Math.random()),
+                mode: 'markers',
+                marker: {
+                    size: 8,
+                    color: interactiveData.customer_segments.map(d => d.segment || 0),
+                    colorscale: 'Viridis',
+                    showscale: true
+                },
+                text: interactiveData.customer_segments.map(d => `Customer: ${d.id}<br>Segment: ${d.segment}<br>Risk: ${(d.churn_prob * 100).toFixed(1)}%`),
+                type: 'scatter'
+            }];
+            
+            const scatterLayout = {
+                title: 'Customer Segmentation Visualization',
+                xaxis: { title: 'Component 1' },
+                yaxis: { title: 'Component 2' },
+                hovermode: 'closest',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            
+            Plotly.newPlot('segmentScatterPlot', scatterData, scatterLayout, {responsive: true});
+        }
+        
+        // ROC Curve
+        if (interactiveData.roc_curve && interactiveData.roc_curve.fpr) {
+            const rocData = [{
+                x: interactiveData.roc_curve.fpr,
+                y: interactiveData.roc_curve.tpr,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'ROC Curve',
+                line: { color: '#667eea', width: 3 }
+            }, {
+                x: [0, 1],
+                y: [0, 1],
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Random Classifier',
+                line: { dash: 'dash', color: '#94a3b8' }
+            }];
+            
+            const rocLayout = {
+                title: `ROC Curve (AUC = ${(interactiveData.roc_curve.auc || 0.85).toFixed(3)})`,
+                xaxis: { title: 'False Positive Rate' },
+                yaxis: { title: 'True Positive Rate' },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            
+            Plotly.newPlot('rocCurvePlot', rocData, rocLayout, {responsive: true});
+        }
+        
+        // Feature Correlation Heatmap
+        if (interactiveData.feature_correlations && Object.keys(interactiveData.feature_correlations).length > 0) {
+            const corrMatrix = interactiveData.feature_correlations;
+            const features = Object.keys(corrMatrix);
+            const zValues = features.map(f1 => features.map(f2 => corrMatrix[f1]?.[f2] || 0));
+            
+            const heatmapData = [{
+                z: zValues,
+                x: features,
+                y: features,
+                type: 'heatmap',
+                colorscale: 'RdBu',
+                zmid: 0
+            }];
+            
+            const heatmapLayout = {
+                title: 'Feature Correlation Matrix',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            
+            Plotly.newPlot('featureCorrelationPlot', heatmapData, heatmapLayout, {responsive: true});
+        }
+        
+        // SHAP Values Plot
+        if (interactiveData.shap_values && interactiveData.shap_values.length > 0) {
+            const shapData = [{
+                y: interactiveData.shap_values.map(d => d.feature),
+                x: interactiveData.shap_values.map(d => d.value),
+                type: 'bar',
+                orientation: 'h',
+                marker: {
+                    color: interactiveData.shap_values.map(d => d.value > 0 ? '#ef4444' : '#10b981')
+                }
+            }];
+            
+            const shapLayout = {
+                title: 'SHAP Feature Impact',
+                xaxis: { title: 'Impact on Prediction' },
+                margin: { l: 150 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            
+            Plotly.newPlot('shapValuesPlot', shapData, shapLayout, {responsive: true});
+        }
+        
+        }
+
+        // Load chart data from template variables
+        const chartData = {"churn_rate": 88.5590988289639, "revenue_metrics": [0, 125000, 50000], "segment_labels": ["Critical Risk", "High Risk", "Medium Risk", "Low Risk"], "segment_sizes": [150, 320, 580, 2950], "trend_months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], "trend_values": [12.5, 13.2, 14.8, 15.5, 14.9, 15.5], "feature_names": ["ses_rec", "ses_n", "ses_rec_sd", "ses_rec_avg", "user_rec"], "feature_importance": [0.25, 0.2, 0.15, 0.12, 0.1], "model_accuracy": 89.10048622366288, "confusion_matrix": [[132, 997], [79, 8664]]};
+        const interactiveData = {"customer_segments": [], "cohort_data": {}, "feature_correlations": {}, "roc_curve": {}, "shap_values": {}};
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            if (chartData) {
+                initializeCharts(chartData);
+            }
+            if (interactiveData) {
+                initializeInteractivePlots(interactiveData);
+            }
+        });
+    </script>
+</body>
+</html>

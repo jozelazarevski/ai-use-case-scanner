@@ -1,0 +1,457 @@
+{
+  "filepath": "D:/data_sets/Churn/data/ecom-user-churn-data.csv",
+  "total_customers": 49358,
+  "churn_rate": 88.5590988289639,
+  "revenue_at_risk": 0,
+  "model_accuracy": 89.10048622366288,
+  "model_precision": 86.57850480692895,
+  "model_recall": 89.10048622366288,
+  "model_f1": 85.63883244165523,
+  "model_auc": 0.7460934710060849,
+  "cv_score": 0.8550729185974404,
+  "confusion_matrix": [
+    [
+      132,
+      997
+    ],
+    [
+      79,
+      8664
+    ]
+  ],
+  "best_model": "gradient_boosting",
+  "column_classification": {
+    "target_column": "target_class",
+    "customer_id": "visitorid",
+    "must_have": [
+      "major_spend_r"
+    ],
+    "good_to_have": [
+      "ses_rec",
+      "ses_rec_avg",
+      "ses_rec_sd",
+      "ses_rec_cv",
+      "user_rec",
+      "ses_n",
+      "ses_n_r",
+      "int_n",
+      "int_n_r",
+      "tran_n",
+      "tran_n_r",
+      "rev_sum",
+      "rev_sum_r",
+      "int_cat_n_avg",
+      "int_itm_n_avg",
+      "ses_mo_avg",
+      "ses_mo_sd",
+      "ses_ho_avg",
+      "ses_ho_sd",
+      "ses_wknd_r",
+      "ses_len_avg",
+      "time_to_int",
+      "time_to_tran",
+      "int_cat1_n",
+      "int_cat2_n",
+      "int_cat3_n",
+      "int_cat4_n",
+      "int_cat5_n",
+      "int_cat6_n",
+      "int_cat7_n",
+      "int_cat8_n",
+      "int_cat9_n",
+      "int_cat10_n",
+      "int_cat11_n",
+      "int_cat12_n",
+      "int_cat13_n",
+      "int_cat15_n",
+      "int_cat16_n",
+      "int_cat17_n",
+      "int_cat18_n",
+      "int_cat19_n",
+      "int_cat20_n",
+      "int_cat21_n",
+      "int_cat22_n",
+      "int_cat23_n",
+      "int_cat24_n",
+      "target_class"
+    ],
+    "date_columns": [],
+    "categorical": [],
+    "numerical": [
+      "ses_rec",
+      "ses_rec_avg",
+      "ses_rec_sd",
+      "ses_rec_cv",
+      "user_rec",
+      "ses_n",
+      "ses_n_r",
+      "int_n",
+      "int_n_r",
+      "tran_n",
+      "tran_n_r",
+      "rev_sum",
+      "rev_sum_r",
+      "major_spend_r",
+      "int_cat_n_avg",
+      "int_itm_n_avg",
+      "ses_mo_avg",
+      "ses_mo_sd",
+      "ses_ho_avg",
+      "ses_ho_sd",
+      "ses_wknd_r",
+      "ses_len_avg",
+      "time_to_int",
+      "time_to_tran",
+      "int_cat1_n",
+      "int_cat2_n",
+      "int_cat3_n",
+      "int_cat4_n",
+      "int_cat5_n",
+      "int_cat6_n",
+      "int_cat7_n",
+      "int_cat8_n",
+      "int_cat9_n",
+      "int_cat10_n",
+      "int_cat11_n",
+      "int_cat12_n",
+      "int_cat13_n",
+      "int_cat15_n",
+      "int_cat16_n",
+      "int_cat17_n",
+      "int_cat18_n",
+      "int_cat19_n",
+      "int_cat20_n",
+      "int_cat21_n",
+      "int_cat22_n",
+      "int_cat23_n",
+      "int_cat24_n",
+      "target_class"
+    ],
+    "high_cardinality": []
+  },
+  "feature_importance": [
+    {
+      "feature": "ses_rec",
+      "importance": 0.2171450537760376
+    },
+    {
+      "feature": "ses_n",
+      "importance": 0.17297264020176287
+    },
+    {
+      "feature": "ses_rec_sd",
+      "importance": 0.16772927853486186
+    },
+    {
+      "feature": "ses_rec_avg",
+      "importance": 0.03823710238054201
+    },
+    {
+      "feature": "user_rec",
+      "importance": 0.03728444510022035
+    },
+    {
+      "feature": "ses_mo_sd",
+      "importance": 0.0347799204229749
+    },
+    {
+      "feature": "visitorid",
+      "importance": 0.03066191170737225
+    },
+    {
+      "feature": "ses_rec_cv",
+      "importance": 0.027052183868060006
+    },
+    {
+      "feature": "ses_ho_sd",
+      "importance": 0.026864013177199636
+    },
+    {
+      "feature": "ses_ho_avg",
+      "importance": 0.02571990283141701
+    },
+    {
+      "feature": "ses_n_r",
+      "importance": 0.020931037086551866
+    },
+    {
+      "feature": "ses_mo_avg",
+      "importance": 0.018035446968914026
+    },
+    {
+      "feature": "time_to_int",
+      "importance": 0.01793625329903752
+    },
+    {
+      "feature": "int_n",
+      "importance": 0.012283596646527051
+    },
+    {
+      "feature": "int_n_r",
+      "importance": 0.012268850708365852
+    },
+    {
+      "feature": "ses_len_avg",
+      "importance": 0.011000532924080996
+    },
+    {
+      "feature": "int_cat17_n",
+      "importance": 0.010637770398902914
+    },
+    {
+      "feature": "ses_wknd_r",
+      "importance": 0.00889661928647473
+    },
+    {
+      "feature": "int_cat16_n",
+      "importance": 0.00850188983545971
+    },
+    {
+      "feature": "int_cat22_n",
+      "importance": 0.007854501487914877
+    },
+    {
+      "feature": "int_cat3_n",
+      "importance": 0.007796831146609546
+    },
+    {
+      "feature": "int_itm_n_avg",
+      "importance": 0.007705294887180787
+    },
+    {
+      "feature": "int_cat19_n",
+      "importance": 0.007026033244323918
+    },
+    {
+      "feature": "int_cat_n_avg",
+      "importance": 0.007022075127519924
+    },
+    {
+      "feature": "time_to_tran",
+      "importance": 0.006473791993659168
+    },
+    {
+      "feature": "int_cat18_n",
+      "importance": 0.006114876186146458
+    },
+    {
+      "feature": "int_cat20_n",
+      "importance": 0.005464696331982893
+    },
+    {
+      "feature": "int_cat1_n",
+      "importance": 0.004992152748806564
+    },
+    {
+      "feature": "rev_sum",
+      "importance": 0.004819264228737539
+    },
+    {
+      "feature": "int_cat24_n",
+      "importance": 0.004653450270559405
+    },
+    {
+      "feature": "int_cat21_n",
+      "importance": 0.004408779273079604
+    },
+    {
+      "feature": "int_cat5_n",
+      "importance": 0.00379103900298779
+    },
+    {
+      "feature": "rev_sum_r",
+      "importance": 0.0033034074350414967
+    },
+    {
+      "feature": "int_cat12_n",
+      "importance": 0.0026374822062582176
+    },
+    {
+      "feature": "tran_n",
+      "importance": 0.002518306804115682
+    },
+    {
+      "feature": "major_spend_r",
+      "importance": 0.002261845688214689
+    },
+    {
+      "feature": "int_cat6_n",
+      "importance": 0.0021257583964334314
+    },
+    {
+      "feature": "int_cat2_n",
+      "importance": 0.00197303747917507
+    },
+    {
+      "feature": "tran_n_r",
+      "importance": 0.0018475285675825868
+    },
+    {
+      "feature": "int_cat23_n",
+      "importance": 0.001708733290386258
+    },
+    {
+      "feature": "int_cat10_n",
+      "importance": 0.001510353354079096
+    },
+    {
+      "feature": "int_cat13_n",
+      "importance": 0.001458518858973028
+    },
+    {
+      "feature": "int_cat7_n",
+      "importance": 0.0007071237906583075
+    },
+    {
+      "feature": "int_cat11_n",
+      "importance": 0.0005299015168667478
+    },
+    {
+      "feature": "int_cat8_n",
+      "importance": 0.0003567675279438774
+    },
+    {
+      "feature": "int_cat15_n",
+      "importance": 0.0
+    },
+    {
+      "feature": "int_cat9_n",
+      "importance": 0.0
+    },
+    {
+      "feature": "int_cat4_n",
+      "importance": 0.0
+    }
+  ],
+  "top_features": [
+    "ses_rec",
+    "ses_n",
+    "ses_rec_sd",
+    "ses_rec_avg",
+    "user_rec"
+  ],
+  "top_features_detailed": [
+    {
+      "name": "ses_rec",
+      "importance": 0.2171450537760376,
+      "description": "Customer behavior metric"
+    },
+    {
+      "name": "ses_n",
+      "importance": 0.17297264020176287,
+      "description": "Customer behavior metric"
+    },
+    {
+      "name": "ses_rec_sd",
+      "importance": 0.16772927853486186,
+      "description": "Customer behavior metric"
+    },
+    {
+      "name": "ses_rec_avg",
+      "importance": 0.03823710238054201,
+      "description": "Customer behavior metric"
+    },
+    {
+      "name": "user_rec",
+      "importance": 0.03728444510022035,
+      "description": "Customer behavior metric"
+    },
+    {
+      "name": "ses_mo_sd",
+      "importance": 0.0347799204229749,
+      "description": "Customer behavior metric"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "CRITICAL",
+      "title": "Implement Immediate Retention Program",
+      "description": "With a 88.6% churn rate, immediate action is required",
+      "actions": [
+        "Launch win-back campaign for high-risk customers",
+        "Implement proactive customer success outreach",
+        "Review and optimize pricing strategy",
+        "Enhance customer onboarding experience"
+      ],
+      "expected_impact": "Reduce churn by 15-25% within 3 months",
+      "investment": "Medium to High"
+    },
+    {
+      "priority": "MEDIUM",
+      "title": "Target High-Risk Customer Segments",
+      "description": "4 segments show >30% churn rate",
+      "actions": [
+        "Create segment-specific retention offers",
+        "Develop targeted communication strategies",
+        "Analyze segment-specific pain points",
+        "Implement segment-based pricing strategies"
+      ],
+      "expected_impact": "Reduce segment churn rates by 10-15%",
+      "investment": "Medium"
+    }
+  ],
+  "high_risk_count": 20,
+  "avg_lifetime": 0.013361433525487257,
+  "risk_segments": [
+    {
+      "name": "Critical Risk - Immediate Action",
+      "priority": "critical",
+      "customers": 34312,
+      "churn_probability": 0.9188382997051755,
+      "avg_revenue": 3.5938980021764975,
+      "characteristics": [
+        "Low Ses Rec Avg (-68%)",
+        "Low Ses Rec Sd (-82%)",
+        "Low User Rec (-36%)"
+      ]
+    },
+    {
+      "name": "Critical Risk - Immediate Action",
+      "priority": "critical",
+      "customers": 6018,
+      "churn_probability": 0.9042230283015087,
+      "avg_revenue": 52.02066024144234,
+      "characteristics": [
+        "High Ses Rec Avg (+363%)",
+        "Low Ses Rec Sd (-93%)",
+        "High User Rec (+105%)"
+      ]
+    },
+    {
+      "name": "Critical Risk - Immediate Action",
+      "priority": "critical",
+      "customers": 7230,
+      "churn_probability": 0.7497169446386865,
+      "avg_revenue": 16.246911736931672,
+      "characteristics": [
+        "High Ses Rec Avg (+45%)",
+        "High Ses Rec Sd (+489%)",
+        "High User Rec (+101%)"
+      ]
+    },
+    {
+      "name": "Critical Risk - Immediate Action",
+      "priority": "critical",
+      "customers": 1797,
+      "churn_probability": 0.7366684700769346,
+      "avg_revenue": 0.2952061873238731,
+      "characteristics": [
+        "Low Ses Rec (-85%)",
+        "Low Ses Rec Avg (-97%)",
+        "Low Ses Rec Sd (-86%)"
+      ]
+    },
+    {
+      "name": "Low Risk - Maintain Engagement",
+      "priority": "low",
+      "customers": 1,
+      "churn_probability": 0.09927609038310824,
+      "avg_revenue": 0.048523206,
+      "characteristics": [
+        "High Visitorid (+63%)",
+        "Low Ses Rec (-100%)",
+        "Low Ses Rec Avg (-100%)"
+      ]
+    }
+  ]
+}
