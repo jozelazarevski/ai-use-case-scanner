@@ -1,0 +1,79 @@
+<!-- Model Metrics Section -->
+<div class="card mt-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Model Performance Metrics</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h6 class="text-muted">Accuracy Metrics</h6>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>Accuracy</th>
+                            <td>{{ training_results.metrics.accuracy|default('N/A') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Precision</th>
+                            <td>{{ training_results.metrics.precision|default('N/A') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Recall</th>
+                            <td>{{ training_results.metrics.recall|default('N/A') }}</td>
+                        </tr>
+                        <tr>
+                            <th>F1 Score</th>
+                            <td>{{ training_results.metrics.f1_score|default('N/A') }}</td>
+                        </tr>
+                        {% if training_results.metrics.roc_auc %}
+                        <tr>
+                            <th>ROC AUC</th>
+                            <td>{{ training_results.metrics.roc_auc }}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-md-6">
+                <h6 class="text-muted">Feature Importance</h6>
+                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Importance</th>
+                                <th>Bar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for feature, importance in training_results.features.importance|dictsort(by='value', reverse=true)|slice(10) %}
+                            <tr>
+                                <td>{{ feature }}</td>
+                                <td>{{ "%.4f"|format(importance) }}</td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" 
+                                             style="width: {{ importance * 100 }}%;" 
+                                             aria-valuenow="{{ importance * 100 }}" 
+                                             aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Classification Report (if available) -->
+        {% if training_results.metrics.classification_report %}
+        <div class="mt-4">
+            <h6 class="text-muted">Classification Report</h6>
+            <pre class="bg-light p-3">{{ training_results.metrics.classification_report }}</pre>
+        </div>
+        {% endif %}
+    </div>
+</div>

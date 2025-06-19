@@ -1554,55 +1554,50 @@
             const plotDiv = document.getElementById('timeseriesPlot');
             plotDiv.innerHTML = '<p class="text-center">Time series analysis will be displayed here.</p>';
         }
-        
-        function generateAIUseCases() {
-            const statusDiv = document.getElementById('aiUseCasesStatus');
-            const button = event.target.closest('button');
-            
-            // Show loading status
-            statusDiv.style.display = 'block';
-            button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-            
-            // Get current file data
-            const filename = '{{ filename }}';
-            
-            // Create a form to submit data
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/generate-use-cases';
-            form.target = '_blank';
-            
-            // Add filename
-            const filenameInput = document.createElement('input');
-            filenameInput.type = 'hidden';
-            filenameInput.name = 'filename';
-            filenameInput.value = filename;
-            form.appendChild(filenameInput);
-            
-            // Add column information
-            const columnsInput = document.createElement('input');
-            columnsInput.type = 'hidden';
-            columnsInput.name = 'columns';
-            columnsInput.value = JSON.stringify({
-                numeric: numericColumns,
-                categorical: categoricalColumns,
-                date: dateColumns
-            });
-            form.appendChild(columnsInput);
-            
-            // Submit the form
-            document.body.appendChild(form);
-            form.submit();
-            document.body.removeChild(form);
-            
-            // Reset button after delay
-            setTimeout(() => {
-                statusDiv.style.display = 'none';
-                button.disabled = false;
-                button.innerHTML = '<i class="fas fa-magic"></i> Generate AI Use Cases';
-            }, 3000);
-        }
+			
+	function generateAIUseCases() {
+		const statusDiv = document.getElementById('aiUseCasesStatus');
+		const button = event.target.closest('button');
+		
+		// Show loading status
+		statusDiv.style.display = 'block';
+		button.disabled = true;
+		button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+		
+		// Get current file data
+		const filename = '{{ filename }}';
+		
+		// Prepare column information
+		const columns = {
+			numeric: numericColumns,
+			categorical: categoricalColumns,
+			date: dateColumns
+		};
+		
+		// Create a form to submit data
+		const form = document.createElement('form');
+		form.method = 'POST';
+		form.action = '/generate-use-cases';
+		form.target = '_self'; // Navigate to results page
+		
+		// Add filename
+		const filenameInput = document.createElement('input');
+		filenameInput.type = 'hidden';
+		filenameInput.name = 'filename';
+		filenameInput.value = filename;
+		form.appendChild(filenameInput);
+		
+		// Add column information
+		const columnsInput = document.createElement('input');
+		columnsInput.type = 'hidden';
+		columnsInput.name = 'columns';
+		columnsInput.value = JSON.stringify(columns);
+		form.appendChild(columnsInput);
+		
+		// Submit the form
+		document.body.appendChild(form);
+		form.submit();
+	}
     </script>
 </body>
 </html>

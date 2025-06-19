@@ -16,6 +16,46 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
         }
+        .churn-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+        .churn-card .card-header {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .churn-card .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .churn-card .section-heading {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .churn-card .business-value,
+        .churn-card .prediction-interpretation {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: rgba(255, 255, 255, 0.3);
+        }
+        .churn-card .card-footer {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .churn-card .btn-warning {
+            background-color: #f59e0b;
+            border-color: #f59e0b;
+            color: white;
+        }
+        .churn-card .btn-warning:hover {
+            background-color: #d97706;
+            border-color: #d97706;
+        }
+        .churn-analysis-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
         .badge {
             font-size: 85%;
             margin-right: 0.5rem;
@@ -125,6 +165,69 @@
         </div>
         
         {% if proposals and proposals|length > 0 %}
+            <!-- Check if any proposal is churn-related -->
+            {% set has_churn = namespace(value=false) %}
+            {% set churn_proposal_index = namespace(value=0) %}
+            {% for proposal in proposals %}
+                {% if 'churn' in proposal.title|lower or 'churn' in (proposal.target_variable|default(''))|lower or 'attrition' in proposal.title|lower %}
+                    {% set has_churn.value = true %}
+                    {% set churn_proposal_index.value = loop.index0 %}
+                {% endif %}
+            {% endfor %}
+            
+            <!-- Special Churn Analysis Card -->
+            {% if has_churn.value %}
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow-lg proposal-card churn-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0">
+                                <i class="bi bi-graph-up-arrow me-2"></i>Advanced Customer Churn Analysis
+                            </h3>
+                            <span class="badge bg-danger">Premium Analysis</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="churn-analysis-icon">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <p class="text-center fs-5 mb-4">
+                                We've detected customer churn patterns in your dataset. Run our comprehensive churn analysis to get:
+                            </p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5><i class="bi bi-check-circle-fill me-2"></i>Advanced Analytics</h5>
+                                    <ul class="list-unstyled ms-3">
+                                        <li><i class="bi bi-arrow-right"></i> Customer segmentation analysis</li>
+                                        <li><i class="bi bi-arrow-right"></i> Risk scoring for each customer</li>
+                                        <li><i class="bi bi-arrow-right"></i> Interactive visualizations</li>
+                                        <li><i class="bi bi-arrow-right"></i> Cohort analysis</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><i class="bi bi-lightbulb-fill me-2"></i>Actionable Insights</h5>
+                                    <ul class="list-unstyled ms-3">
+                                        <li><i class="bi bi-arrow-right"></i> Prescriptive recommendations</li>
+                                        <li><i class="bi bi-arrow-right"></i> Revenue impact analysis</li>
+                                        <li><i class="bi bi-arrow-right"></i> Retention strategies</li>
+                                        <li><i class="bi bi-arrow-right"></i> High-risk customer lists</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="d-grid">
+                                <button class="btn btn-warning btn-lg run-churn-analysis-btn" 
+                                        data-proposal-index="{{ churn_proposal_index.value }}">
+                                    <i class="bi bi-lightning-charge-fill me-2"></i>Run Advanced Churn Analysis
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Regular Proposals -->
             <div class="row">
                 {% for proposal in proposals %}
                 <div class="col-md-6 mb-4">
@@ -177,18 +280,18 @@
                             {% endif %}
                         </div>
                         <div class="card-footer bg-white">
-							<div class="d-grid">
-								<button class="btn btn-primary train-model-btn" 
-										data-proposal-index="{{ loop.index0 }}" 
-										data-model-type="{{ 
-											'classification' if proposal.model_type in ['auto', 'sentiment_analysis'] 
-											else proposal.model_type if proposal.model_type 
-											else 'classification' 
-										}}">
-										<i class="bi bi-graph-up me-2"></i>Train Model
-								</button>
-							</div>
-						</div>
+                            <div class="d-grid">
+                                <button class="btn btn-primary train-model-btn" 
+                                        data-proposal-index="{{ loop.index0 }}" 
+                                        data-model-type="{{ 
+                                            'classification' if proposal.model_type in ['auto', 'sentiment_analysis'] 
+                                            else proposal.model_type if proposal.model_type 
+                                            else 'classification' 
+                                        }}">
+                                        <i class="bi bi-graph-up me-2"></i>Train Standard Model
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -206,60 +309,112 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
      
-	<script>
-	$(document).ready(function() {
-    $('.train-model-btn').on('click', function() {
-        var $button = $(this);
-        var proposalIndex = $button.data('proposal-index');
-        var modelType = $button.data('model-type') || 'classification';
-        
-        console.log('Training Model:', {
-            proposalIndex: proposalIndex,
-            modelType: modelType
+    <script>
+    $(document).ready(function() {
+        // Handler for regular model training
+        $('.train-model-btn').on('click', function() {
+            var $button = $(this);
+            var proposalIndex = $button.data('proposal-index');
+            var modelType = $button.data('model-type') || 'classification';
+            
+            console.log('Training Standard Model:', {
+                proposalIndex: proposalIndex,
+                modelType: modelType
+            });
+            
+            // Show loading state
+            $button.prop('disabled', true)
+                   .html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Training...');
+            
+            $.ajax({
+                url: '/train_model/' + modelType,
+                type: 'POST',
+                data: {
+                    proposal_index: proposalIndex
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success && response.redirect) {
+                        window.location.href = response.redirect;
+                    } else {
+                        alert(response.error || 'Unexpected server response');
+                        $button.prop('disabled', false)
+                               .html('<i class="bi bi-graph-up me-2"></i>Train Standard Model');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = 'Error starting model training';
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        errorMessage = errorResponse.error || errorMessage;
+                    } catch(e) {
+                        errorMessage = xhr.responseText || errorMessage;
+                    }
+                    
+                    console.error('Training Error:', {
+                        status: status,
+                        error: error,
+                        responseText: xhr.responseText
+                    });
+                    
+                    alert(errorMessage);
+                    $button.prop('disabled', false)
+                           .html('<i class="bi bi-graph-up me-2"></i>Train Standard Model');
+                }
+            });
         });
         
-        // Show loading state
-        $button.prop('disabled', true)
-               .html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Training...');
-        
-        $.ajax({
-            url: '/train_model/' + modelType,
-            type: 'POST',
-            data: {
-                proposal_index: proposalIndex
-            },
-            dataType: 'json',
-            success: function(response) {
-                if (response.success && response.redirect) {
-                    window.location.href = response.redirect;
-                } else {
-                    alert(response.error || 'Unexpected server response');
+        // Handler for churn analysis
+        $('.run-churn-analysis-btn').on('click', function() {
+            var $button = $(this);
+            var proposalIndex = $button.data('proposal-index');
+            
+            console.log('Running Advanced Churn Analysis:', {
+                proposalIndex: proposalIndex
+            });
+            
+            // Show loading state
+            $button.prop('disabled', true)
+                   .html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Running Advanced Analysis...');
+            
+            $.ajax({
+                url: '/train_churn_model',
+                type: 'POST',
+                data: {
+                    proposal_index: proposalIndex
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success && response.redirect) {
+                        window.location.href = response.redirect;
+                    } else {
+                        alert(response.error || 'Unexpected server response');
+                        $button.prop('disabled', false)
+                               .html('<i class="bi bi-lightning-charge-fill me-2"></i>Run Advanced Churn Analysis');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = 'Error starting churn analysis';
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        errorMessage = errorResponse.error || errorMessage;
+                    } catch(e) {
+                        errorMessage = xhr.responseText || errorMessage;
+                    }
+                    
+                    console.error('Churn Analysis Error:', {
+                        status: status,
+                        error: error,
+                        responseText: xhr.responseText
+                    });
+                    
+                    alert(errorMessage);
                     $button.prop('disabled', false)
-                           .html('<i class="bi bi-graph-up me-2"></i>Train Model');
+                           .html('<i class="bi bi-lightning-charge-fill me-2"></i>Run Advanced Churn Analysis');
                 }
-            },
-            error: function(xhr, status, error) {
-                var errorMessage = 'Error starting model training';
-                try {
-                    var errorResponse = JSON.parse(xhr.responseText);
-                    errorMessage = errorResponse.error || errorMessage;
-                } catch(e) {
-                    errorMessage = xhr.responseText || errorMessage;
-                }
-                
-                console.error('Training Error:', {
-                    status: status,
-                    error: error,
-                    responseText: xhr.responseText
-                });
-                
-                alert(errorMessage);
-                $button.prop('disabled', false)
-                       .html('<i class="bi bi-graph-up me-2"></i>Train Model');
-            }
+            });
         });
     });
-});
-</script>
+    </script>
 </body>
 </html>
