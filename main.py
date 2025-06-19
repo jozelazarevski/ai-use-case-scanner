@@ -3,6 +3,8 @@
 Main database interface module for the AI Use Case Generator application.
 Integrates with user_auth.py for authentication and session management.
 """
+from use_cases.churn.churn_analysis import ChurnAnalysisPipeline
+import shutil
 
 import re
 import tempfile
@@ -23,20 +25,14 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 from flask import Flask, request, render_template, redirect, url_for, flash, jsonify, session, g
 from flask_session import Session
+from flask import send_from_directory
+
 from functools import wraps
 import importlib
 from ml_trainer import train_model_with_robust_error_handling
 from utils.ml_utils import predict_with_preprocessor
 from enhanced_column_mapper import EnhancedColumnMapper
-
- 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)   
-
-# Import config
-from config import Config, encodings
-
+from column_mapper import ColumnMapper
 # Import user authentication module
 from utils.user_auth import (
     get_db_connection, login_required, get_user_by_id, init_database,
@@ -45,8 +41,28 @@ from utils.user_auth import (
     get_user_embeddings, create_model_embedding, get_embedding_by_id, delete_embedding, 
     init_auth_routes
 )
-from utils.read_file import read_data_flexible
+from utils.read_file import read_file as read_data_flexible 
  
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)   
+
+# Import config
+from config import Config, encodings
+
+
+# Main application and route handlers
+app = None
+ACTIVE_MODEL = None
+HAS_GEMINI_CONFIG = False
+CLAUDE_API_KEY = None
+CLAUDE_API_URL = None
+CLAUDE_MODEL = None
+GEMINI_MODEL_NAME = None
+gemini_model = None
+
+
+
 gemini_insights=None
 
 def make_json_serializable(obj):
@@ -57,10 +73,9 @@ def make_json_serializable(obj):
         return {k: make_json_serializable(v) for k, v in obj.items()}
     elif isinstance(obj, list):
         return [make_json_serializable(item) for item in obj]
-    elif isinstance(obj, (np.int_, np.intc, np.intp, np.int8, np.int16, np.int32, np.int64,
-                         np.uint8, np.uint16, np.uint32, np.uint64)):
+    elif isinstance(obj, np.integer):
         return int(obj)
-    elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
+    elif isinstance(obj, np.floating):
         return float(obj)
     elif isinstance(obj, np.bool_):
         return bool(obj)
@@ -70,6 +85,7 @@ def make_json_serializable(obj):
         return obj.item()
     else:
         return obj
+
 
 # Dynamically handle ML module imports
 def import_ml_module(module_name, default_value=None):
@@ -124,177 +140,7 @@ except ImportError as e:
     read_data_flexible = None
     HAS_GEMINI = False
 
-# Initialize Flask app
-def create_app():
-    """
-    Create and configure the Flask application
-    
-    Returns:
-        Flask: Configured Flask app
-    """
-    app = Flask(__name__, static_folder='static')
-    
-    # Create directories if they don't exist
-    if not os.path.exists('static'):
-        os.makedirs('static')
-        
-    # Create database directories if they don't exist
-    if not os.path.exists(Config.DATABASE_DIR):
-        os.makedirs(Config.DATABASE_DIR)
-    
-    # Create user models directory if it doesn't exist
-    user_models_dir = os.path.join(Config.DATABASE_DIR, 'user_models')
-    if not os.path.exists(user_models_dir):
-        os.makedirs(user_models_dir)
-    
-    # Load configuration from Config class
-    app.config['UPLOAD_FOLDER'] = Config.UPLOAD_FOLDER
-    app.config['ALLOWED_EXTENSIONS'] = Config.ALLOWED_EXTENSIONS
-    app.config['SECRET_KEY'] = Config.SECRET_KEY or os.urandom(24)
-    
-    # Session configuration from Config class
-    app.config['SESSION_TYPE'] = Config.SESSION_TYPE
-    app.config['SESSION_FILE_DIR'] = Config.SESSION_FILE_DIR
-    app.config['SESSION_PERMANENT'] = Config.SESSION_PERMANENT
-    app.config['SESSION_USE_SIGNER'] = Config.SESSION_USE_SIGNER
-    app.config['SESSION_COOKIE_MAX_SIZE'] = Config.SESSION_COOKIE_MAX_SIZE
-    app.config['SESSION_COOKIE_SECURE'] = Config.SESSION_COOKIE_SECURE
-    app.config['SESSION_COOKIE_HTTPONLY'] = Config.SESSION_COOKIE_HTTPONLY
-    app.config['SESSION_COOKIE_SAMESITE'] = Config.SESSION_COOKIE_SAMESITE
-    
-    # Initialize Flask-Session
-    Session(app)
-    
-    # Initialize the database
-    init_database()
-    
-    # Verify EDA database schema
-    try:
-        with get_db_connection() as conn:
-            with conn.cursor() as cursor:
-                # Check if EDA columns exist in column_mappings table
-                cursor.execute("""
-                    SELECT column_name 
-                    FROM information_schema.columns 
-                    WHERE table_name = 'column_mappings' AND column_name = 'eda_results'
-                """)
-                eda_column_exists = cursor.fetchone()
-                
-                if not eda_column_exists:
-                    logger.info("Adding EDA support to column_mappings table")
-                    cursor.execute("""
-                        ALTER TABLE column_mappings 
-                        ADD COLUMN IF NOT EXISTS eda_results JSONB
-                    """)
-                    conn.commit()
-                    logger.info("EDA column added successfully")
-    except Exception as e:
-        logger.error(f"Error updating database schema for EDA: {str(e)}")
-    
-    # Initialize authentication routes and middleware
-    init_auth_routes(app)
-    
-    # Get active model from config
-    ACTIVE_MODEL = Config.ACTIVE_MODEL.lower()
-    if ACTIVE_MODEL not in ['claude', 'gemini']:
-        logger.warning(f"Unknown model '{ACTIVE_MODEL}' specified. Defaulting to Claude.")
-        ACTIVE_MODEL = 'claude'
-    
-    # Claude API configuration
-    CLAUDE_API_KEY = Config.CLAUDE_API_KEY
-    CLAUDE_API_URL = "https://api.anthropic.com/v1/messages"
-    CLAUDE_MODEL = Config.CLAUDE_MODEL
-    
-    # Gemini API configuration
-    GOOGLE_API_KEY = Config.GOOGLE_API_KEY
-    GEMINI_MODEL_NAME = Config.GEMINI_MODEL
-    
-    # Initialize Gemini if it's the active model and API key is available
-    HAS_GEMINI_CONFIG = False
-    
-    
-    if ACTIVE_MODEL == 'gemini' and HAS_GEMINI and GOOGLE_API_KEY:
-        try:
-            genai.configure(api_key=GOOGLE_API_KEY)
-            gemini_model = genai.GenerativeModel(GEMINI_MODEL_NAME)
-            HAS_GEMINI_CONFIG = True
-            logger.info(f"Gemini model '{GEMINI_MODEL_NAME}' configured successfully.")
-        except Exception as e:
-            logger.error(f"Error configuring Gemini API: {str(e)}")
-            logger.info("Falling back to Claude due to Gemini configuration error.")
-            ACTIVE_MODEL = 'claude'
-    
-    # Create necessary directories if they don't exist
-    if not os.path.exists(app.config['UPLOAD_FOLDER']):
-        os.makedirs(app.config['UPLOAD_FOLDER'])
-    
-    # Register template filters and global functions
-    app.jinja_env.filters['nl2br'] = lambda text: text.replace('\n', '<br>') if text else ''
-    
-    def read_script_file(script_path):
-        """
-        Read the content of a script file
-        
-        Args:
-            script_path (str): Path to the script file
-            
-        Returns:
-            str: Content of the script file
-        """
-        try:
-            with open(script_path, 'r', encoding='utf-8') as f:
-                return f.read()
-        except Exception as e:
-            return f"Error reading file: {str(e)}"
-    
-    app.jinja_env.globals.update(read_script_file=read_script_file)
-    
-    # Custom template filters
-    @app.template_filter('datetimeformat')
-    def datetimeformat(value, format='%Y-%m-%d %H:%M'):
-        """
-        Custom Jinja2 filter to format datetime strings
-        
-        Args:
-            value (str): ISO formatted datetime string
-            format (str, optional): Desired output format. Defaults to '%Y-%m-%d %H:%M'
-        
-        Returns:
-            str: Formatted datetime string
-        """
-        try:
-            # Parse the ISO formatted datetime string
-            dt = datetime.fromisoformat(value)
-            return dt.strftime(format)
-        except (ValueError, TypeError):
-            # If parsing fails, return the original value
-            return value
-    
-    @app.template_filter('to_json_safe')
-    def to_json_safe(obj):
-        """
-        Convert NumPy types to Python native types for JSON serialization
-        """
-        import numpy as np
-        import json
-        
-        class NumpyEncoder(json.JSONEncoder):
-            def default(self, obj):
-                if isinstance(obj, np.ndarray):
-                    return obj.tolist()
-                if isinstance(obj, (np.int_, np.intc, np.intp, np.int8, np.int16, np.int32, np.int64, 
-                                  np.uint8, np.uint16, np.uint32, np.uint64)):
-                    return int(obj)
-                if isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
-                    return float(obj)
-                if isinstance(obj, np.bool_):
-                    return bool(obj)
-                return super().default(obj)
-        
-        return json.dumps(obj, cls=NumpyEncoder)
-    
-    return app, ACTIVE_MODEL, HAS_GEMINI_CONFIG, CLAUDE_API_KEY, CLAUDE_API_URL, CLAUDE_MODEL, GEMINI_MODEL_NAME
-
+ 
 # Helper functions
 def allowed_file(filename):
     """Check if the uploaded file has an allowed extension."""
@@ -477,20 +323,12 @@ def create_proposals_from_targets(target_columns):
         })
     
     return proposals
-def get_claude_proposals(prompt_text, claude_api_key, claude_api_url, claude_model, column_mappings=None, target_columns=None):
+
+# Update the get_claude_proposals function to ensure multiple proposals:
+
+def get_claude_proposals(prompt_text, claude_api_key, claude_api_url, claude_model, column_mappings=None, min_proposals=3):
     """
-    Get proposals from Claude API
-    
-    Args:
-        prompt_text (str): Prompt to send to Claude
-        claude_api_key (str): Claude API key
-        claude_api_url (str): Claude API URL
-        claude_model (str): Claude model identifier
-        column_mappings (list): List of column mapping dictionaries (optional)
-        target_columns (list): List of identified target columns (optional)
-        
-    Returns:
-        List[Dict]: List of AI use case proposal dictionaries
+    Get proposals from Claude API - enhanced to ensure multiple proposals
     """
     # Prepare the headers for Claude API request
     headers = {
@@ -499,10 +337,10 @@ def get_claude_proposals(prompt_text, claude_api_key, claude_api_url, claude_mod
         "content-type": "application/json"
     }
     
-    # Prepare the request data
+    # Prepare the request data with increased token limit for multiple proposals
     data = {
         "model": claude_model,
-        "max_tokens": 4000,
+        "max_tokens": 6000,  # Increased for multiple proposals
         "messages": [
             {"role": "user", "content": prompt_text}
         ]
@@ -514,8 +352,8 @@ def get_claude_proposals(prompt_text, claude_api_key, claude_api_url, claude_mod
     
     for attempt in range(max_retries):
         try:
-            logger.info(f"Calling Claude API - attempt {attempt+1}")
-            response = requests.post(claude_api_url, headers=headers, json=data, timeout=60)
+            logger.info(f"Calling Claude API for multiple proposals - attempt {attempt+1}")
+            response = requests.post(claude_api_url, headers=headers, json=data, timeout=90)
             
             # Log response status for debugging
             logger.info(f"Status code: {response.status_code}")
@@ -545,10 +383,17 @@ def get_claude_proposals(prompt_text, claude_api_key, claude_api_url, claude_mod
                         if isinstance(proposals, list) and len(proposals) > 0:
                             proposals = sanitize_proposals(proposals)
                             
-                            # Ensure coverage of all identified targets
-                            if target_columns:
-                                proposals = ensure_target_coverage(proposals, target_columns)
+                            # Ensure minimum number of proposals
+                            if len(proposals) < min_proposals and column_mappings:
+                                logger.info(f"Claude returned {len(proposals)} proposals, generating {min_proposals - len(proposals)} more")
+                                additional_proposals = generate_additional_proposals(
+                                    column_mappings, 
+                                    proposals, 
+                                    min_proposals - len(proposals)
+                                )
+                                proposals.extend(additional_proposals)
                             
+                            logger.info(f"Returning {len(proposals)} proposals total")
                             return proposals
                         else:
                             raise ValueError("Invalid JSON structure: expected a list of proposal objects")
@@ -558,8 +403,14 @@ def get_claude_proposals(prompt_text, claude_api_key, claude_api_url, claude_mod
                         # Fall back to the original text parsing method
                         proposals = parse_proposals(text)
                         if proposals:
-                            if target_columns:
-                                proposals = ensure_target_coverage(proposals, target_columns)
+                            # Ensure minimum proposals
+                            if len(proposals) < min_proposals and column_mappings:
+                                additional_proposals = generate_additional_proposals(
+                                    column_mappings, 
+                                    proposals, 
+                                    min_proposals - len(proposals)
+                                )
+                                proposals.extend(additional_proposals)
                             return proposals
                         else:
                             raise ValueError("Failed to parse proposals from Claude's response")
@@ -584,45 +435,21 @@ def get_claude_proposals(prompt_text, claude_api_key, claude_api_url, claude_mod
             # Wait before retrying
             time.sleep(2)
     
-    # If we get here, all attempts failed
+    # If we get here, all attempts failed - try to generate proposals locally
+    if column_mappings:
+        logger.warning("API calls failed, generating proposals from column mappings")
+        return create_multiple_proposals_from_columns(column_mappings, min_proposals)
+    
+    # If no column mappings, raise the error
     if last_error:
         raise last_error
     else:
-        raise ValueError("Failed to get proposals from Claude API after multiple attempts")          
-# Function to get AI use case proposals using the selected model with column metadata
-def get_ai_use_case_proposals(file_content, filename, active_model, has_gemini_config, 
-                             claude_api_key, claude_api_url, claude_model, gemini_model=None,
-                             column_mappings=None):
-    """
-    Generate AI use case proposals using the selected AI model based on file content.
-    
-    Args:
-        file_content (str): Content of the uploaded file
-        filename (str): Original filename
-        active_model (str): Selected AI model ('claude' or 'gemini')
-        has_gemini_config (bool): Whether Gemini is properly configured
-        claude_api_key (str): Claude API key
-        claude_api_url (str): Claude API URL
-        claude_model (str): Claude model identifier
-        gemini_model: Gemini model instance (optional)
-        column_mappings (list): List of column mapping dictionaries with user validations (optional)
-        
-    Returns:
-        List[Dict]: List of AI use case proposal dictionaries
-    """
-    # JSON structure example
-    json_example = '''
-{
-  "title": "Title of the use case",
-  "description": "Detailed description of the use case (2-3 paragraphs)",
-  "kpis": ["Business KPI 1 : one sentence description", "Business KPI 2 : one sentence description", "Business KPI 3 : one sentence description"],
-  "business_value": "Comprehensive explanation of business value",
-  "target_variable": "exact_column_name_from_dataset",
-  "model_type": "classification/regression/clustering/sentiment analysis",
-  "use_case_implementation_complexity": "hard/medium/easy",
-  "prediction_interpretation": "comprehensive explanation how to interpret the AI prediction with examples",
-  "target_variable_understanding": "analysis of the target variable and its meaning for the use case"
-}'''
+        raise ValueError("Failed to get proposals from Claude API after multiple attempts")       
+# Enhanced prompt section for get_ai_use_case_proposals function
+# Replace the prompt_text creation in your get_ai_use_case_proposals function with this:
+
+def create_enhanced_prompt(filename, file_content, column_mappings, json_example):
+    """Create an enhanced prompt that encourages multiple diverse use case proposals"""
     
     # Build detailed column information if mappings are provided
     column_info_section = ""
@@ -673,8 +500,8 @@ VALIDATED COLUMN INFORMATION:
         # Build detailed target columns section
         if target_columns:
             target_columns_section = f"""
-PRIORITY TARGET VARIABLES IDENTIFIED BY USER:
-You MUST create at least one use case for each of these target variables:
+USER-IDENTIFIED TARGET VARIABLES:
+The user has identified the following columns as potential target variables. You MUST create at least one use case for EACH of these:
 
 """
             for i, target in enumerate(target_columns, 1):
@@ -688,8 +515,8 @@ You MUST create at least one use case for each of these target variables:
    - User Suggested Use Cases: {'; '.join(target['use_cases']) if target['use_cases'] else 'Create relevant use cases'}
 """
     
-    # Create the prompt with strong emphasis on using validated information
-    prompt_text = f"""You are analyzing a dataset to create AI/ML use case proposals. The user has carefully validated and corrected the column information below. You MUST use this validated information in your proposals.
+    # Create the enhanced prompt
+    prompt_text = f"""You are analyzing a dataset to create AI/ML use case proposals. The user has validated column information and may have identified some target variables, but you should ALSO propose additional creative use cases.
 
 FILENAME: {filename}
 {all_columns_list}
@@ -699,47 +526,368 @@ FILENAME: {filename}
 FILE CONTENT SAMPLE (first 100 rows):
 {file_content[:20000]}
 
-CRITICAL INSTRUCTIONS:
-1. You MUST create at least one use case for EACH identified target variable listed above
-2. Use ONLY the exact column names provided (the mapped/validated names, NOT original names)
-3. For target variables, use the user-validated meanings and descriptions
-4. Do NOT suggest use cases that require columns not present in the dataset
-5. Do NOT suggest use cases that require feature engineering
-6. Each use case must be practical and implementable with the existing data
+CRITICAL INSTRUCTIONS FOR MULTIPLE PROPOSALS:
+
+1. **MINIMUM PROPOSALS**: Generate at least 3-5 different AI use case proposals
+2. **REQUIRED PROPOSALS**: If user identified target variables above, create AT LEAST one use case for EACH
+3. **ADDITIONAL PROPOSALS**: Beyond the required ones, propose OTHER creative use cases using DIFFERENT target variables from the dataset
+4. **DIVERSITY**: Each proposal should target a DIFFERENT column as the prediction target
+5. **BUSINESS VALUE**: Focus on diverse business problems - customer behavior, risk assessment, operational efficiency, revenue optimization, etc.
+
+Examples of diverse use case types to consider:
+- Customer churn/retention prediction
+- Risk scoring or fraud detection
+- Revenue/sales forecasting
+- Customer segmentation (clustering)
+- Anomaly detection
+- Process optimization predictions
+- Resource allocation predictions
+- Quality predictions
+- Time-to-event predictions
 
 For each AI use case proposal, provide:
 1. A clear, business-focused title
-2. A detailed description (2-3 paragraphs) explaining:
-   - What business problem this solves
-   - How the AI/ML model would work
-   - What insights or automation it provides
+2. A detailed description (2-3 paragraphs) explaining the business problem and solution
 3. 3-5 specific, measurable KPIs
 4. Clear business value proposition
 5. The EXACT target variable name from the validated columns
-6. Appropriate model type based on the target variable's data type
-7. Implementation complexity assessment
-8. Detailed prediction interpretation with business context
-9. Target variable understanding based on the user's validation
+6. Appropriate model type (classification/regression/clustering/etc.)
+7. Implementation complexity (easy/medium/hard)
+8. Detailed prediction interpretation
+9. Target variable understanding
+
+IMPORTANT REMINDERS:
+- Generate AT LEAST 3-5 DIFFERENT proposals
+- Use DIFFERENT target variables for each proposal
+- Include ALL user-identified targets PLUS additional creative ones
+- Each proposal should solve a distinct business problem
+- Use only columns that exist in the dataset
+- Be creative but practical
 
 Return ONLY a valid JSON array with this structure:
 {json_example}
 
-IMPORTANT: 
-- If user identified "Churn" as a target, you MUST include a customer churn prediction use case
-- If user identified any other specific targets, create use cases for those as well
-- Each use case should be distinct and valuable
-- Use the exact column names from the validated list above
+The response must be a JSON array containing multiple proposal objects."""
+    
+    return prompt_text
+
+# Enhanced analytical prompt for get_ai_use_case_proposals function
+
+def create_analytical_prompt(filename, file_content, column_mappings, json_example):
+    """Create an analytical prompt that examines actual data before proposing use cases"""
+    
+    # Build detailed column information if mappings are provided
+    column_info_section = ""
+    target_columns_section = ""
+    all_columns_list = ""
+    
+    if column_mappings:
+        # Create lists for different types of columns
+        column_descriptions = []
+        target_columns = []
+        all_column_names = []
+        
+        for mapping in column_mappings:
+            # Collect all column names
+            all_column_names.append(mapping['mapped_name'])
+            
+            # Build detailed column description
+            col_desc = f"- **{mapping['mapped_name']}**"
+            if mapping['original_name'] != mapping['mapped_name']:
+                col_desc += f" (originally: {mapping['original_name']})"
+            col_desc += f"\n  - Type: {mapping.get('data_type', 'unknown')}"
+            col_desc += f"\n  - Description: {mapping.get('description', 'No description provided')}"
+            
+            column_descriptions.append(col_desc)
+            
+            # Collect target columns with full details
+            if mapping.get('is_target', False):
+                target_info = {
+                    'name': mapping['mapped_name'],
+                    'original_name': mapping['original_name'],
+                    'meaning': mapping.get('target_meaning', ''),
+                    'use_cases': mapping.get('prediction_use_cases', []),
+                    'business_value': mapping.get('business_value', ''),
+                    'model_type': mapping.get('model_type', 'auto'),
+                    'data_type': mapping.get('data_type', 'unknown'),
+                    'description': mapping.get('description', '')
+                }
+                target_columns.append(target_info)
+        
+        # Build column information section
+        all_columns_list = f"\nAVAILABLE COLUMNS IN DATASET: {', '.join(all_column_names)}\n"
+        
+        column_info_section = f"""
+VALIDATED COLUMN INFORMATION:
+{chr(10).join(column_descriptions)}
+"""
+        
+        # Build detailed target columns section
+        if target_columns:
+            target_columns_section = f"""
+USER-IDENTIFIED TARGET VARIABLES:
+The user has identified the following columns as potential target variables. You MUST create at least one use case for EACH of these:
+
+"""
+            for i, target in enumerate(target_columns, 1):
+                target_columns_section += f"""
+{i}. Target Column: "{target['name']}"
+   - User-Validated Meaning: {target['meaning']}
+   - Data Type: {target['data_type']}
+   - Description: {target['description']}
+   - Recommended Model Type: {target['model_type']}
+   - Business Value: {target['business_value']}
+   - User Suggested Use Cases: {'; '.join(target['use_cases']) if target['use_cases'] else 'Create relevant use cases'}
 """
     
+    # Create the analytical prompt
+    prompt_text = f"""You are a data scientist analyzing a dataset to identify REALISTIC and DATA-SUPPORTED AI/ML use cases. You must examine the actual data content, not just column names.
+
+FILENAME: {filename}
+{all_columns_list}
+{column_info_section}
+{target_columns_section}
+
+FILE CONTENT SAMPLE (analyze this carefully):
+{file_content[:30000]}
+
+CRITICAL ANALYTICAL INSTRUCTIONS:
+
+1. **DATA ANALYSIS FIRST**: Before proposing any use case, you MUST:
+   - Examine the actual data values in the sample
+   - Identify data patterns, distributions, and quality issues
+   - Check for sufficient variation in potential target variables
+   - Assess data completeness and missing value patterns
+   - Identify relationships between features
+   - Determine if there's enough signal in the data for predictions
+
+2. **REALISTIC USE CASES ONLY**: Only propose use cases that are:
+   - Supported by actual patterns visible in the data
+   - Feasible given the data quality and completeness
+   - Have sufficient examples of different outcomes/values
+   - Show meaningful variation that can be learned
+
+3. **DATA QUALITY ASSESSMENT**: For each proposed use case:
+   - Verify the target variable has meaningful variation (not all same value)
+   - Ensure sufficient non-null values for training
+   - Confirm relevant features exist with good data quality
+   - Check if there are enough examples of each class/outcome
+
+4. **REJECT UNSUITABLE USE CASES**: Do NOT propose a use case if:
+   - The target variable has >90% missing values
+   - The target variable has no variation (all same value)
+   - There's insufficient data to learn patterns
+   - The features and target show no apparent relationship
+
+5. **MINIMUM PROPOSALS**: Generate 3-5 use cases, but ONLY if the data supports them
+
+Example of proper analysis:
+"Looking at the 'churn' column, I see it has values [0, 1] with approximately 20% positive cases and 80% negative cases. This provides sufficient examples of both classes. The customer features like 'tenure', 'monthly_charges', and 'total_charges' show good variation and could be predictive of churn."
+
+For each AI use case proposal, provide:
+1. **Data-backed justification**: Explain what patterns in the data support this use case
+2. A clear, business-focused title
+3. A detailed description including data insights
+4. 3-5 specific, measurable KPIs
+5. Clear business value proposition
+6. The EXACT target variable name from the dataset
+7. Appropriate model type based on the target's data distribution
+8. Implementation complexity based on data quality
+9. Prediction interpretation with actual data examples
+10. Target variable analysis with statistics
+
+IMPORTANT:
+- Analyze the ACTUAL DATA VALUES, not just column names
+- Cite specific examples from the data sample
+- If data quality is poor, acknowledge it and adjust proposals
+- Be honest about limitations and data issues
+- Only propose what the data can realistically support
+
+Return ONLY a valid JSON array with this structure:
+{json_example}
+
+Each proposal must include evidence from the actual data that supports its feasibility."""
+    
+    return prompt_text
+
+
+def analyze_data_for_proposals(df, column_mappings):
+    """
+    Analyze actual data to provide statistics for the AI prompt
+    """
+    data_analysis = {
+        'total_rows': len(df),
+        'columns': {}
+    }
+    
+    for col in df.columns:
+        col_analysis = {
+            'null_count': df[col].isnull().sum(),
+            'null_percentage': (df[col].isnull().sum() / len(df) * 100),
+            'unique_values': df[col].nunique(),
+            'dtype': str(df[col].dtype)
+        }
+        
+        # For numeric columns, add statistics
+        if pd.api.types.is_numeric_dtype(df[col]):
+            col_analysis['min'] = float(df[col].min()) if not pd.isna(df[col].min()) else None
+            col_analysis['max'] = float(df[col].max()) if not pd.isna(df[col].max()) else None
+            col_analysis['mean'] = float(df[col].mean()) if not pd.isna(df[col].mean()) else None
+            col_analysis['std'] = float(df[col].std()) if not pd.isna(df[col].std()) else None
+            col_analysis['has_variation'] = col_analysis['std'] > 0 if col_analysis['std'] is not None else False
+        else:
+            # For categorical columns, show value distribution
+            value_counts = df[col].value_counts().head(10)
+            col_analysis['top_values'] = {str(k): int(v) for k, v in value_counts.items()}
+            col_analysis['has_variation'] = col_analysis['unique_values'] > 1
+        
+        # Check if this is a potential target variable
+        col_analysis['suitable_as_target'] = (
+            col_analysis['null_percentage'] < 50 and 
+            col_analysis['has_variation'] and
+            col_analysis['unique_values'] > 1
+        )
+        
+        data_analysis['columns'][col] = col_analysis
+    
+    return data_analysis
+
+
+# Helper functions to support the template
+def detect_simple_data_type(series):
+    """Simple data type detection"""
+    if pd.api.types.is_numeric_dtype(series):
+        # Check if it's integer-like
+        if series.dtype in ['int64', 'int32'] or (series.dropna() % 1 == 0).all():
+            return 'integer'
+        return 'numeric'
+    elif series.nunique() == 2:
+        return 'boolean'
+    elif series.nunique() < 20:
+        return 'categorical'
+    elif pd.api.types.is_datetime64_any_dtype(series):
+        return 'date'
+    else:
+        return 'text'
+
+def is_likely_target(col_name):
+    """Check if column name suggests it's a target variable"""
+    target_keywords = [
+        'target', 'label', 'class', 'outcome', 'result', 'predict',
+        'churn', 'subscribe', 'buy', 'purchase', 'fraud', 'default',
+        'success', 'fail', 'score', 'rating', 'price', 'value',
+        'revenue', 'profit', 'cost', 'amount', 'deposit', 'y'
+    ]
+    col_lower = col_name.lower()
+    return any(keyword in col_lower for keyword in target_keywords)
+def create_data_summary_for_llm(df, column_mappings=None):
+    """Create a concise data summary for LLM analysis"""
+    try:
+        summary = {
+            'dataset_info': {
+                'rows': int(len(df)),
+                'columns': int(len(df.columns)),
+                'size_category': 'small' if len(df) < 1000 else 'medium' if len(df) < 50000 else 'large'
+            },
+            'columns': []
+        }
+        
+        for col in df.columns:
+            # Get column info with proper type conversion
+            col_data = df[col]
+            
+            # Basic stats
+            missing_count = int(col_data.isnull().sum())
+            missing_pct = round((missing_count / len(df)) * 100, 2)
+            unique_count = int(col_data.nunique())
+            
+            # Detect data type
+            data_type = detect_simple_data_type(col_data)
+            
+            # Get sample values (properly converted)
+            sample_values = []
+            for val in col_data.dropna().head(3):
+                if pd.isna(val):
+                    sample_values.append(None)
+                elif isinstance(val, (np.integer, np.int64, np.int32)):
+                    sample_values.append(int(val))
+                elif isinstance(val, (np.floating, np.float64, np.float32)):
+                    sample_values.append(float(val))
+                else:
+                    sample_values.append(str(val))
+            
+            col_info = {
+                'name': str(col),
+                'type': data_type,
+                'missing_pct': missing_pct,
+                'unique_count': unique_count,
+                'sample_values': sample_values
+            }
+            
+            # Add type-specific info
+            if data_type in ['numeric', 'integer']:
+                try:
+                    col_info['min'] = float(col_data.min()) if not pd.isna(col_data.min()) else None
+                    col_info['max'] = float(col_data.max()) if not pd.isna(col_data.max()) else None
+                    col_info['mean'] = round(float(col_data.mean()), 2) if not pd.isna(col_data.mean()) else None
+                except:
+                    pass
+            elif data_type == 'categorical':
+                try:
+                    top_values = col_data.value_counts().head(3)
+                    col_info['top_categories'] = [str(idx) for idx in top_values.index.tolist()]
+                except:
+                    pass
+            
+            summary['columns'].append(col_info)
+        
+        return summary
+        
+    except Exception as e:
+        logger.error(f"Error creating data summary: {str(e)}")
+        return {
+            'dataset_info': {'rows': len(df), 'columns': len(df.columns), 'size_category': 'unknown'},
+            'columns': [{'name': str(col), 'type': 'unknown'} for col in df.columns]
+        }
+ 
+def get_ai_use_case_proposals(file_content, filename, active_model, has_gemini_config, 
+                             claude_api_key, claude_api_url, claude_model, gemini_model=None,
+                             column_mappings=None):
+    """
+    Generate AI use case proposals using the selected AI model based on file content.
+    Enhanced to generate multiple diverse proposals.
+    """
+    # JSON structure example
+    json_example = '''
+{
+  "title": "Title of the use case",
+  "description": "Detailed description of the use case (2-3 paragraphs)",
+  "kpis": ["Business KPI 1 : one sentence description", "Business KPI 2 : one sentence description", "Business KPI 3 : one sentence description"],
+  "business_value": "Comprehensive explanation of business value",
+  "target_variable": "exact_column_name_from_dataset",
+  "model_type": "classification/regression/clustering/sentiment analysis",
+  "use_case_implementation_complexity": "hard/medium/easy",
+  "prediction_interpretation": "comprehensive explanation how to interpret the AI prediction with examples",
+  "target_variable_understanding": "analysis of the target variable and its meaning for the use case"
+}'''
+    
+    # Create enhanced prompt
+    prompt_text = create_enhanced_prompt(filename, file_content, column_mappings, json_example)
+    
     # Log the prompt for debugging
-    logger.info(f"Number of target columns identified: {len(target_columns) if column_mappings else 0}")
-    if column_mappings and target_columns:
-        logger.info(f"Target columns: {[t['name'] for t in target_columns]}")
+    if column_mappings:
+        target_columns = [m for m in column_mappings if m.get('is_target', False)]
+        logger.info(f"Number of user-identified target columns: {len(target_columns)}")
+        if target_columns:
+            logger.info(f"User target columns: {[t['mapped_name'] for t in target_columns]}")
+    
+    # Minimum number of proposals we want
+    MIN_PROPOSALS = 3
     
     if active_model == "gemini" and has_gemini_config and gemini_model:
         # Use Gemini API
         try:
-            logger.info("Using Gemini API to generate proposals")
+            logger.info("Using Gemini API to generate multiple proposals")
             response = gemini_model.generate_content(prompt_text)
             if response and hasattr(response, 'text'):
                 text = response.text
@@ -759,9 +907,14 @@ IMPORTANT:
                     if isinstance(proposals, list) and len(proposals) > 0:
                         proposals = sanitize_proposals(proposals)
                         
-                        # Ensure we have proposals for all identified targets
-                        if column_mappings and target_columns:
-                            proposals = ensure_target_coverage(proposals, target_columns)
+                        # Ensure minimum number of proposals
+                        if len(proposals) < MIN_PROPOSALS and column_mappings:
+                            additional_proposals = generate_additional_proposals(
+                                column_mappings, 
+                                proposals, 
+                                MIN_PROPOSALS - len(proposals)
+                            )
+                            proposals.extend(additional_proposals)
                         
                         return proposals
                     else:
@@ -769,11 +922,17 @@ IMPORTANT:
                     
                 except (json.JSONDecodeError, ValueError) as json_error:
                     logger.error(f"Gemini JSON parsing failed: {str(json_error)}. Falling back to text parsing.")
-                    # Fall back to the original text parsing method
+                    # Fall back to text parsing
                     proposals = parse_proposals(text)
                     if proposals:
-                        if column_mappings and target_columns:
-                            proposals = ensure_target_coverage(proposals, target_columns)
+                        # Ensure minimum proposals
+                        if len(proposals) < MIN_PROPOSALS and column_mappings:
+                            additional_proposals = generate_additional_proposals(
+                                column_mappings, 
+                                proposals, 
+                                MIN_PROPOSALS - len(proposals)
+                            )
+                            proposals.extend(additional_proposals)
                         return proposals
                     else:
                         raise ValueError("Failed to parse proposals from Gemini's response")
@@ -786,7 +945,7 @@ IMPORTANT:
             # Fall back to Claude if Gemini fails
             if claude_api_key:
                 logger.info("Falling back to Claude API")
-                return get_claude_proposals(prompt_text, claude_api_key, claude_api_url, claude_model, column_mappings, target_columns)
+                return get_claude_proposals(prompt_text, claude_api_key, claude_api_url, claude_model, column_mappings, MIN_PROPOSALS)
             else:
                 raise ValueError(f"Error with Gemini API: {str(e)}. Claude API not configured as fallback.")
     
@@ -794,24 +953,463 @@ IMPORTANT:
         # Use Claude API (default)
         if not claude_api_key:
             # Return proposals based on identified targets if no API key
-            if column_mappings and target_columns:
-                return create_proposals_from_targets(target_columns)
+            if column_mappings:
+                return create_multiple_proposals_from_columns(column_mappings, MIN_PROPOSALS)
             else:
                 logger.warning("Claude API key not configured. Returning dummy data.")
-                return [{
-                    "title": "Example AI Use Case",
-                    "description": "This is a dummy use case proposal since no API key is configured.",
-                    "kpis": ["Example KPI 1", "Example KPI 2"],
-                    "business_value": "Configure a Claude or Gemini API key to get real use case proposals.",
-                    "target_variable": "dummy_variable",
-                    "model_type": "classification",
-                    "use_case_implementation_complexity": "medium",
-                    "prediction_interpretation": "This is a placeholder. Configure an API key for actual results.",
-                    "target_variable_understanding": "Configure an API key to see real analysis."
-                }]
+                return create_dummy_proposals(MIN_PROPOSALS)
         
-        return get_claude_proposals(prompt_text, claude_api_key, claude_api_url, claude_model, column_mappings, target_columns)
+        return get_claude_proposals(prompt_text, claude_api_key, claude_api_url, claude_model, column_mappings, MIN_PROPOSALS)
+
+
+def generate_additional_proposals(column_mappings, existing_proposals, needed_count):
+    """Generate additional proposals to meet minimum count"""
+    additional_proposals = []
     
+    # Get columns not yet used as targets
+    used_targets = {p.get('target_variable', '').lower() for p in existing_proposals}
+    available_columns = [m for m in column_mappings 
+                        if m['mapped_name'].lower() not in used_targets]
+    
+    # Prioritize numeric columns for additional proposals
+    numeric_columns = [m for m in available_columns 
+                      if m.get('data_type', '').lower() in ['numeric', 'float', 'integer']]
+    categorical_columns = [m for m in available_columns 
+                          if m.get('data_type', '').lower() in ['categorical', 'text', 'boolean']]
+    
+    # Generate proposals for numeric columns first
+    for col in numeric_columns[:needed_count]:
+        proposal = create_generic_proposal(col, 'regression')
+        additional_proposals.append(proposal)
+        if len(additional_proposals) >= needed_count:
+            break
+    
+    # If still need more, use categorical columns
+    if len(additional_proposals) < needed_count:
+        for col in categorical_columns[:needed_count - len(additional_proposals)]:
+            proposal = create_generic_proposal(col, 'classification')
+            additional_proposals.append(proposal)
+            if len(additional_proposals) >= needed_count:
+                break
+    
+    return additional_proposals
+
+ 
+
+def enhance_proposals_with_real_stats(proposals, df):
+    """Enhance AI proposals with actual dataset statistics"""
+    try:
+        enhanced_proposals = []
+        
+        for proposal in proposals:
+            enhanced = proposal.copy()
+            
+            # Add real dataset stats
+            enhanced['dataset_size'] = f"{len(df):,} rows"
+            enhanced['features_count'] = len(df.columns)
+            
+            # Calculate data quality score
+            total_cells = df.shape[0] * df.shape[1]
+            missing_cells = df.isnull().sum().sum()
+            quality_score = round(100 - (missing_cells / total_cells * 100), 1) if total_cells > 0 else 100
+            enhanced['data_quality'] = f"{quality_score}%"
+            
+            # Add column types summary
+            numeric_cols = len([col for col in df.columns if df[col].dtype in ['int64', 'float64']])
+            categorical_cols = len(df.columns) - numeric_cols
+            enhanced['column_summary'] = f"{numeric_cols} numeric, {categorical_cols} categorical"
+            
+            # Enhance feasibility based on real data
+            if 'feasibility' in enhanced:
+                if len(df) < 1000:
+                    enhanced['feasibility'] = min(enhanced.get('feasibility', 70), 75)
+                elif quality_score < 80:
+                    enhanced['feasibility'] = enhanced.get('feasibility', 70) * 0.9
+            
+            enhanced_proposals.append(enhanced)
+        
+        return enhanced_proposals
+        
+    except Exception as e:
+        logger.error(f"Error enhancing proposals: {str(e)}")
+        return proposals
+
+
+def create_data_driven_fallback_proposals(df, column_mappings=None):
+    """Create fallback proposals based on actual data analysis"""
+    try:
+        proposals = []
+        
+        # Analyze the dataset
+        numeric_cols = [col for col in df.columns if df[col].dtype in ['int64', 'float64']]
+        categorical_cols = [col for col in df.columns if col not in numeric_cols]
+        
+        # Basic dataset info
+        n_rows = len(df)
+        n_cols = len(df.columns)
+        missing_pct = round((df.isnull().sum().sum() / (n_rows * n_cols)) * 100, 1)
+        
+        # Generate proposals based on data characteristics
+        
+        # 1. Predictive Analytics (if we have numeric targets)
+        potential_targets = []
+        for col in numeric_cols:
+            if any(keyword in col.lower() for keyword in ['price', 'cost', 'value', 'amount', 'score', 'rating']):
+                potential_targets.append(col)
+        
+        if potential_targets:
+            target = potential_targets[0]
+            proposals.append({
+                'title': f'Predict {target.replace("_", " ").title()}',
+                'description': f'Build a machine learning model to predict {target} based on other features in the dataset.',
+                'category': 'Predictive Analytics',
+                'business_value': f'Enable data-driven pricing and forecasting decisions',
+                'technical_approach': f'Regression analysis using {len(df.columns)-1} features',
+                'feasibility': 85,
+                'complexity': 'Medium',
+                'timeline': '4-6 weeks',
+                'key_features': [col for col in df.columns if col != target][:5],
+                'target_column': target
+            })
+        
+        # 2. Customer Segmentation (if we have categorical data)
+        if len(categorical_cols) >= 2:
+            proposals.append({
+                'title': 'Customer/Market Segmentation',
+                'description': 'Identify distinct groups and patterns in your data using clustering analysis.',
+                'category': 'Segmentation & Clustering',
+                'business_value': 'Understand customer behavior and optimize marketing strategies',
+                'technical_approach': f'Unsupervised clustering on {len(categorical_cols)} categorical features',
+                'feasibility': 80,
+                'complexity': 'Medium',
+                'timeline': '3-4 weeks',
+                'key_features': categorical_cols[:5],
+                'target_column': None
+            })
+        
+        # 3. Data Quality & Insights
+        proposals.append({
+            'title': 'Data Quality Assessment & Insights',
+            'description': f'Comprehensive analysis of data quality and key business insights from {n_rows:,} records.',
+            'category': 'Analytics & Reporting',
+            'business_value': 'Improve data quality and discover actionable business insights',
+            'technical_approach': 'Statistical analysis and data profiling',
+            'feasibility': 95,
+            'complexity': 'Low',
+            'timeline': '1-2 weeks',
+            'key_features': list(df.columns)[:5],
+            'data_quality_score': f'{100 - missing_pct}%'
+        })
+        
+        # 4. Classification (if we have binary/categorical targets)
+        binary_cols = []
+        for col in categorical_cols:
+            if df[col].nunique() == 2:
+                binary_cols.append(col)
+        
+        if binary_cols:
+            target = binary_cols[0]
+            proposals.append({
+                'title': f'Classification Model for {target.replace("_", " ").title()}',
+                'description': f'Predict {target} categories using machine learning classification.',
+                'category': 'Classification',
+                'business_value': 'Automate decision-making and improve accuracy',
+                'technical_approach': f'Classification model with {len(df.columns)-1} features',
+                'feasibility': 80,
+                'complexity': 'Medium',
+                'timeline': '3-5 weeks',
+                'key_features': [col for col in df.columns if col != target][:5],
+                'target_column': target
+            })
+        
+        # 5. Time Series (if we have date columns)
+        date_cols = []
+        for col in df.columns:
+            if 'date' in col.lower() or 'time' in col.lower() or df[col].dtype == 'datetime64[ns]':
+                date_cols.append(col)
+        
+        if date_cols and len(numeric_cols) > 0:
+            proposals.append({
+                'title': 'Time Series Forecasting',
+                'description': f'Forecast future trends using time-based patterns in your data.',
+                'category': 'Time Series',
+                'business_value': 'Predict future performance and plan accordingly',
+                'technical_approach': f'Time series analysis on {date_cols[0]}',
+                'feasibility': 75,
+                'complexity': 'High',
+                'timeline': '6-8 weeks',
+                'key_features': date_cols + numeric_cols[:3],
+                'target_column': numeric_cols[0] if numeric_cols else None
+            })
+        
+        # Ensure we have at least 3 proposals
+        if len(proposals) < 3:
+            proposals.append({
+                'title': 'Exploratory Data Analysis',
+                'description': 'Deep dive into your data to uncover hidden patterns and relationships.',
+                'category': 'Analytics & Reporting',
+                'business_value': 'Data-driven insights for strategic decision making',
+                'technical_approach': 'Statistical analysis and visualization',
+                'feasibility': 90,
+                'complexity': 'Low',
+                'timeline': '2-3 weeks',
+                'key_features': list(df.columns)[:5]
+            })
+        
+        return proposals[:5]  # Return top 5 proposals
+        
+    except Exception as e:
+        logger.error(f"Error creating fallback proposals: {str(e)}")
+        return [
+            {
+                'title': 'Basic Data Analysis',
+                'description': 'Analyze your dataset to find patterns and insights.',
+                'category': 'Analytics',
+                'business_value': 'Understand your data better',
+                'technical_approach': 'Statistical analysis',
+                'feasibility': 85,
+                'complexity': 'Low',
+                'timeline': '2-3 weeks'
+            }
+        ]
+
+
+def create_data_summary_for_llm(df, column_mappings=None):
+    """Create a concise data summary for LLM analysis"""
+    try:
+        summary = {
+            'dataset_info': {
+                'rows': int(len(df)),
+                'columns': int(len(df.columns)),
+                'size_category': 'small' if len(df) < 1000 else 'medium' if len(df) < 50000 else 'large'
+            },
+            'columns': []
+        }
+        
+        for col in df.columns:
+            # Get column info with proper type conversion
+            col_data = df[col]
+            
+            # Basic stats
+            missing_count = int(col_data.isnull().sum())
+            missing_pct = round((missing_count / len(df)) * 100, 2)
+            unique_count = int(col_data.nunique())
+            
+            # Detect data type
+            data_type = detect_simple_data_type(col_data)
+            
+            # Get sample values (properly converted)
+            sample_values = []
+            for val in col_data.dropna().head(3):
+                if pd.isna(val):
+                    sample_values.append(None)
+                elif isinstance(val, (np.integer, np.int64, np.int32)):
+                    sample_values.append(int(val))
+                elif isinstance(val, (np.floating, np.float64, np.float32)):
+                    sample_values.append(float(val))
+                else:
+                    sample_values.append(str(val))
+            
+            col_info = {
+                'name': str(col),
+                'type': data_type,
+                'missing_pct': missing_pct,
+                'unique_count': unique_count,
+                'sample_values': sample_values
+            }
+            
+            # Add type-specific info
+            if data_type in ['numeric', 'integer']:
+                try:
+                    col_info['min'] = float(col_data.min()) if not pd.isna(col_data.min()) else None
+                    col_info['max'] = float(col_data.max()) if not pd.isna(col_data.max()) else None
+                    col_info['mean'] = round(float(col_data.mean()), 2) if not pd.isna(col_data.mean()) else None
+                except:
+                    pass
+            elif data_type == 'categorical':
+                try:
+                    top_values = col_data.value_counts().head(3)
+                    col_info['top_categories'] = [str(idx) for idx in top_values.index.tolist()]
+                except:
+                    pass
+            
+            summary['columns'].append(col_info)
+        
+        return summary
+        
+    except Exception as e:
+        logger.error(f"Error creating data summary: {str(e)}")
+        return {
+            'dataset_info': {'rows': len(df), 'columns': len(df.columns), 'size_category': 'unknown'},
+            'columns': [{'name': str(col), 'type': 'unknown'} for col in df.columns]
+        }
+
+ 
+
+def detect_simple_data_type(series):
+    """Simple data type detection"""
+    if pd.api.types.is_numeric_dtype(series):
+        # Check if it's integer-like
+        if series.dtype in ['int64', 'int32'] or (series.dropna() % 1 == 0).all():
+            return 'integer'
+        return 'numeric'
+    elif series.nunique() == 2:
+        return 'boolean'
+    elif series.nunique() < 20:
+        return 'categorical'
+    elif pd.api.types.is_datetime64_any_dtype(series):
+        return 'date'
+    else:
+        return 'text'
+
+
+def is_likely_target(col_name):
+    """Check if column name suggests it's a target variable"""
+    target_keywords = [
+        'target', 'label', 'class', 'outcome', 'result', 'predict',
+        'churn', 'subscribe', 'buy', 'purchase', 'fraud', 'default',
+        'success', 'fail', 'score', 'rating', 'price', 'value',
+        'revenue', 'profit', 'cost', 'amount', 'deposit', 'y'
+    ]
+    col_lower = col_name.lower()
+    return any(keyword in col_lower for keyword in target_keywords)
+
+def create_generic_proposal(column_info, model_type):
+    """Create a generic proposal for a column"""
+    column_name = column_info['mapped_name']
+    
+    # Generate title based on column name
+    title = f"Predict {column_name}"
+    if 'customer' in column_name.lower():
+        title = f"Customer {column_name} Prediction"
+    elif 'sales' in column_name.lower() or 'revenue' in column_name.lower():
+        title = f"{column_name} Forecasting Model"
+    elif 'risk' in column_name.lower():
+        title = f"{column_name} Risk Assessment"
+    
+    # Generate description
+    description = f"Develop a {model_type} model to predict {column_name}. "
+    description += f"This AI solution will analyze available features to predict {column_name}, "
+    description += f"enabling data-driven decision making and operational improvements. "
+    description += f"The model will help identify patterns and factors that influence {column_name}."
+    
+    # Generate KPIs based on model type
+    if model_type == 'regression':
+        kpis = [
+            f"Achieve R² score above 0.75 for {column_name} prediction",
+            f"Reduce prediction error (RMSE) to acceptable business threshold",
+            f"Enable accurate forecasting for planning and optimization"
+        ]
+    else:
+        kpis = [
+            f"Achieve >80% accuracy in {column_name} classification",
+            f"Maintain balanced precision and recall metrics",
+            f"Provide actionable insights for decision making"
+        ]
+    
+    return {
+        "title": title,
+        "description": description,
+        "kpis": kpis,
+        "business_value": f"Accurate prediction of {column_name} will enable better resource allocation and strategic planning.",
+        "target_variable": column_name,
+        "model_type": model_type,
+        "use_case_implementation_complexity": "medium",
+        "prediction_interpretation": f"Model predictions for {column_name} should be interpreted in the business context.",
+        "target_variable_understanding": column_info.get('description', f"Target variable representing {column_name}")
+    }
+
+
+def create_multiple_proposals_from_columns(column_mappings, min_proposals=3):
+    """Create multiple proposals from column mappings when no API is available"""
+    proposals = []
+    
+    # First, create proposals for all identified targets
+    target_columns = [m for m in column_mappings if m.get('is_target', False)]
+    for target in target_columns:
+        proposal = create_proposal_for_target(target)
+        proposals.append(proposal)
+    
+    # Then, create additional proposals from other columns
+    non_target_columns = [m for m in column_mappings if not m.get('is_target', False)]
+    
+    # Prioritize numeric columns for additional proposals
+    numeric_columns = [m for m in non_target_columns 
+                      if m.get('data_type', '').lower() in ['numeric', 'float', 'integer']]
+    categorical_columns = [m for m in non_target_columns 
+                          if m.get('data_type', '').lower() in ['categorical', 'text', 'boolean']]
+    
+    # Add numeric column proposals
+    for col in numeric_columns:
+        if len(proposals) >= min_proposals:
+            break
+        col['model_type'] = 'regression'
+        proposal = create_proposal_for_target(col)
+        proposals.append(proposal)
+    
+    # Add categorical column proposals
+    for col in categorical_columns:
+        if len(proposals) >= min_proposals:
+            break
+        col['model_type'] = 'classification'
+        proposal = create_proposal_for_target(col)
+        proposals.append(proposal)
+    
+    return proposals
+
+
+def create_dummy_proposals(count=3):
+    """Create dummy proposals when no API is configured"""
+    proposals = []
+    
+    dummy_use_cases = [
+        {
+            "title": "Customer Churn Prediction",
+            "target_variable": "churn",
+            "model_type": "classification",
+            "description": "Predict which customers are likely to stop using your service."
+        },
+        {
+            "title": "Sales Forecasting",
+            "target_variable": "sales",
+            "model_type": "regression",
+            "description": "Forecast future sales based on historical patterns."
+        },
+        {
+            "title": "Risk Assessment",
+            "target_variable": "risk_score",
+            "model_type": "regression",
+            "description": "Assess risk levels for business decisions."
+        },
+        {
+            "title": "Customer Segmentation",
+            "target_variable": "segment",
+            "model_type": "clustering",
+            "description": "Group customers into meaningful segments."
+        },
+        {
+            "title": "Fraud Detection",
+            "target_variable": "is_fraud",
+            "model_type": "classification",
+            "description": "Identify potentially fraudulent transactions."
+        }
+    ]
+    
+    for i in range(min(count, len(dummy_use_cases))):
+        base = dummy_use_cases[i]
+        proposals.append({
+            "title": base["title"],
+            "description": base["description"] + " Configure an API key to get real proposals based on your data.",
+            "kpis": ["Example KPI 1", "Example KPI 2", "Example KPI 3"],
+            "business_value": "Configure a Claude or Gemini API key to get real business value analysis.",
+            "target_variable": base["target_variable"],
+            "model_type": base["model_type"],
+            "use_case_implementation_complexity": "medium",
+            "prediction_interpretation": "Configure an API key for actual prediction interpretation.",
+            "target_variable_understanding": "Configure an API key to see real analysis."
+        })
+    
+    return proposals
     
 def sanitize_proposals(proposals):
     """
@@ -1154,28 +1752,31 @@ def get_embed_code(embed_id, base_url=None):
     <iframe src="{embed_url}" width="100%" height="600px" frameborder="0"></iframe>
     """
 
-# Main application and route handlers
-app = None
-ACTIVE_MODEL = None
-HAS_GEMINI_CONFIG = False
-CLAUDE_API_KEY = None
-CLAUDE_API_URL = None
-CLAUDE_MODEL = None
-GEMINI_MODEL_NAME = None
-gemini_model = None
 
-def current_app():
+
     """Get the current application instance"""
     global app, ACTIVE_MODEL, HAS_GEMINI_CONFIG, CLAUDE_API_KEY, CLAUDE_API_URL, CLAUDE_MODEL, GEMINI_MODEL_NAME, gemini_model
     
     if app is None:
-        app, ACTIVE_MODEL, HAS_GEMINI_CONFIG, CLAUDE_API_KEY, CLAUDE_API_URL, CLAUDE_MODEL, GEMINI_MODEL_NAME = create_app()
-        
-        # Initialize Gemini model if configured
-        if ACTIVE_MODEL == 'gemini' and HAS_GEMINI_CONFIG:
-            import google.generativeai as genai
-            genai.configure(api_key=Config.GOOGLE_API_KEY)
-            gemini_model = genai.GenerativeModel(GEMINI_MODEL_NAME)
+        try:
+            result = create_app()
+            if result is None:
+                raise ValueError("create_app() returned None")
+            
+            app, ACTIVE_MODEL, HAS_GEMINI_CONFIG, CLAUDE_API_KEY, CLAUDE_API_URL, CLAUDE_MODEL, GEMINI_MODEL_NAME = result
+            
+            # Initialize Gemini model if configured
+            if ACTIVE_MODEL == 'gemini' and HAS_GEMINI_CONFIG:
+                try:
+                    import google.generativeai as genai
+                    genai.configure(api_key=Config.GOOGLE_API_KEY)
+                    gemini_model = genai.GenerativeModel(GEMINI_MODEL_NAME)
+                except Exception as e:
+                    logger.error(f"Failed to initialize Gemini model: {e}")
+                    HAS_GEMINI_CONFIG = False
+        except Exception as e:
+            logger.error(f"Failed to create app: {e}")
+            raise
     
     return app
 
@@ -1183,10 +1784,332 @@ def init_routes(app):
     """Initialize routes for the application"""
     
     
-    from column_mapper import ColumnMapper
     
-    # Then replace the existing upload_file route with this updated version:
+        
+    @app.route('/generate-use-cases', methods=['POST'])
+    @login_required
+    def generate_use_cases():
+        """Generate AI use cases based on the original file and column information"""
+        try:
+            # Get data from form
+            filename = request.form.get('filename')
+            columns_json = request.form.get('columns')
+            
+            # Parse column information
+            column_info = json.loads(columns_json) if columns_json else {}
+            
+            # Get ORIGINAL file path from session - NO MAPPED FILE
+            file_path = session.get('original_file_path')
+            if not file_path:
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            
+            logger.info(f"Generate use cases for ORIGINAL file: {file_path}")
+            
+            # Verify file exists
+            if not os.path.exists(file_path):
+                flash('Data file not found. Please re-upload.', 'error')
+                return redirect(url_for('upload_file'))
+            
+            # Get column mappings from session
+            column_mappings = session.get('column_mappings', [])
+            
+            # Read the ORIGINAL data using read_data_flexible
+            try:
+                logger.info(f"Reading ORIGINAL data with read_data_flexible from: {file_path}")
+                df = read_data_flexible(file_path)
+                
+                if df is None or df.empty:
+                    logger.error("read_data_flexible returned None or empty DataFrame")
+                    flash('Failed to read the data file properly.', 'error')
+                    return redirect(url_for('business_insights'))
+                
+                logger.info(f"Successfully loaded original data: {df.shape}")
+                logger.info(f"Original columns: {list(df.columns)[:10]}...")
+                
+                # Check data quality
+                total_cells = df.shape[0] * df.shape[1]
+                total_missing = df.isnull().sum().sum()
+                missing_pct = (total_missing / total_cells * 100) if total_cells > 0 else 0
+                logger.info(f"Overall missing data: {missing_pct:.1f}%")
+                
+            except Exception as e:
+                logger.error(f"Error reading file with read_data_flexible: {str(e)}")
+                import traceback
+                logger.error(traceback.format_exc())
+                flash(f'Error reading file: {str(e)}', 'error')
+                return redirect(url_for('business_insights'))
+            
+            # Create data analysis summary using ORIGINAL column names
+            data_summary = create_data_summary_for_llm(df, column_mappings)
+            
+            # Prepare sample data for LLM
+            sample_size = min(50, len(df))
+            if len(df) > sample_size:
+                sample_df = df.sample(n=sample_size, random_state=42)
+            else:
+                sample_df = df
+            
+            # Create file content for LLM
+            file_content = f"""{data_summary}
     
+    SAMPLE DATA ({sample_size} rows):
+    {sample_df.to_csv(index=False, float_format='%.2f')}"""
+            
+            # Limit content length
+            if len(file_content) > 50000:  # Gemini can handle more
+                file_content = file_content[:50000] + "\n\n[Content truncated]"
+            
+            # Generate AI use case proposals
+            try:
+                logger.info("Calling AI to generate use case proposals...")
+                
+                # IMPORTANT: Update column mappings to use original names for AI
+                # The AI needs to see the ORIGINAL column names from the file
+                mappings_for_ai = []
+                for mapping in column_mappings:
+                    ai_mapping = mapping.copy()
+                    # Temporarily set mapped_name to original_name for AI processing
+                    ai_mapping['mapped_name'] = mapping['original_name']
+                    mappings_for_ai.append(ai_mapping)
+                
+                ai_proposals = get_ai_use_case_proposals(
+                    file_content, 
+                    filename, 
+                    ACTIVE_MODEL, 
+                    HAS_GEMINI_CONFIG, 
+                    CLAUDE_API_KEY, 
+                    CLAUDE_API_URL, 
+                    CLAUDE_MODEL,
+                    gemini_model,
+                    mappings_for_ai  # Pass mappings with original names
+                )
+                
+                logger.info(f"AI generated {len(ai_proposals) if ai_proposals else 0} proposals")
+                
+                # If no proposals generated, create fallback proposals
+                if not ai_proposals or len(ai_proposals) == 0:
+                    logger.warning("No AI proposals generated, creating fallback proposals")
+                    ai_proposals = create_data_driven_fallback_proposals(df, column_mappings)
+                
+                # Enhance proposals with actual statistics
+                ai_proposals = enhance_proposals_with_real_stats(ai_proposals, df)
+                
+                # Save use cases for the current user
+                if 'user_id' in session:
+                    save_use_case_id = save_use_cases(
+                        session['user_id'], 
+                        filename, 
+                        ai_proposals, 
+                        metadata={
+                            'file_path': file_path,
+                            'proposal_count': len(ai_proposals),
+                            'column_mappings': column_mappings,
+                            'data_shape': df.shape,
+                            'missing_pct': missing_pct
+                        }
+                    )
+                    session['current_use_case_id'] = save_use_case_id
+                
+                # Extract target variable from the first proposal
+                target_variable = None
+                if ai_proposals and len(ai_proposals) > 0:
+                    target_variable = ai_proposals[0].get('target_variable', None)
+                
+                # Update session data for training
+                session['last_filename'] = filename
+                session['proposal_count'] = len(ai_proposals)
+                session['file_path'] = file_path
+                session['target_variable'] = target_variable
+                session['proposals'] = ai_proposals
+                
+                logger.info(f"Rendering results with {len(ai_proposals)} proposals")
+                
+                # Render results page
+                return render_template('results.html', 
+                                     filename=filename, 
+                                     proposals=ai_proposals,
+                                     target_variable=target_variable)
+                
+            except Exception as api_error:
+                logger.error(f"Error generating AI use cases: {str(api_error)}")
+                import traceback
+                logger.error(traceback.format_exc())
+                
+                # Create fallback proposals on error
+                logger.info("Creating fallback proposals due to API error")
+                ai_proposals = create_data_driven_fallback_proposals(df, column_mappings)
+                
+                if ai_proposals:
+                    session['proposals'] = ai_proposals
+                    return render_template('results.html', 
+                                         filename=filename, 
+                                         proposals=ai_proposals,
+                                         target_variable=ai_proposals[0].get('target_variable') if ai_proposals else None)
+                else:
+                    flash(f"Error generating AI use cases: {str(api_error)}", 'error')
+                    return redirect(url_for('business_insights'))
+                
+        except Exception as e:
+            logger.error(f"Error in generate_use_cases: {str(e)}")
+            import traceback
+            logger.error(traceback.format_exc())
+            flash(f"Error generating use cases: {str(e)}", 'error')
+            return redirect(url_for('business_insights'))   
+    
+    def get_ai_use_case_proposals_analytical(file_content, filename, active_model, has_gemini_config, 
+                                            claude_api_key, claude_api_url, claude_model, gemini_model=None,
+                                            column_mappings=None, data_analysis=None):
+        """
+        Wrapper function that uses the analytical prompt
+        """
+        # Create the analytical prompt using the enhanced version
+        prompt_text = create_analytical_prompt(filename, file_content, column_mappings, get_json_example())
+        
+        # Add data quality warnings if applicable
+        if data_analysis:
+            warnings = []
+            for col_name, col_stats in data_analysis['columns'].items():
+                if col_stats['null_percentage'] > 90:
+                    warnings.append(f"- {col_name}: {col_stats['null_percentage']:.1f}% missing data")
+                if not col_stats['has_variation']:
+                    warnings.append(f"- {col_name}: No variation in values")
+            
+            if warnings:
+                warning_section = "\nDATA QUALITY WARNINGS:\n" + "\n".join(warnings) + "\n"
+                prompt_text = prompt_text.replace(
+                    "FILE CONTENT SAMPLE",
+                    warning_section + "\nFILE CONTENT SAMPLE"
+                )
+        
+        # Continue with the regular API call flow but with analytical prompt
+        return get_ai_use_case_proposals(
+            file_content, filename, active_model, has_gemini_config,
+            claude_api_key, claude_api_url, claude_model, gemini_model,
+            column_mappings
+        )
+    
+    
+    def get_json_example():
+        """Get the JSON structure example"""
+        return '''
+    {
+      "title": "Title of the use case",
+      "description": "Detailed description including specific data insights",
+      "data_support": "Specific evidence from the data that supports this use case (e.g., 'The target variable shows 20% positive cases and 80% negative cases with clear patterns related to customer tenure')",
+      "kpis": ["Business KPI 1", "Business KPI 2", "Business KPI 3"],
+      "business_value": "Comprehensive explanation of business value",
+      "target_variable": "exact_column_name_from_dataset",
+      "target_statistics": {
+        "unique_values": 2,
+        "distribution": "20% positive, 80% negative",
+        "missing_percentage": 5.2
+      },
+      "model_type": "classification/regression/clustering",
+      "use_case_implementation_complexity": "hard/medium/easy",
+      "prediction_interpretation": "How to interpret predictions with data examples",
+      "target_variable_understanding": "Analysis of the target variable based on actual data patterns"
+    }'''
+    
+     
+    # @app.route('/profile')
+    # @login_required
+    # def profile():
+    #     """Display user profile page"""
+    #     user_id = session.get('user_id')
+    #     if not user_id:
+    #         flash('Please login to view your profile', 'error')
+    #         return redirect(url_for('login'))
+        
+    #     # Get user information
+    #     user = get_user_by_id(user_id)
+    #     if not user:
+    #         flash('User not found', 'error')
+    #         return redirect(url_for('login'))
+        
+    #     # Get user statistics
+    #     try:
+    #         with get_db_connection() as conn:
+    #             with conn.cursor() as cursor:
+    #                 # Get model count
+    #                 cursor.execute("SELECT COUNT(*) AS count FROM models WHERE user_id = %s", (user_id,))
+    #                 model_count = cursor.fetchone()['count']
+                    
+    #                 # Get use case count
+    #                 cursor.execute("SELECT COUNT(*) AS count FROM use_cases WHERE user_id = %s", (user_id,))
+    #                 use_case_count = cursor.fetchone()['count']
+                    
+    #                 # Get embedding count
+    #                 cursor.execute("SELECT COUNT(*) AS count FROM embeddings WHERE user_id = %s", (user_id,))
+    #                 embedding_count = cursor.fetchone()['count']
+                    
+    #                 # Get recent activity (last 5 models)
+    #                 cursor.execute("""
+    #                     SELECT name, created_at, metadata
+    #                     FROM models 
+    #                     WHERE user_id = %s 
+    #                     ORDER BY created_at DESC 
+    #                     LIMIT 5
+    #                 """, (user_id,))
+    #                 recent_models = cursor.fetchall()
+                    
+    #                 user_stats = {
+    #                     'model_count': model_count,
+    #                     'use_case_count': use_case_count,
+    #                     'embedding_count': embedding_count,
+    #                     'recent_models': recent_models
+    #                 }
+    #     except Exception as e:
+    #         logger.error(f"Error fetching user stats: {str(e)}")
+    #         user_stats = {
+    #             'model_count': 0,
+    #             'use_case_count': 0,
+    #             'embedding_count': 0,
+    #             'recent_models': []
+    #         }
+        
+    #     return render_template('profile.html', 
+    #                          user=user, 
+    #                          stats=user_stats,
+    #                          user_name=session.get('user_name', 'User'))
+    
+    # Also add a route for updating profile if needed
+    # @app.route('/update-profile', methods=['POST'])
+    # @login_required
+    # def update_profile():
+    #     """Update user profile information"""
+    #     user_id = session.get('user_id')
+    #     if not user_id:
+    #         return jsonify({'success': False, 'error': 'Not logged in'}), 401
+        
+    #     try:
+    #         # Get form data
+    #         new_name = request.form.get('name', '').strip()
+    #         new_email = request.form.get('email', '').strip()
+            
+    #         if not new_name or not new_email:
+    #             return jsonify({'success': False, 'error': 'Name and email are required'}), 400
+            
+    #         # Update user in database
+    #         with get_db_connection() as conn:
+    #             with conn.cursor() as cursor:
+    #                 cursor.execute("""
+    #                     UPDATE users 
+    #                     SET name = %s, email = %s, updated_at = %s
+    #                     WHERE id = %s
+    #                 """, (new_name, new_email, datetime.now(), user_id))
+    #                 conn.commit()
+            
+    #         # Update session
+    #         session['user_name'] = new_name
+    #         session['user_email'] = new_email
+            
+    #         flash('Profile updated successfully', 'success')
+    #         return jsonify({'success': True, 'message': 'Profile updated successfully'})
+            
+    #     except Exception as e:
+    #         logger.error(f"Error updating profile: {str(e)}")
+    #         return jsonify({'success': False, 'error': str(e)}), 500
+
     @app.route('/upload', methods=['GET', 'POST'])
     @login_required
     def upload_file():
@@ -1230,10 +2153,8 @@ def init_routes(app):
         return render_template('upload.html', allowed_extensions=app.config['ALLOWED_EXTENSIONS'],
                               active_model=ACTIVE_MODEL.capitalize())
          
- 
-    
-    # Fixed implementation for db_main.py
-    
+     
+            
     @app.route('/save-column-mappings', methods=['POST'])
     @login_required
     def save_column_mappings():
@@ -1274,31 +2195,29 @@ def init_routes(app):
                 else:
                     return jsonify({'success': False, 'error': f'File not found: {filename}'})
             
-            # Read the data
+            # Read the data using read_data_flexible for EDA only
             try:
+                logger.info(f"Reading data for EDA from: {file_path}")
                 df = read_data_flexible(file_path)
+                
                 if df is None or df.empty:
-                    # Fallback to pandas
-                    if file_path.lower().endswith('.csv'):
-                        df = pd.read_csv(file_path, encoding='utf-8')
-                    elif file_path.lower().endswith(('.xlsx', '.xls')):
-                        df = pd.read_excel(file_path)
-                    else:
-                        return jsonify({'success': False, 'error': 'Unsupported file format'})
+                    logger.error("read_data_flexible returned None or empty DataFrame")
+                    return jsonify({'success': False, 'error': 'Failed to read file'})
                 
                 logger.info(f"Data loaded successfully: {df.shape}")
+                logger.info(f"Columns: {list(df.columns)}")
+                
             except Exception as e:
                 logger.error(f"Error reading file: {str(e)}")
                 return jsonify({'success': False, 'error': f'Error reading file: {str(e)}'})
             
-            # Initialize enhanced column mapper and perform EDA
+            # Initialize column mapper and perform EDA
             eda_results = {}
             try:
-                from enhanced_column_mapper import EnhancedColumnMapper
                 column_mapper = EnhancedColumnMapper(gemini_model if HAS_GEMINI_CONFIG else None)
                 
-                # Perform EDA if not already done
-                logger.info("Performing EDA analysis...")
+                # Perform EDA on original data
+                logger.info("Performing EDA analysis on original data...")
                 eda_results = column_mapper.perform_comprehensive_eda(df)
                 
                 # Save mappings with EDA results
@@ -1306,62 +2225,40 @@ def init_routes(app):
                 
                 if not success:
                     logger.warning("Failed to save mappings to database, but continuing...")
-                
-                # Apply mappings
-                df_mapped = column_mapper.apply_mappings(df, mappings)
-                
+                    
             except Exception as e:
-                logger.warning(f"Enhanced mapper error: {str(e)}, using basic mapper")
+                logger.warning(f"Enhanced mapper error: {str(e)}")
                 # Fallback to basic column mapper
-                from column_mapper import ColumnMapper
                 column_mapper = ColumnMapper(gemini_model if HAS_GEMINI_CONFIG else None)
                 column_mapper.save_mappings(user_id, filename, mappings)
-                
-                # Simple column renaming
-                rename_dict = {m['original_name']: m['mapped_name'] 
-                              for m in mappings 
-                              if m['original_name'] != m['mapped_name']}
-                df_mapped = df.rename(columns=rename_dict) if rename_dict else df
             
-            # Save mapped data
-            try:
-                base_path = file_path.rsplit('.', 1)[0]
-                extension = file_path.rsplit('.', 1)[1] if '.' in file_path else 'csv'
-                mapped_filepath = f"{base_path}_mapped.{extension}"
-                
-                if extension.lower() == 'csv':
-                    df_mapped.to_csv(mapped_filepath, index=False)
-                else:
-                    df_mapped.to_excel(mapped_filepath, index=False)
-                
-                logger.info(f"Saved mapped data to: {mapped_filepath}")
-                
-            except Exception as e:
-                logger.error(f"Error saving mapped file: {str(e)}")
-                mapped_filepath = file_path
-            
-            # Store important data in session
+            # Store important data in session - NO MAPPED FILE
             session['last_uploaded_file'] = filename
-            session['mapped_file_path'] = mapped_filepath
-            session['column_mappings'] = mappings
             session['original_file_path'] = file_path
+            session['column_mappings'] = mappings
             
-            # Store EDA results summary if available
+            # Remove any mapped file path from session
+            if 'mapped_file_path' in session:
+                del session['mapped_file_path']
+            
+            # Store EDA results if available
             if eda_results:
-                session['eda_results'] = eda_results  # Store full EDA results
+                session['eda_results'] = eda_results
                 session['has_eda'] = True
             
             # Identify target columns
             target_columns = [m for m in mappings if m.get('is_target')]
             if target_columns:
-                session['target_variable'] = target_columns[0]['mapped_name']
+                # Store the ORIGINAL column name as target, not the mapped name
+                session['target_variable'] = target_columns[0]['original_name']
+                logger.info(f"Target variable identified: {target_columns[0]['original_name']} (mapped to: {target_columns[0]['mapped_name']})")
             
-            logger.info("Successfully processed column mappings, redirecting to business insights")
+            logger.info("Successfully processed column mappings (using original file)")
             
-            # Return success - redirect to business insights WITHOUT filename in URL
+            # Return success - redirect to business insights
             return jsonify({
                 'success': True,
-                'redirect': url_for('business_insights')  # No filename parameter
+                'redirect': url_for('business_insights')
             })
             
         except Exception as e:
@@ -1372,9 +2269,6 @@ def init_routes(app):
                 'success': False,
                 'error': f'An unexpected error occurred: {str(e)}'
             })
-    
-    
-  
     
     # Add a separate API endpoint for getting more data if needed
     @app.route('/api/business-insights-data')
@@ -1423,14 +2317,12 @@ def init_routes(app):
         except Exception as e:
             logger.error(f"Error in API: {str(e)}")
             return jsonify({'error': str(e)}), 500
-
-
-
     
+            
     @app.route('/validate-columns')
     @login_required
     def validate_columns():
-        """Display column validation and mapping interface with comprehensive EDA"""
+        """Simplified column validation that works with existing template"""
         # Get uploaded file info from session
         file_info = session.get('uploaded_file')
         if not file_info:
@@ -1441,83 +2333,174 @@ def init_routes(app):
         filepath = file_info['filepath']
         
         try:
-            # Read the data
+            # Read the file
+            logger.info(f"Reading file for column validation: {filepath}")
             df = read_data_flexible(filepath)
             
-            # Initialize enhanced column mapper
-            column_mapper = EnhancedColumnMapper(gemini_model if HAS_GEMINI_CONFIG else None)
+            if df is None or df.empty:
+                flash('Failed to read the uploaded file.', 'error')
+                return redirect(url_for('upload_file'))
             
-            # Check if we have saved mappings for this file
-            user_id = session.get('user_id')
-            saved_mappings, saved_eda = column_mapper.get_saved_mappings_with_eda(user_id, filename)
+            logger.info(f"Successfully read file: {df.shape[0]} rows, {df.shape[1]} columns")
             
-            if saved_mappings and saved_eda:
-                # Use saved mappings and EDA
-                analysis = {
-                    'columns': saved_mappings,
-                    'dataset_summary': f'Previously analyzed dataset: {filename}',
-                    'suggested_use_cases': [],
-                    'eda_results': saved_eda
-                }
-            else:
-                # Perform comprehensive analysis with EDA
-                analysis = column_mapper.analyze_columns_with_eda(df, filename)
-            
-            # Prepare column data for template with enhanced target information
+            # Prepare columns data for the existing template
             columns = []
-            for col_info in analysis.get('columns', []):
-                # Get sample data for this column
-                sample_data = df[col_info['original_name']].dropna().head(5).tolist() if col_info['original_name'] in df.columns else []
+            for col in df.columns:
+                # Basic statistics - convert to Python native types
+                missing_count = int(df[col].isnull().sum())
+                missing_pct = float((missing_count / len(df)) * 100)
+                unique_count = int(df[col].nunique())
                 
-                column_data = {
-                    'original_name': col_info['original_name'],
-                    'suggested_name': col_info.get('suggested_name', col_info['original_name']),
-                    'data_type': col_info.get('data_type', 'text'),
-                    'description': col_info.get('description', ''),
-                    'is_target': col_info.get('is_target', False),
-                    'target_meaning': col_info.get('target_meaning', ''),
-                    'confidence': col_info.get('confidence', 0.5),
-                    'sample_data': sample_data
+                # Detect data type
+                data_type = detect_simple_data_type(df[col])
+                
+                # Get sample data - ensure serializable
+                sample_data = []
+                for val in df[col].dropna().head(5):
+                    if pd.isna(val):
+                        sample_data.append(None)
+                    elif isinstance(val, (pd.Timestamp, pd.DatetimeIndex)):
+                        sample_data.append(str(val))
+                    elif isinstance(val, (np.integer, np.int64, np.int32)):
+                        sample_data.append(int(val))
+                    elif isinstance(val, (np.floating, np.float64, np.float32)):
+                        sample_data.append(float(val))
+                    else:
+                        sample_data.append(str(val))
+                
+                # Check if likely target
+                is_target = is_likely_target(col)
+                
+                col_info = {
+                    'original_name': str(col),
+                    'suggested_name': str(col).replace('_', ' ').title(),
+                    'data_type': data_type,
+                    'description': '',
+                    'is_target': is_target,
+                    'target_meaning': 'Target variable for prediction' if is_target else '',
+                    'confidence': 0.8 if is_target else 0.5,
+                    'sample_data': sample_data,
+                    'missing_count': missing_count,
+                    'missing_percentage': round(missing_pct, 2),
+                    'unique_values': unique_count
                 }
                 
-                # Add target-specific fields if this is identified as a target
-                if column_data['is_target']:
-                    column_data['prediction_use_cases'] = col_info.get('prediction_use_cases', [])
-                    column_data['business_value'] = col_info.get('business_value', '')
-                    column_data['model_type'] = col_info.get('model_type', 'classification')
+                # Add target-specific fields if identified as target
+                if is_target:
+                    col_info['prediction_use_cases'] = [
+                        'Predict ' + col,
+                        'Identify patterns affecting ' + col,
+                        'Build automated decision system'
+                    ]
+                    col_info['business_value'] = 'Enable data-driven predictions and improve decision making'
+                    col_info['model_type'] = 'classification' if data_type in ['categorical', 'boolean'] else 'regression'
                 
-                columns.append(column_data)
+                columns.append(col_info)
             
-            # Extract EDA results for template
-            eda_results = analysis.get('eda_results', {})
+            # Basic data quality metrics for the template - convert to native types
+            total_cells = int(df.shape[0] * df.shape[1])
+            total_missing = int(df.isnull().sum().sum())
             
-            # Convert numpy types to JSON-serializable types
-            eda_results = make_json_serializable(eda_results)
-            data_quality = make_json_serializable(eda_results.get('data_quality', {}))
-            correlations = make_json_serializable(eda_results.get('correlations', {}))
-            business_insights = make_json_serializable(eda_results.get('business_insights', []))
+            data_quality = {
+                'quality_score': round(100 - (total_missing / total_cells * 100) if total_cells > 0 else 100, 2),
+                'missing_percentage': round((total_missing / total_cells * 100) if total_cells > 0 else 0, 2),
+                'completeness_score': round(100 - (total_missing / total_cells * 100) if total_cells > 0 else 100, 2)
+            }
+            
+            # Simple EDA results for template compatibility
+            eda_results = {
+                'basic_stats': {
+                    'n_rows': int(len(df)),
+                    'n_columns': int(len(df.columns))
+                },
+                'data_quality': data_quality
+            }
+            
+            # Empty placeholders for template compatibility
+            correlations = {}
+            business_insights = []
             
             return render_template('enhanced_column_validation.html',
                                  filename=filename,
                                  file_path=filepath,
-                                 total_rows=len(df),
-                                 total_columns=len(df.columns),
+                                 total_rows=int(len(df)),
+                                 total_columns=int(len(df.columns)),
                                  columns=columns,
-                                 dataset_summary=analysis.get('dataset_summary', ''),
-                                 suggested_use_cases=analysis.get('suggested_use_cases', []),
+                                 dataset_summary=f'Dataset from {filename} with {len(df):,} rows and {len(df.columns)} columns',
+                                 suggested_use_cases=[],
                                  eda_results=eda_results,
                                  data_quality=data_quality,
-                                 correlations=correlations,
-                                 business_insights=business_insights,
+                                 correlations={},
+                                 business_insights=[],
                                  saved_templates=[])
             
         except Exception as e:
-            error_trace = traceback.format_exc()
-            print(f"Error in column validation: {str(e)}\n{error_trace}")
+            logger.error(f"Error in column validation: {str(e)}")
             flash(f"Error analyzing columns: {str(e)}", 'error')
             return redirect(url_for('upload_file'))
-                
-        
+    
+    
+    # Add this import at the top of your file
+    import numpy as np
+    
+    # Helper functions to support the template
+    def detect_simple_data_type(series):
+        """Simple data type detection"""
+        if pd.api.types.is_numeric_dtype(series):
+            # Check if it's integer-like
+            if series.dtype in ['int64', 'int32'] or (series.dropna() % 1 == 0).all():
+                return 'integer'
+            return 'numeric'
+        elif series.nunique() == 2:
+            return 'boolean'
+        elif series.nunique() < 20:
+            return 'categorical'
+        elif pd.api.types.is_datetime64_any_dtype(series):
+            return 'date'
+        else:
+            return 'text'
+    
+    
+    def is_likely_target(col_name):
+        """Check if column name suggests it's a target variable"""
+        target_keywords = [
+            'target', 'label', 'class', 'outcome', 'result', 'predict',
+            'churn', 'subscribe', 'buy', 'purchase', 'fraud', 'default',
+            'success', 'fail', 'score', 'rating', 'price', 'value',
+            'revenue', 'profit', 'cost', 'amount', 'deposit', 'y'
+        ]
+        col_lower = col_name.lower()
+        return any(keyword in col_lower for keyword in target_keywords)  
+    
+    # Helper functions to support the template
+    def detect_simple_data_type(series):
+        """Simple data type detection"""
+        if pd.api.types.is_numeric_dtype(series):
+            # Check if it's integer-like
+            if series.dtype in ['int64', 'int32'] or (series.dropna() % 1 == 0).all():
+                return 'integer'
+            return 'numeric'
+        elif series.nunique() == 2:
+            return 'boolean'
+        elif series.nunique() < 20:
+            return 'categorical'
+        elif pd.api.types.is_datetime64_any_dtype(series):
+            return 'date'
+        else:
+            return 'text'
+    
+    
+    def is_likely_target(col_name):
+        """Check if column name suggests it's a target variable"""
+        target_keywords = [
+            'target', 'label', 'class', 'outcome', 'result', 'predict',
+            'churn', 'subscribe', 'buy', 'purchase', 'fraud', 'default',
+            'success', 'fail', 'score', 'rating', 'price', 'value',
+            'revenue', 'profit', 'cost', 'amount', 'deposit', 'y'
+        ]
+        col_lower = col_name.lower()
+        return any(keyword in col_lower for keyword in target_keywords)
+     
         
 
     @app.route('/results')
@@ -1701,10 +2684,10 @@ def init_routes(app):
                 converted_feature_importance = {}
                 for key, value in feature_importance.items():
                     # Convert NumPy float32/float64 to Python float
-                    if isinstance(value, (np.float32, np.float64, np.float16, np.float_)):
+                    if isinstance(value, (np.float32, np.float64, np.float16, np.floating)):
                         converted_feature_importance[key] = float(value)
                     # Convert NumPy int types to Python int
-                    elif isinstance(value, (np.int32, np.int64, np.int16, np.int8, np.int_, np.intc, np.intp)):
+                    elif isinstance(value, (np.int32, np.int64, np.int16, np.int8, np.integer, np.intc, np.intp)):
                         converted_feature_importance[key] = int(value)
                     # Convert NumPy bool to Python bool
                     elif isinstance(value, np.bool_):
@@ -1855,10 +2838,9 @@ def init_routes(app):
         def clean_value(value):
             if value is None:
                 return None
-            elif isinstance(value, (np.int_, np.intc, np.intp, np.int8, np.int16, np.int32, np.int64,
-                                   np.uint8, np.uint16, np.uint32, np.uint64)):
+            elif isinstance(value, np.integer):
                 return int(value)
-            elif isinstance(value, (np.float_, np.float16, np.float32, np.float64)):
+            elif isinstance(value, np.floating):
                 return float(value)
             elif isinstance(value, np.bool_):
                 return bool(value)
@@ -1874,9 +2856,7 @@ def init_routes(app):
                 return value.isoformat()
             else:
                 return value
-        
-        return {k: clean_value(v) for k, v in metadata.items()}
-    
+            
 
         
         
@@ -3604,8 +4584,227 @@ def init_routes(app):
             logger.error(traceback.format_exc())
             flash(f'Error loading data: {str(e)}', 'error')
             return redirect(url_for('upload_file'))
+    
+    
 
- 
+    
+    @app.route('/train_churn_model', methods=['POST'])
+    @login_required
+    def train_churn_model():
+        """Special handler for churn analysis models"""
+        try:
+            # Get user information
+            user_id = session.get('user_id')
+            if not user_id:
+                return jsonify({'error': 'User not authenticated'}), 401
+            
+            # Get information from the session
+            filename = session.get('last_filename', 'Unknown file')
+            proposal_index = int(request.form.get('proposal_index', 0))
+            file_path = session.get('file_path')
+            proposals = session.get('proposals', [])
+            
+            # Get the selected proposal
+            selected_proposal = None
+            if proposals and len(proposals) > proposal_index:
+                selected_proposal = proposals[proposal_index]
+                target_variable = selected_proposal.get('target_variable')
+            
+            # Check if this is actually a churn use case
+            if not selected_proposal or 'churn' not in selected_proposal.get('title', '').lower():
+                # Fall back to regular training
+                return train_model('classification')
+            
+            logger.info(f"Running churn analysis for file: {file_path}")
+            
+            # Create output directory for this user
+            output_dir = os.path.join('churn_analysis_output', user_id)
+            os.makedirs(output_dir, exist_ok=True)
+            
+            # Create a static directory to serve the dashboard
+            static_churn_dir = os.path.join('static', 'churn_dashboards', user_id)
+            os.makedirs(static_churn_dir, exist_ok=True)
+            
+            try:
+                # Initialize and run the churn analysis pipeline
+                pipeline = ChurnAnalysisPipeline(
+                    output_dir=output_dir,
+                    model_dir=os.path.join(output_dir, 'models')
+                )
+                
+                # Run analysis
+                results = pipeline.analyze_file(filepath=file_path, target_col=target_variable)
+                
+                # Copy the generated dashboard to static directory
+                source_dashboard = os.path.join(output_dir, 'churn_analysis_dashboard.html')
+                if os.path.exists(source_dashboard):
+                    # Generate unique dashboard filename
+                    dashboard_id = str(uuid.uuid4())
+                    dashboard_filename = f'churn_dashboard_{dashboard_id}.html'
+                    dest_dashboard = os.path.join(static_churn_dir, dashboard_filename)
+                    
+                    # Copy the dashboard file
+                    shutil.copy2(source_dashboard, dest_dashboard)
+                    
+                    # Store dashboard info in session
+                    session['churn_dashboard_id'] = dashboard_id
+                    session['churn_dashboard_path'] = dest_dashboard
+                    
+                    # Save the model info to database
+                    model_name = f"Churn Analysis - {selected_proposal.get('title', 'Model')}"
+                    metadata = {
+                        'type': 'churn_analysis',
+                        'target_variable': target_variable,
+                        'model_type': 'churn_prediction',
+                        'accuracy': results['model_accuracy'],
+                        'churn_rate': results['churn_rate'],
+                        'revenue_at_risk': results['revenue_at_risk'],
+                        'title': model_name,
+                        'description': selected_proposal.get('description', ''),
+                        'dashboard_id': dashboard_id,
+                        'dashboard_filename': dashboard_filename,
+                        'source_file': filename,
+                        'features': results.get('top_features', []),
+                        'best_model': results.get('best_model', 'random_forest'),
+                        'total_customers': results.get('total_customers', 0),
+                        'high_risk_count': results.get('high_risk_count', 0)
+                    }
+                    
+                    # Save model to database
+                    model_id = str(uuid.uuid4())
+                    
+                    # Also copy the predictions CSV if it exists
+                    predictions_source = os.path.join(output_dir, 'customer_churn_predictions.csv')
+                    if os.path.exists(predictions_source):
+                        predictions_dest = os.path.join(static_churn_dir, f'predictions_{dashboard_id}.csv')
+                        shutil.copy2(predictions_source, predictions_dest)
+                        metadata['predictions_file'] = f'predictions_{dashboard_id}.csv'
+                    
+                    with get_db_connection() as conn:
+                        with conn.cursor() as cursor:
+                            cursor.execute(
+                                """
+                                INSERT INTO models (id, user_id, name, metadata, created_at)
+                                VALUES (%s, %s, %s, %s, %s)
+                                """,
+                                (model_id, user_id, model_name, json.dumps(metadata), datetime.now())
+                            )
+                            conn.commit()
+                    
+                    session['current_model_id'] = model_id
+                    
+                    return jsonify({
+                        'success': True,
+                        'redirect': url_for('view_churn_dashboard', dashboard_id=dashboard_id)
+                    })
+                else:
+                    raise ValueError("Dashboard generation failed - file not found")
+                    
+            except Exception as e:
+                logger.error(f"Error in churn analysis: {str(e)}")
+                return jsonify({
+                    'error': f'Churn analysis failed: {str(e)}'
+                }), 500
+                
+        except Exception as e:
+            error_trace = traceback.format_exc()
+            logger.error(f"Error in train_churn_model: {str(e)}\n{error_trace}")
+            return jsonify({
+                'success': False,
+                'error': str(e)
+            }), 500
+    
+    @app.route('/churn_dashboard/<dashboard_id>')
+    @login_required
+    def view_churn_dashboard(dashboard_id):
+        """View the churn analysis dashboard"""
+        user_id = session.get('user_id')
+        
+        # Construct the dashboard path
+        dashboard_filename = f'churn_dashboard_{dashboard_id}.html'
+        dashboard_path = os.path.join('static', 'churn_dashboards', user_id, dashboard_filename)
+        
+        # Check if file exists
+        if not os.path.exists(dashboard_path):
+            flash('Dashboard not found. Please run the analysis again.', 'error')
+            return redirect(url_for('my_models'))
+        
+        # Serve the dashboard file
+        return send_from_directory(
+            os.path.join('static', 'churn_dashboards', user_id),
+            dashboard_filename
+        )
+    
+    @app.route('/churn_dashboard_from_model/<model_id>')
+    @login_required
+    def view_churn_dashboard_from_model(model_id):
+        """View a saved churn dashboard by model ID"""
+        user_id = session.get('user_id')
+        
+        # Get model from database
+        with get_db_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT metadata FROM models 
+                    WHERE id = %s AND user_id = %s
+                    """,
+                    (model_id, user_id)
+                )
+                result = cursor.fetchone()
+        
+        if not result:
+            flash('Model not found', 'error')
+            return redirect(url_for('my_models'))
+        
+        metadata = result['metadata']
+        dashboard_id = metadata.get('dashboard_id')
+        
+        if not dashboard_id:
+            flash('No dashboard found for this model', 'error')
+            return redirect(url_for('my_models'))
+        
+        # Redirect to the dashboard view
+        return redirect(url_for('view_churn_dashboard', dashboard_id=dashboard_id))
+    
+    @app.route('/download_churn_predictions/<model_id>')
+    @login_required
+    def download_churn_predictions(model_id):
+        """Download the churn predictions CSV"""
+        from flask import send_from_directory
+        
+        user_id = session.get('user_id')
+        
+        # Get model from database
+        with get_db_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT metadata FROM models 
+                    WHERE id = %s AND user_id = %s
+                    """,
+                    (model_id, user_id)
+                )
+                result = cursor.fetchone()
+        
+        if not result:
+            flash('Model not found', 'error')
+            return redirect(url_for('my_models'))
+        
+        metadata = result['metadata']
+        predictions_file = metadata.get('predictions_file')
+        
+        if not predictions_file:
+            flash('No predictions file found', 'error')
+            return redirect(url_for('my_models'))
+        
+        # Send the file
+        return send_from_directory(
+            os.path.join('static', 'churn_dashboards', user_id),
+            predictions_file,
+            as_attachment=True,
+            download_name='churn_predictions.csv'
+        )    
 def load_model_from_db(model_id, user_id=None):
     """
     Load a model and its preprocessor from the database
@@ -3698,15 +4897,429 @@ def load_model_from_db(model_id, user_id=None):
         logger.error(f"Error loading model from database: {str(e)}")
         logger.error(traceback.format_exc())
         return None, None, None
+
+
+# # Enhanced analytical prompt for get_ai_use_case_proposals function
+
+# def create_analytical_prompt(filename, file_content, column_mappings, json_example):
+#     """Create an analytical prompt that examines actual data before proposing use cases"""
+    
+#     # Build detailed column information if mappings are provided
+#     column_info_section = ""
+#     target_columns_section = ""
+#     all_columns_list = ""
+    
+#     if column_mappings:
+#         # Create lists for different types of columns
+#         column_descriptions = []
+#         target_columns = []
+#         all_column_names = []
+        
+#         for mapping in column_mappings:
+#             # Collect all column names
+#             all_column_names.append(mapping['mapped_name'])
+            
+#             # Build detailed column description
+#             col_desc = f"- **{mapping['mapped_name']}**"
+#             if mapping['original_name'] != mapping['mapped_name']:
+#                 col_desc += f" (originally: {mapping['original_name']})"
+#             col_desc += f"\n  - Type: {mapping.get('data_type', 'unknown')}"
+#             col_desc += f"\n  - Description: {mapping.get('description', 'No description provided')}"
+            
+#             column_descriptions.append(col_desc)
+            
+#             # Collect target columns with full details
+#             if mapping.get('is_target', False):
+#                 target_info = {
+#                     'name': mapping['mapped_name'],
+#                     'original_name': mapping['original_name'],
+#                     'meaning': mapping.get('target_meaning', ''),
+#                     'use_cases': mapping.get('prediction_use_cases', []),
+#                     'business_value': mapping.get('business_value', ''),
+#                     'model_type': mapping.get('model_type', 'auto'),
+#                     'data_type': mapping.get('data_type', 'unknown'),
+#                     'description': mapping.get('description', '')
+#                 }
+#                 target_columns.append(target_info)
+        
+#         # Build column information section
+#         all_columns_list = f"\nAVAILABLE COLUMNS IN DATASET: {', '.join(all_column_names)}\n"
+        
+#         column_info_section = f"""
+# VALIDATED COLUMN INFORMATION:
+# {chr(10).join(column_descriptions)}
+# """
+        
+#         # Build detailed target columns section
+#         if target_columns:
+#             target_columns_section = f"""
+# USER-IDENTIFIED TARGET VARIABLES:
+# The user has identified the following columns as potential target variables. You MUST create at least one use case for EACH of these:
+
+# """
+#             for i, target in enumerate(target_columns, 1):
+#                 target_columns_section += f"""
+# {i}. Target Column: "{target['name']}"
+#    - User-Validated Meaning: {target['meaning']}
+#    - Data Type: {target['data_type']}
+#    - Description: {target['description']}
+#    - Recommended Model Type: {target['model_type']}
+#    - Business Value: {target['business_value']}
+#    - User Suggested Use Cases: {'; '.join(target['use_cases']) if target['use_cases'] else 'Create relevant use cases'}
+# """
+    
+#     # Create the analytical prompt
+#     prompt_text = f"""You are a data scientist analyzing a dataset to identify REALISTIC and DATA-SUPPORTED AI/ML use cases. You must examine the actual data content, not just column names.
+
+# FILENAME: {filename}
+# {all_columns_list}
+# {column_info_section}
+# {target_columns_section}
+
+# FILE CONTENT SAMPLE (analyze this carefully):
+# {file_content[:30000]}
+
+# CRITICAL ANALYTICAL INSTRUCTIONS:
+
+# 1. **DATA ANALYSIS FIRST**: Before proposing any use case, you MUST:
+#    - Examine the actual data values in the sample
+#    - Identify data patterns, distributions, and quality issues
+#    - Check for sufficient variation in potential target variables
+#    - Assess data completeness and missing value patterns
+#    - Identify relationships between features
+#    - Determine if there's enough signal in the data for predictions
+
+# 2. **REALISTIC USE CASES ONLY**: Only propose use cases that are:
+#    - Supported by actual patterns visible in the data
+#    - Feasible given the data quality and completeness
+#    - Have sufficient examples of different outcomes/values
+#    - Show meaningful variation that can be learned
+
+# 3. **DATA QUALITY ASSESSMENT**: For each proposed use case:
+#    - Verify the target variable has meaningful variation (not all same value)
+#    - Ensure sufficient non-null values for training
+#    - Confirm relevant features exist with good data quality
+#    - Check if there are enough examples of each class/outcome
+
+# 4. **REJECT UNSUITABLE USE CASES**: Do NOT propose a use case if:
+#    - The target variable has >90% missing values
+#    - The target variable has no variation (all same value)
+#    - There's insufficient data to learn patterns
+#    - The features and target show no apparent relationship
+
+# 5. **MINIMUM PROPOSALS**: Generate 3-5 use cases, but ONLY if the data supports them
+
+# Example of proper analysis:
+# "Looking at the 'churn' column, I see it has values [0, 1] with approximately 20% positive cases and 80% negative cases. This provides sufficient examples of both classes. The customer features like 'tenure', 'monthly_charges', and 'total_charges' show good variation and could be predictive of churn."
+
+# For each AI use case proposal, provide:
+# 1. **Data-backed justification**: Explain what patterns in the data support this use case
+# 2. A clear, business-focused title
+# 3. A detailed description including data insights
+# 4. 3-5 specific, measurable KPIs
+# 5. Clear business value proposition
+# 6. The EXACT target variable name from the dataset
+# 7. Appropriate model type based on the target's data distribution
+# 8. Implementation complexity based on data quality
+# 9. Prediction interpretation with actual data examples
+# 10. Target variable analysis with statistics
+
+# IMPORTANT:
+# - Analyze the ACTUAL DATA VALUES, not just column names
+# - Cite specific examples from the data sample
+# - If data quality is poor, acknowledge it and adjust proposals
+# - Be honest about limitations and data issues
+# - Only propose what the data can realistically support
+
+# Return ONLY a valid JSON array with this structure:
+# {json_example}
+
+# Each proposal must include evidence from the actual data that supports its feasibility."""
+    
+#     return prompt_text
+
+
+def analyze_data_for_proposals(df, column_mappings):
+    """
+    Analyze actual data to provide statistics for the AI prompt
+    """
+    data_analysis = {
+        'total_rows': len(df),
+        'columns': {}
+    }
+    
+    for col in df.columns:
+        col_analysis = {
+            'null_count': df[col].isnull().sum(),
+            'null_percentage': (df[col].isnull().sum() / len(df) * 100),
+            'unique_values': df[col].nunique(),
+            'dtype': str(df[col].dtype)
+        }
+        
+        # For numeric columns, add statistics
+        if pd.api.types.is_numeric_dtype(df[col]):
+            col_analysis['min'] = float(df[col].min()) if not pd.isna(df[col].min()) else None
+            col_analysis['max'] = float(df[col].max()) if not pd.isna(df[col].max()) else None
+            col_analysis['mean'] = float(df[col].mean()) if not pd.isna(df[col].mean()) else None
+            col_analysis['std'] = float(df[col].std()) if not pd.isna(df[col].std()) else None
+            col_analysis['has_variation'] = col_analysis['std'] > 0 if col_analysis['std'] is not None else False
+        else:
+            # For categorical columns, show value distribution
+            value_counts = df[col].value_counts().head(10)
+            col_analysis['top_values'] = {str(k): int(v) for k, v in value_counts.items()}
+            col_analysis['has_variation'] = col_analysis['unique_values'] > 1
+        
+        # Check if this is a potential target variable
+        col_analysis['suitable_as_target'] = (
+            col_analysis['null_percentage'] < 50 and 
+            col_analysis['has_variation'] and
+            col_analysis['unique_values'] > 1
+        )
+        
+        data_analysis['columns'][col] = col_analysis
+    
+    return data_analysis
+
  
+def create_app():
+    """
+    Create and configure the Flask application
+    
+    Returns:
+        tuple: (app, ACTIVE_MODEL, HAS_GEMINI_CONFIG, CLAUDE_API_KEY, CLAUDE_API_URL, CLAUDE_MODEL, GEMINI_MODEL_NAME)
+    """
+    app = Flask(__name__, static_folder='static')
+    
+    # Create directories if they don't exist
+    if not os.path.exists('static'):
+        os.makedirs('static')
+        
+    # Create database directories if they don't exist
+    if not os.path.exists(Config.DATABASE_DIR):
+        os.makedirs(Config.DATABASE_DIR)
+    
+    # Create user models directory if it doesn't exist
+    user_models_dir = os.path.join(Config.DATABASE_DIR, 'user_models')
+    if not os.path.exists(user_models_dir):
+        os.makedirs(user_models_dir)
+    
+    # Load configuration from Config class
+    app.config['UPLOAD_FOLDER'] = Config.UPLOAD_FOLDER
+    app.config['ALLOWED_EXTENSIONS'] = Config.ALLOWED_EXTENSIONS
+    app.config['SECRET_KEY'] = Config.SECRET_KEY or os.urandom(24)
+    
+    # Session configuration from Config class
+    app.config['SESSION_TYPE'] = Config.SESSION_TYPE
+    app.config['SESSION_FILE_DIR'] = Config.SESSION_FILE_DIR
+    app.config['SESSION_PERMANENT'] = Config.SESSION_PERMANENT
+    app.config['SESSION_USE_SIGNER'] = Config.SESSION_USE_SIGNER
+    app.config['SESSION_COOKIE_MAX_SIZE'] = Config.SESSION_COOKIE_MAX_SIZE
+    app.config['SESSION_COOKIE_SECURE'] = Config.SESSION_COOKIE_SECURE
+    app.config['SESSION_COOKIE_HTTPONLY'] = Config.SESSION_COOKIE_HTTPONLY
+    app.config['SESSION_COOKIE_SAMESITE'] = Config.SESSION_COOKIE_SAMESITE
+    
+    # Initialize Flask-Session
+    Session(app)
+    
+    # Initialize the database
+    init_database()
+    
+    # Verify EDA database schema
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cursor:
+                # Check if EDA columns exist in column_mappings table
+                cursor.execute("""
+                    SELECT column_name 
+                    FROM information_schema.columns 
+                    WHERE table_name = 'column_mappings' AND column_name = 'eda_results'
+                """)
+                eda_column_exists = cursor.fetchone()
+                
+                if not eda_column_exists:
+                    logger.info("Adding EDA support to column_mappings table")
+                    cursor.execute("""
+                        ALTER TABLE column_mappings 
+                        ADD COLUMN IF NOT EXISTS eda_results JSONB
+                    """)
+                    conn.commit()
+                    logger.info("EDA column added successfully")
+    except Exception as e:
+        logger.error(f"Error updating database schema for EDA: {str(e)}")
+    
+    # Get active model from config
+    ACTIVE_MODEL = Config.ACTIVE_MODEL.lower()
+    if ACTIVE_MODEL not in ['claude', 'gemini']:
+        logger.warning(f"Unknown model '{ACTIVE_MODEL}' specified. Defaulting to Claude.")
+        ACTIVE_MODEL = 'claude'
+    
+    # Claude API configuration
+    CLAUDE_API_KEY = Config.CLAUDE_API_KEY
+    CLAUDE_API_URL = "https://api.anthropic.com/v1/messages"
+    CLAUDE_MODEL = Config.CLAUDE_MODEL
+    
+    # Gemini API configuration
+    GOOGLE_API_KEY = Config.GOOGLE_API_KEY
+    GEMINI_MODEL_NAME = Config.GEMINI_MODEL
+    
+    # Initialize Gemini if it's the active model and API key is available
+    HAS_GEMINI_CONFIG = False
+    
+    if ACTIVE_MODEL == 'gemini' and HAS_GEMINI and GOOGLE_API_KEY:
+        try:
+            genai.configure(api_key=GOOGLE_API_KEY)
+            gemini_model = genai.GenerativeModel(GEMINI_MODEL_NAME)
+            HAS_GEMINI_CONFIG = True
+            logger.info(f"Gemini model '{GEMINI_MODEL_NAME}' configured successfully.")
+        except Exception as e:
+            logger.error(f"Error configuring Gemini API: {str(e)}")
+            logger.info("Falling back to Claude due to Gemini configuration error.")
+            ACTIVE_MODEL = 'claude'
+    
+    # Create necessary directories if they don't exist
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
+    
+    # Register template filters and global functions
+    app.jinja_env.filters['nl2br'] = lambda text: text.replace('\n', '<br>') if text else ''
+    
+    def read_script_file(script_path):
+        """
+        Read the content of a script file
+        
+        Args:
+            script_path (str): Path to the script file
+            
+        Returns:
+            str: Content of the script file
+        """
+        try:
+            with open(script_path, 'r', encoding='utf-8') as f:
+                return f.read()
+        except Exception as e:
+            return f"Error reading file: {str(e)}"
+    
+    app.jinja_env.globals.update(read_script_file=read_script_file)
+    
+    # Custom template filters
+    @app.template_filter('datetimeformat')
+    def datetimeformat(value, format='%Y-%m-%d %H:%M'):
+        """
+        Custom Jinja2 filter to format datetime strings
+        
+        Args:
+            value (str): ISO formatted datetime string
+            format (str, optional): Desired output format. Defaults to '%Y-%m-%d %H:%M'
+        
+        Returns:
+            str: Formatted datetime string
+        """
+        try:
+            # Parse the ISO formatted datetime string
+            dt = datetime.fromisoformat(value)
+            return dt.strftime(format)
+        except (ValueError, TypeError):
+            # If parsing fails, return the original value
+            return value
+        
+    @app.template_filter('to_json_safe')
+    def to_json_safe(obj):
+        """
+        Convert NumPy types to Python native types for JSON serialization
+        """
+        import numpy as np
+        import json
+        
+        class NumpyEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, np.ndarray):
+                    return obj.tolist()
+                if isinstance(obj, np.integer):
+                    return int(obj)
+                if isinstance(obj, np.floating):
+                    return float(obj)
+                if isinstance(obj, np.bool_):
+                    return bool(obj)
+                return super().default(obj)
+        
+        return json.dumps(obj, cls=NumpyEncoder)
+    
+    # CRITICAL: Return the required tuple at the end
+    return app, ACTIVE_MODEL, HAS_GEMINI_CONFIG, CLAUDE_API_KEY, CLAUDE_API_URL, CLAUDE_MODEL, GEMINI_MODEL_NAME
+
+
+# Replace your current_app() function with this complete version:
+
+def current_app():
+    """Get the current application instance"""
+    global app, ACTIVE_MODEL, HAS_GEMINI_CONFIG, CLAUDE_API_KEY, CLAUDE_API_URL, CLAUDE_MODEL, GEMINI_MODEL_NAME, gemini_model
+    
+    if app is None:
+        try:
+            result = create_app()
+            if result is None:
+                raise ValueError("create_app() returned None")
+            
+            # Unpack all the values
+            app, ACTIVE_MODEL, HAS_GEMINI_CONFIG, CLAUDE_API_KEY, CLAUDE_API_URL, CLAUDE_MODEL, GEMINI_MODEL_NAME = result
+            
+            # Initialize Gemini model if configured
+            if ACTIVE_MODEL == 'gemini' and HAS_GEMINI_CONFIG:
+                try:
+                    import google.generativeai as genai
+                    genai.configure(api_key=Config.GOOGLE_API_KEY)
+                    gemini_model = genai.GenerativeModel(GEMINI_MODEL_NAME)
+                    logger.info(f"Gemini model initialized in current_app()")
+                except Exception as e:
+                    logger.error(f"Failed to initialize Gemini model: {e}")
+                    HAS_GEMINI_CONFIG = False
+            
+            logger.info(f"Flask app created successfully with model: {ACTIVE_MODEL}")
+            
+        except Exception as e:
+            logger.error(f"Failed to create app: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            raise
+    
+    return app
+
+
+# Fix your main execution section:
+
 if __name__ == '__main__':
+    # Get the Flask app
     app = current_app()
+    
+    # Initialize authentication routes FIRST (these are in user_auth.py)
+    init_auth_routes(app)
+    
+    # Initialize main application routes
     init_routes(app)
     
+    # Debug: Print all registered routes to verify everything is working
+    print("\n=== REGISTERED ROUTES ===")
+    for rule in app.url_map.iter_rules():
+        print(f"{rule.endpoint}: {rule.rule} [{', '.join(rule.methods)}]")
+    print("========================\n")
+    
+    # Check for required routes
+    required_routes = ['login', 'logout', 'register', 'profile', 'forgot_password', 'home']
+    existing_endpoints = [rule.endpoint for rule in app.url_map.iter_rules()]
+    
+    missing_routes = [route for route in required_routes if route not in existing_endpoints]
+    
+    if missing_routes:
+        logger.error(f"MISSING ROUTES: {missing_routes}")
+        print(f"ERROR: Missing required routes: {missing_routes}")
+    else:
+        logger.info("All required authentication routes are registered")
+        print("✓ All required routes are registered")
+    
     try:
-       logger.info("Optimized business insights integrated successfully")
+       logger.info("Application setup completed successfully")
     except Exception as e:
-       logger.error(f"Failed to integrate optimized insights: {str(e)}")
+       logger.error(f"Setup error: {str(e)}")
     
     port = int(os.environ.get('PORT', 8080))
     app.run(host='0.0.0.0', port=port, debug=False)
