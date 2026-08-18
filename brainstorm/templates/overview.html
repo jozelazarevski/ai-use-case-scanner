@@ -58,7 +58,7 @@
             <h3>{{ m.participant['name'] }}</h3>
             <div class="meta">
               {{ m.stats.total_ideas }} idea{{ 's' if m.stats.total_ideas != 1 }}
-              {%- if m.stats.robot_hours is not none %} · {{ m.stats.robot_hours }} hrs/week on robot tasks{% endif %}
+              {%- if m.stats.robot_hours is not none %} · {{ m.stats.robot_hours }} hrs/week on repetitive tasks{% endif %}
             </div>
           </div>
           {% for c in categories %}

@@ -10,7 +10,7 @@ can build the right agents for the right people.
 2. **They brainstorm one idea at a time** across five guided categories:
    - **Front Stage / Back Stage** — the work where they shine vs. what buries it
    - **No-Go Zones** — what should always stay human
-   - **Robot Task** — repetitive weekly work (with hours/week)
+   - **Repetitive Task** — repetitive weekly work (with hours/week)
    - **Iron Man Moment** — expert decisions buried under prep time
    - **Who Would You Hire?** — the one thing they'd delegate forever (with a success measure)
 3. **Final idea summary** — at the end, each participant sees a "My Idea Summary" page

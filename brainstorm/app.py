@@ -77,15 +77,15 @@ CATEGORIES = [
     },
     {
         "slug": "robot-task",
-        "nav": "Robot Task",
-        "title": "What's your robot task?",
+        "nav": "Repetitive Task",
+        "title": "What's your repetitive task?",
         "subtitle": "Repetitive, rule-based, high-volume, or low-judgment work you do every week.",
         "examples": [
             "copying orders into the system, 4 hrs a week",
             "sending the same confirmation emails over and over",
         ],
         "fields": [
-            {"name": "task", "label": "The task", "placeholder": "My robot task...", "type": "textarea"},
+            {"name": "task", "label": "The task", "placeholder": "My repetitive task...", "type": "textarea"},
             {"name": "hours_per_week", "label": "Hours per week", "placeholder": "e.g. 3", "type": "text"},
         ],
         "format": "{task} ({hours_per_week} hrs/week)",

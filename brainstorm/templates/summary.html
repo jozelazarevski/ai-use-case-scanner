@@ -51,7 +51,7 @@
       </div>
       <div class="stat-card">
         <div class="value">{{ stats.automation_candidates }}</div>
-        <div class="label">candidates for an AI agent (robot tasks + hires)</div>
+        <div class="label">candidates for an AI agent (repetitive tasks + hires)</div>
       </div>
       <div class="stat-card">
         <div class="value">{{ stats.copilot_candidates }}</div>
@@ -59,7 +59,7 @@
       </div>
       <div class="stat-card">
         <div class="value">{% if stats.robot_hours is not none %}{{ stats.robot_hours }}{% else %}–{% endif %}</div>
-        <div class="label">hours/week spent on robot tasks</div>
+        <div class="label">hours/week spent on repetitive tasks</div>
       </div>
     </div>
 
