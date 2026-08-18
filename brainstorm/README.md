@@ -12,7 +12,12 @@ can build the right agents for the right people.
    - **No-Go Zones** — what should always stay human
    - **Repetitive Task** — repetitive weekly work (with hours/week)
    - **Iron Man Moment** — expert decisions buried under prep time
-   - **Human + Agent** — augmentation ideas: work they'd keep, with an AI agent alongside (my part vs. the agent's part)
+   - **Human + Agent** — augmentation ideas: work they'd keep, with an AI agent alongside
+     (my part vs. the agent's part). This screen also **auto-suggests ideas**: every
+     repetitive task the participant submitted is turned into a suggested human/agent
+     split (keyword rules pick a fitting split — emails, scheduling, reports, invoices,
+     data entry, quotes, follow-ups, paperwork — with a generic split as fallback).
+     Clicking a suggestion pre-fills the form so they can adjust and submit it.
    - **Who Would You Hire?** — the one thing they'd delegate forever (with a success measure)
 3. **Final idea summary** — at the end, each participant sees a "My Idea Summary" page
    that compiles everything they submitted, with headline stats (total ideas, AI-agent

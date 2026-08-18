@@ -1,5 +1,34 @@
 {% extends "base.html" %}
 {% block title %}{{ cat.nav }} — AI Needs Brainstorm{% endblock %}
+{% block extra_style %}
+  .suggestion-box {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 14px;
+    padding: 18px 22px 14px;
+    margin-bottom: 26px;
+  }
+  .suggestion-intro { color: var(--muted); font-size: .93rem; margin-bottom: 14px; }
+  .suggestion-intro a { color: var(--accent-dark); }
+  .suggestion-card {
+    display: block; width: 100%; text-align: left;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--highlight);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    font-family: inherit;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .suggestion-card:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+  .suggestion-card .s-task { display: block; font-weight: 600; font-size: 1rem; margin-bottom: 6px; }
+  .suggestion-card .s-split { display: block; font-size: .92rem; color: var(--muted); padding: 1px 0; }
+  .suggestion-card .s-split strong { color: var(--accent-dark); font-weight: 600; }
+  .suggestion-card .s-use { display: inline-block; margin-top: 8px; font-size: .85rem; font-weight: 600; color: var(--accent); }
+{% endblock %}
 {% block body %}
 <div class="layout">
   {% include "_sidebar.html" %}
@@ -14,6 +43,27 @@
         <div>· {{ ex }}</div>
       {% endfor %}
     </div>
+
+    {% if suggestions %}
+      <div class="suggestion-box">
+        <div class="section-label">💡 Suggested from your repetitive tasks</div>
+        <div class="suggestion-intro">Based on what you told us fills your week — click one to pre-fill the form, adjust it, and submit.</div>
+        {% for s in suggestions %}
+          <button type="button" class="suggestion-card"
+                  data-task="{{ s.task }}" data-human="{{ s.human_part }}" data-agent="{{ s.agent_part }}">
+            <span class="s-task">{{ s.task }}</span>
+            <span class="s-split"><strong>You:</strong> {{ s.human_part }}</span>
+            <span class="s-split"><strong>Agent:</strong> {{ s.agent_part }}</span>
+            <span class="s-use">Use this idea ↓</span>
+          </button>
+        {% endfor %}
+      </div>
+    {% elif cat.slug == 'augmentation' and not items %}
+      <div class="suggestion-box">
+        <div class="section-label">💡 Idea suggestions</div>
+        <div class="suggestion-intro">Add some <a href="{{ url_for('category', slug='robot-task') }}">repetitive tasks</a> first and we'll automatically suggest a human/agent split for each one here.</div>
+      </div>
+    {% endif %}
 
     {% if items %}
       <div class="section-label">
@@ -48,4 +98,23 @@
     </div>
   </main>
 </div>
+<script>
+  document.querySelectorAll('.suggestion-card').forEach(function (card) {
+    card.addEventListener('click', function () {
+      var form = document.querySelector('.form-card form');
+      var fields = {
+        task: card.dataset.task,
+        human_part: card.dataset.human,
+        agent_part: card.dataset.agent
+      };
+      Object.keys(fields).forEach(function (name) {
+        var input = form.querySelector('[name="' + name + '"]');
+        if (input) input.value = fields[name];
+      });
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      var first = form.querySelector('[name="task"]');
+      if (first) first.focus();
+    });
+  });
+</script>
 {% endblock %}

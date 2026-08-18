@@ -270,6 +270,93 @@ def build_summary_stats(grouped):
 
 
 # ---------------------------------------------------------------------------
+# Human + Agent idea suggestions
+# ---------------------------------------------------------------------------
+# Each repetitive task the participant submitted is turned into a suggested
+# human/agent split. Keyword rules pick a split that fits the kind of work;
+# anything unmatched gets a sensible generic split.
+
+AUGMENTATION_RULES = [
+    {
+        "keywords": ["email", "e-mail", "inbox", "reply", "replying", "respond"],
+        "human_part": "review and send the replies that matter, handle the sensitive ones myself",
+        "agent_part": "sort the inbox, draft replies for me to approve, and answer the routine ones",
+    },
+    {
+        "keywords": ["meeting", "schedul", "calendar", "appointment", "booking"],
+        "human_part": "decide which meetings are worth my time",
+        "agent_part": "find slots, send invites, reschedule conflicts, and prepare a short agenda",
+    },
+    {
+        "keywords": ["report", "dashboard", "summar", "status update", "presentation"],
+        "human_part": "check the numbers and add my conclusions and recommendations",
+        "agent_part": "gather the data and produce the first full draft",
+    },
+    {
+        "keywords": ["invoice", "billing", "purchase order", " po ", "pos ", "payment"],
+        "human_part": "approve them and handle disputes",
+        "agent_part": "prepare and enter them, chase what's missing, and flag mismatches",
+    },
+    {
+        "keywords": ["data entry", "copying", "copy ", "entering", "typing", "crm", "update the system", "spreadsheet"],
+        "human_part": "spot-check the exceptions it flags",
+        "agent_part": "do the entry end to end and keep every system in sync",
+    },
+    {
+        "keywords": ["quote", "proposal", "offer", "tender", "pricing"],
+        "human_part": "set the price and add the judgment and relationship touch",
+        "agent_part": "draft it from our templates and past examples with all the standard parts filled in",
+    },
+    {
+        "keywords": ["follow up", "follow-up", "chase", "chasing", "remind"],
+        "human_part": "step in when a reply needs a human touch",
+        "agent_part": "send and track every follow-up until it's answered",
+    },
+    {
+        "keywords": ["document", "paperwork", "admin", "filing", "form", "contract"],
+        "human_part": "review and sign off",
+        "agent_part": "fill in, file, and organize the documents, flagging anything unusual",
+    },
+]
+
+GENERIC_AUGMENTATION = {
+    "human_part": "handle the exceptions and give final approval",
+    "agent_part": "do the routine part end to end and flag anything unusual",
+}
+
+
+def _normalize(text):
+    return re.sub(r"\s+", " ", (text or "").strip().lower())
+
+
+def suggest_augmentations(grouped):
+    """Build Human + Agent idea suggestions from the repetitive tasks."""
+    already_used = {
+        _normalize(item["answers"].get("task"))
+        for item in grouped.get("augmentation", [])
+    }
+    suggestions = []
+    for item in grouped.get("robot-task", []):
+        task = (item["answers"].get("task") or "").strip()
+        if not task or _normalize(task) in already_used:
+            continue
+        haystack = " " + _normalize(task) + " "
+        split = GENERIC_AUGMENTATION
+        for rule in AUGMENTATION_RULES:
+            if any(kw in haystack for kw in rule["keywords"]):
+                split = rule
+                break
+        suggestions.append(
+            {
+                "task": task,
+                "human_part": split["human_part"],
+                "agent_part": split["agent_part"],
+            }
+        )
+    return suggestions
+
+
+# ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
 
@@ -339,6 +426,7 @@ def category(slug):
         return redirect(url_for("category", slug=slug))
 
     grouped = submissions_for(participant["id"])
+    suggestions = suggest_augmentations(grouped) if slug == "augmentation" else []
     return render_template(
         "category.html",
         participant=participant,
@@ -346,6 +434,7 @@ def category(slug):
         counts=counts_for(participant["id"]),
         cat=cat,
         items=grouped[slug],
+        suggestions=suggestions,
         active=slug,
     )
 
