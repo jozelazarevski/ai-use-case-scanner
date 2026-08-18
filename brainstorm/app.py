@@ -107,6 +107,22 @@ CATEGORIES = [
         "format": "{task} — {prep_time} prep → {decision_time} decision",
     },
     {
+        "slug": "augmentation",
+        "nav": "Human + Agent",
+        "title": "Where would you and an agent team up?",
+        "subtitle": "Work you'd keep doing yourself, but where an AI agent working alongside you would make you faster or better.",
+        "examples": [
+            "drafting proposals: the agent writes the first draft, I add the judgment",
+            "customer visits: the agent preps the briefing, I run the meeting",
+        ],
+        "fields": [
+            {"name": "task", "label": "The work", "placeholder": "The work we'd do together...", "type": "textarea"},
+            {"name": "human_part", "label": "My part", "placeholder": "I'd keep doing...", "type": "textarea"},
+            {"name": "agent_part", "label": "The agent's part", "placeholder": "The AI agent would...", "type": "textarea"},
+        ],
+        "format": "{task} — me: {human_part} · agent: {agent_part}",
+    },
+    {
         "slug": "who-would-you-hire",
         "nav": "Who Would You Hire?",
         "title": "Who would you hire?",
@@ -247,7 +263,8 @@ def build_summary_stats(grouped):
         "robot_hours": round(robot_hours, 1) if robot_hours_known else None,
         "automation_candidates": len(grouped.get("robot-task", []))
         + len(grouped.get("who-would-you-hire", [])),
-        "copilot_candidates": len(grouped.get("iron-man", [])),
+        "copilot_candidates": len(grouped.get("iron-man", []))
+        + len(grouped.get("augmentation", [])),
         "no_go_count": len(grouped.get("no-go-zones", [])),
     }
 

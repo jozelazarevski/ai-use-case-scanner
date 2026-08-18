@@ -55,7 +55,7 @@
       </div>
       <div class="stat-card">
         <div class="value">{{ stats.copilot_candidates }}</div>
-        <div class="label">candidates for an AI copilot (Iron Man moments)</div>
+        <div class="label">candidates for human + agent teamwork (Iron Man moments + augmentation)</div>
       </div>
       <div class="stat-card">
         <div class="value">{% if stats.robot_hours is not none %}{{ stats.robot_hours }}{% else %}–{% endif %}</div>
@@ -70,7 +70,7 @@
       {% else %}
         You named <strong>{{ stats.automation_candidates }}</strong> task{{ 's' if stats.automation_candidates != 1 }} that could be fully handed to an AI agent
         {%- if stats.robot_hours is not none %} (about <strong>{{ stats.robot_hours }} hours every week</strong> you could win back){% endif %},
-        and <strong>{{ stats.copilot_candidates }}</strong> expert task{{ 's' if stats.copilot_candidates != 1 }} where AI should do the prep so you make the call.
+        and <strong>{{ stats.copilot_candidates }}</strong> task{{ 's' if stats.copilot_candidates != 1 }} where you and an AI agent would work side by side — the agent does the prep or the drafts, you bring the judgment.
         {% if stats.no_go_count %}You also drew a clear line: <strong>{{ stats.no_go_count }}</strong> thing{{ 's' if stats.no_go_count != 1 }} that must always stay human.{% endif %}
         The list below is your personal blueprint for which AI agents and tools would help you most.
       {% endif %}
