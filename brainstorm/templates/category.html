@@ -28,6 +28,25 @@
   .suggestion-card .s-split { display: block; font-size: .92rem; color: var(--muted); padding: 1px 0; }
   .suggestion-card .s-split strong { color: var(--accent-dark); font-weight: 600; }
   .suggestion-card .s-use { display: inline-block; margin-top: 8px; font-size: .85rem; font-weight: 600; color: var(--accent); }
+  .discover-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--green);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+  .discover-card .d-task { font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
+  .discover-card .d-reason { font-size: .9rem; color: var(--muted); margin-bottom: 10px; }
+  .discover-card .d-actions { display: flex; gap: 10px; }
+  .discover-card button {
+    font-family: inherit; font-size: .88rem; font-weight: 600;
+    border-radius: 8px; padding: 8px 14px; cursor: pointer;
+  }
+  .discover-card .d-yes { background: var(--green); color: #fff; border: none; }
+  .discover-card .d-yes:hover { background: #047857; }
+  .discover-card .d-no { background: var(--card); color: var(--muted); border: 1px solid var(--border); }
+  .discover-card .d-no:hover { color: #dc2626; border-color: #fecaca; }
 {% endblock %}
 {% block body %}
 <div class="layout">
@@ -43,6 +62,14 @@
         <div>· {{ ex }}</div>
       {% endfor %}
     </div>
+
+    {% if cat.slug == 'robot-task' and participant['job_description'] %}
+      <div class="suggestion-box no-print" id="discover-box" hidden>
+        <div class="section-label">🔍 Are you also doing this?</div>
+        <div class="suggestion-intro" id="discover-intro">Reading your job description to spot tasks you might have forgotten…</div>
+        <div id="discover-cards"></div>
+      </div>
+    {% endif %}
 
     {% if suggestions %}
       <div class="suggestion-box">
@@ -116,5 +143,71 @@
       if (first) first.focus();
     });
   });
+
+  var discoverBox = document.getElementById('discover-box');
+  if (discoverBox) {
+    var intro = document.getElementById('discover-intro');
+    var cards = document.getElementById('discover-cards');
+    discoverBox.hidden = false;
+
+    fetch('{{ url_for("api_discover") }}')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data.available || !data.suggestions || !data.suggestions.length) {
+          discoverBox.hidden = true;
+          return;
+        }
+        intro.textContent = 'Based on your job description, people in your role usually also do these — add the ones that apply, with your own hours.';
+        data.suggestions.forEach(function (s) {
+          var card = document.createElement('div');
+          card.className = 'discover-card';
+
+          var task = document.createElement('div');
+          task.className = 'd-task';
+          task.textContent = s.task;
+
+          var reason = document.createElement('div');
+          reason.className = 'd-reason';
+          reason.textContent = s.reason;
+
+          var actions = document.createElement('div');
+          actions.className = 'd-actions';
+
+          function resolve(action) {
+            fetch('{{ url_for("api_discover") }}/' + s.id + '/' + action, { method: 'POST' });
+            card.remove();
+            if (!cards.children.length) discoverBox.hidden = true;
+          }
+
+          var yes = document.createElement('button');
+          yes.type = 'button';
+          yes.className = 'd-yes';
+          yes.textContent = 'Yes, I do this — add it ↓';
+          yes.addEventListener('click', function () {
+            var form = document.querySelector('.form-card form');
+            var input = form.querySelector('[name="task"]');
+            if (input) input.value = s.task;
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            var hours = form.querySelector('[name="hours_per_week"]');
+            if (hours) hours.focus();
+            resolve('used');
+          });
+
+          var no = document.createElement('button');
+          no.type = 'button';
+          no.className = 'd-no';
+          no.textContent = 'Not me ✕';
+          no.addEventListener('click', function () { resolve('dismissed'); });
+
+          actions.appendChild(yes);
+          actions.appendChild(no);
+          card.appendChild(task);
+          if (s.reason) card.appendChild(reason);
+          card.appendChild(actions);
+          cards.appendChild(card);
+        });
+      })
+      .catch(function () { discoverBox.hidden = true; });
+  }
 </script>
 {% endblock %}

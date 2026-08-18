@@ -21,19 +21,29 @@ No extra dependencies: Flask + stdlib sqlite3 only.
 """
 
 import csv
+import hashlib
 import io
+import json
 import os
 import re
 import sqlite3
 from datetime import datetime
 
 from flask import (
-    Flask, g, redirect, render_template, request, session, url_for,
+    Flask, g, jsonify, redirect, render_template, request, session, url_for,
     Response, abort
 )
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.environ.get("BRAINSTORM_DB", os.path.join(BASE_DIR, "brainstorm.db"))
+
+# Pick up API keys from the main app's .env (repo root) when available.
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv(os.path.join(os.path.dirname(BASE_DIR), ".env"))
+except ImportError:
+    pass
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("BRAINSTORM_SECRET_KEY", "ai-needs-brainstorm-dev-key")
@@ -168,6 +178,7 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             team TEXT NOT NULL DEFAULT '',
+            job_description TEXT NOT NULL DEFAULT '',
             created_at TEXT NOT NULL,
             UNIQUE(name, team)
         );
@@ -178,8 +189,22 @@ def init_db():
             answers TEXT NOT NULL,   -- JSON of field name -> value
             created_at TEXT NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS ai_suggestions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            participant_id INTEGER NOT NULL REFERENCES participants(id),
+            task TEXT NOT NULL,
+            reason TEXT NOT NULL DEFAULT '',
+            status TEXT NOT NULL DEFAULT 'new',   -- new | used | dismissed
+            jd_hash TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        );
         """
     )
+    # Migrate pre-existing databases created before job_description existed.
+    try:
+        db.execute("ALTER TABLE participants ADD COLUMN job_description TEXT NOT NULL DEFAULT ''")
+    except sqlite3.OperationalError:
+        pass
     db.commit()
     db.close()
 
@@ -187,9 +212,6 @@ def init_db():
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-
-import json
-
 
 def current_participant():
     pid = session.get("participant_id")
@@ -357,6 +379,160 @@ def suggest_augmentations(grouped):
 
 
 # ---------------------------------------------------------------------------
+# AI task discovery (Gemini)
+# ---------------------------------------------------------------------------
+# From the participant's job description (plus the tasks they already
+# reported), Gemini suggests recurring tasks they very likely also do but
+# did not report ("Are you also doing this?"). Suggestions are cached per
+# participant and regenerated only when the job description changes.
+
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
+
+DISCOVERY_PROMPT = """You help companies discover employee tasks that could be supported by AI.
+A person described their job like this:
+
+JOB DESCRIPTION:
+{job_description}
+
+TASKS THEY ALREADY REPORTED DOING:
+{reported_tasks}
+
+List 5 to 8 OTHER concrete, recurring work tasks that someone with this job
+very likely ALSO does but did not report — think of admin work, communication,
+coordination, chasing people, reporting, data upkeep, preparation work.
+Do NOT repeat or rephrase any reported task. Keep each task short (max 12
+words), written in first person, e.g. "Preparing the weekly sales report".
+
+Reply ONLY with a JSON array, no other text, in this exact shape:
+[{{"task": "...", "reason": "one short sentence on why people in this role usually do this"}}]
+"""
+
+
+def gemini_api_key():
+    return os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY") or ""
+
+
+def call_gemini(prompt):
+    """Send one prompt to Gemini and return the raw response text.
+
+    Kept as a separate function so tests can stub it out.
+    """
+    import google.generativeai as genai
+
+    genai.configure(api_key=gemini_api_key())
+    model = genai.GenerativeModel(GEMINI_MODEL)
+    response = model.generate_content(prompt)
+    return response.text
+
+
+def parse_suggestion_json(text):
+    """Extract the JSON array of suggestions from a model response."""
+    text = (text or "").strip()
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text)
+    start, end = text.find("["), text.rfind("]")
+    if start == -1 or end == -1:
+        return []
+    try:
+        data = json.loads(text[start : end + 1])
+    except ValueError:
+        return []
+    suggestions = []
+    for item in data:
+        if isinstance(item, dict) and (item.get("task") or "").strip():
+            suggestions.append(
+                {
+                    "task": str(item["task"]).strip(),
+                    "reason": str(item.get("reason") or "").strip(),
+                }
+            )
+    return suggestions[:8]
+
+
+def jd_hash(job_description):
+    return hashlib.md5(_normalize(job_description).encode("utf-8")).hexdigest()
+
+
+def all_reported_tasks(grouped):
+    """Every idea line the participant submitted, across all categories."""
+    lines = []
+    for items in grouped.values():
+        for item in items:
+            lines.append(item["text"])
+    return lines
+
+
+def get_task_discoveries(participant):
+    """Return cached (or freshly generated) task suggestions for a participant.
+
+    Returns (suggestions, error_message). suggestions is a list of rows with
+    id/task/reason; error_message is set when generation was attempted but
+    failed.
+    """
+    job_description = (participant["job_description"] or "").strip()
+    if not job_description or not gemini_api_key():
+        return [], None
+
+    db = get_db()
+    current_hash = jd_hash(job_description)
+    cached = db.execute(
+        "SELECT * FROM ai_suggestions WHERE participant_id = ? AND jd_hash = ?",
+        (participant["id"], current_hash),
+    ).fetchall()
+    if cached:
+        return [dict(row) for row in cached if row["status"] == "new"], None
+
+    # Job description is new or changed: drop stale pending suggestions
+    # (keep used/dismissed history so we don't re-suggest those tasks).
+    db.execute(
+        "DELETE FROM ai_suggestions WHERE participant_id = ? AND status = 'new'",
+        (participant["id"],),
+    )
+
+    grouped = submissions_for(participant["id"])
+    reported = all_reported_tasks(grouped)
+    handled = db.execute(
+        "SELECT task FROM ai_suggestions WHERE participant_id = ?",
+        (participant["id"],),
+    ).fetchall()
+    reported += [row["task"] for row in handled]
+
+    prompt = DISCOVERY_PROMPT.format(
+        job_description=job_description,
+        reported_tasks="\n".join(f"- {t}" for t in reported) or "- (none reported yet)",
+    )
+    try:
+        suggestions = parse_suggestion_json(call_gemini(prompt))
+    except Exception:
+        return [], "Could not reach the AI service right now — please try again later."
+
+    already_known = {_normalize(t) for t in reported}
+    for items in grouped.values():
+        for item in items:
+            for value in item["answers"].values():
+                if value:
+                    already_known.add(_normalize(value))
+    already_known.discard("")
+
+    def is_duplicate(task):
+        t = _normalize(task)
+        return any(t in known or known in t for known in already_known)
+
+    now = datetime.now().isoformat(timespec="seconds")
+    fresh = []
+    for s in suggestions:
+        if is_duplicate(s["task"]):
+            continue
+        cur = db.execute(
+            "INSERT INTO ai_suggestions (participant_id, task, reason, status, jd_hash, created_at)"
+            " VALUES (?, ?, ?, 'new', ?, ?)",
+            (participant["id"], s["task"], s["reason"], current_hash, now),
+        )
+        fresh.append({"id": cur.lastrowid, "task": s["task"], "reason": s["reason"], "status": "new"})
+    db.commit()
+    return fresh, None
+
+
+# ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
 
@@ -365,6 +541,7 @@ def login():
     if request.method == "POST":
         name = (request.form.get("name") or "").strip()
         team = (request.form.get("team") or "").strip()
+        job_description = (request.form.get("job_description") or "").strip()
         if not name:
             return render_template("login.html", error="Please enter your name.")
         db = get_db()
@@ -373,10 +550,17 @@ def login():
         ).fetchone()
         if row:
             pid = row["id"]
+            if job_description:
+                db.execute(
+                    "UPDATE participants SET job_description = ? WHERE id = ?",
+                    (job_description, pid),
+                )
+                db.commit()
         else:
             cur = db.execute(
-                "INSERT INTO participants (name, team, created_at) VALUES (?, ?, ?)",
-                (name, team, datetime.now().isoformat(timespec="seconds")),
+                "INSERT INTO participants (name, team, job_description, created_at)"
+                " VALUES (?, ?, ?, ?)",
+                (name, team, job_description, datetime.now().isoformat(timespec="seconds")),
             )
             db.commit()
             pid = cur.lastrowid
@@ -451,6 +635,47 @@ def delete_submission(slug, submission_id):
     )
     db.commit()
     return redirect(url_for("category", slug=slug))
+
+
+@app.route("/api/discover")
+def api_discover():
+    """AI-suggested tasks from the participant's job description."""
+    participant = current_participant()
+    if not participant:
+        return jsonify({"available": False, "message": "Not logged in."}), 401
+    if not (participant["job_description"] or "").strip():
+        return jsonify({"available": False, "message": "no-job-description"})
+    if not gemini_api_key():
+        return jsonify({"available": False, "message": "no-api-key"})
+    suggestions, error = get_task_discoveries(participant)
+    if error:
+        return jsonify({"available": False, "message": error})
+    return jsonify(
+        {
+            "available": True,
+            "suggestions": [
+                {"id": s["id"], "task": s["task"], "reason": s["reason"]}
+                for s in suggestions
+            ],
+        }
+    )
+
+
+@app.route("/api/discover/<int:suggestion_id>/<action>", methods=["POST"])
+def api_discover_action(suggestion_id, action):
+    """Mark an AI task suggestion as used (added) or dismissed (not me)."""
+    participant = current_participant()
+    if not participant:
+        return jsonify({"ok": False}), 401
+    if action not in ("used", "dismissed"):
+        abort(404)
+    db = get_db()
+    db.execute(
+        "UPDATE ai_suggestions SET status = ? WHERE id = ? AND participant_id = ?",
+        (action, suggestion_id, participant["id"]),
+    )
+    db.commit()
+    return jsonify({"ok": True})
 
 
 @app.route("/summary")

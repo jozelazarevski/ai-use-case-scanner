@@ -22,6 +22,7 @@
   .person-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
   .person-head h3 { font-size: 1.1rem; }
   .person-head .meta { color: var(--muted); font-size: .88rem; }
+  .person-jd { color: var(--muted); font-size: .92rem; font-style: italic; margin: -6px 0 12px; }
   .cat-group { margin: 12px 0; }
   .cat-group .cat-name { font-size: .78rem; letter-spacing: .08em; font-weight: 700; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 6px; }
   .cat-group ul { list-style: none; }
@@ -61,6 +62,9 @@
               {%- if m.stats.robot_hours is not none %} · {{ m.stats.robot_hours }} hrs/week on repetitive tasks{% endif %}
             </div>
           </div>
+          {% if m.participant['job_description'] %}
+            <div class="person-jd">“{{ m.participant['job_description'] }}”</div>
+          {% endif %}
           {% for c in categories %}
             {% if m.grouped[c.slug] %}
               <div class="cat-group">
