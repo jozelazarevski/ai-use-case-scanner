@@ -4,3 +4,5 @@ temp_models
 trained_models
 databases
 database
+brainstorm/brainstorm.db
+__pycache__/

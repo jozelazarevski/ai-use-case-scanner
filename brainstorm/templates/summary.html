@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}My Idea Summary — AI Needs Brainstorm{% endblock %}
+{% block extra_style %}
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 26px 0 34px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .stat-card .value { font-size: 1.9rem; font-weight: 700; color: var(--accent-dark); }
+  .stat-card .label { color: var(--muted); font-size: .9rem; margin-top: 4px; line-height: 1.4; }
+  .summary-section { margin-bottom: 34px; }
+  .summary-section h2 { font-size: 1.2rem; margin-bottom: 4px; }
+  .summary-section .desc { color: var(--muted); font-size: .93rem; margin-bottom: 14px; }
+  .empty-note { color: var(--muted); font-style: italic; padding: 8px 0 4px; }
+  .takeaway {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 36px;
+    line-height: 1.65;
+  }
+  .takeaway h2 { font-size: 1.15rem; color: var(--accent-dark); margin-bottom: 10px; }
+  .actions { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
+  .action-btn {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 18px; font-family: inherit; font-size: .95rem; font-weight: 500;
+    color: var(--text); cursor: pointer; text-decoration: none; display: inline-block;
+  }
+  .action-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
+{% endblock %}
+{% block body %}
+<div class="layout">
+  {% include "_sidebar.html" %}
+  <main class="main">
+    <h1>Final idea summary</h1>
+    <div class="subtitle">Everything you brainstormed, {{ participant['name'] }}{% if participant['team'] %} ({{ participant['team'] }}){% endif %} — in one place.</div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="value">{{ stats.total_ideas }}</div>
+        <div class="label">ideas submitted in total</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">{{ stats.automation_candidates }}</div>
+        <div class="label">candidates for an AI agent (robot tasks + hires)</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">{{ stats.copilot_candidates }}</div>
+        <div class="label">candidates for an AI copilot (Iron Man moments)</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">{% if stats.robot_hours is not none %}{{ stats.robot_hours }}{% else %}–{% endif %}</div>
+        <div class="label">hours/week spent on robot tasks</div>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <h2>💡 What this points to</h2>
+      {% if stats.total_ideas == 0 %}
+        You haven't submitted any ideas yet — pick a category on the left and start with the first thing that comes to mind.
+      {% else %}
+        You named <strong>{{ stats.automation_candidates }}</strong> task{{ 's' if stats.automation_candidates != 1 }} that could be fully handed to an AI agent
+        {%- if stats.robot_hours is not none %} (about <strong>{{ stats.robot_hours }} hours every week</strong> you could win back){% endif %},
+        and <strong>{{ stats.copilot_candidates }}</strong> expert task{{ 's' if stats.copilot_candidates != 1 }} where AI should do the prep so you make the call.
+        {% if stats.no_go_count %}You also drew a clear line: <strong>{{ stats.no_go_count }}</strong> thing{{ 's' if stats.no_go_count != 1 }} that must always stay human.{% endif %}
+        The list below is your personal blueprint for which AI agents and tools would help you most.
+      {% endif %}
+    </div>
+
+    <div class="actions no-print">
+      <button class="action-btn" onclick="window.print()">🖨 Print / save as PDF</button>
+      <a class="action-btn" href="{{ url_for('overview') }}">👥 View all participants</a>
+    </div>
+
+    {% for c in categories %}
+      <div class="summary-section">
+        <div class="section-label">{{ c.nav }}</div>
+        <div class="desc">{{ c.subtitle }}</div>
+        {% if grouped[c.slug] %}
+          {% for item in grouped[c.slug] %}
+            <div class="idea-card">
+              <div>
+                <div class="text">{{ item.text }}</div>
+                <div class="time">{{ item.time }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-note">No ideas here yet — <a href="{{ url_for('category', slug=c.slug) }}">add one</a>.</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </main>
+</div>
+{% endblock %}

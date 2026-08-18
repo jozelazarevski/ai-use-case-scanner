@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ cat.nav }} — AI Needs Brainstorm{% endblock %}
+{% block body %}
+<div class="layout">
+  {% include "_sidebar.html" %}
+  <main class="main">
+    <h1>{{ cat.title }}</h1>
+    <div class="subtitle">{{ cat.subtitle }}</div>
+    <div class="hint">Submit <strong>one idea at a time</strong> — you can add as many as you like.</div>
+
+    <div class="examples">
+      <div class="label">FOR EXAMPLE</div>
+      {% for ex in cat.examples %}
+        <div>· {{ ex }}</div>
+      {% endfor %}
+    </div>
+
+    {% if items %}
+      <div class="section-label">
+        Your {{ items|length }} submission{{ 's' if items|length != 1 }}
+      </div>
+      {% for item in items %}
+        <div class="idea-card">
+          <div>
+            <div class="text">{{ item.text }}</div>
+            <div class="time">{{ item.time }}</div>
+          </div>
+          <form method="post" action="{{ url_for('delete_submission', slug=cat.slug, submission_id=item.id) }}"
+                onsubmit="return confirm('Remove this idea?');">
+            <button class="delete-btn" type="submit" title="Remove this idea">✕</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="form-card">
+      <form method="post">
+        {% for field in cat.fields %}
+          <div class="field-label">{{ field.label }}</div>
+          {% if field.type == 'textarea' %}
+            <textarea name="{{ field.name }}" placeholder="{{ field.placeholder }}"></textarea>
+          {% else %}
+            <input type="text" name="{{ field.name }}" placeholder="{{ field.placeholder }}">
+          {% endif %}
+        {% endfor %}
+        <button class="submit-btn" type="submit">Submit</button>
+      </form>
+    </div>
+  </main>
+</div>
+{% endblock %}

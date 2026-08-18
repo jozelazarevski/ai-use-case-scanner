@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Join — AI Needs Brainstorm{% endblock %}
+{% block extra_style %}
+  .login-wrap {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .login-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 44px 40px;
+    width: 100%;
+    max-width: 460px;
+  }
+  .login-card .emoji { font-size: 2.4rem; margin-bottom: 12px; }
+  .login-card h1 { margin-bottom: 10px; }
+  .login-card p { color: var(--muted); margin-bottom: 26px; line-height: 1.55; }
+  .error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; font-size: .95rem; }
+{% endblock %}
+{% block body %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="emoji">💡</div>
+    <h1>AI Needs Brainstorm</h1>
+    <p>Help us find the right AI agents and tools for the right people. Tell us what fills your week, what buries your best work, and who you'd hire if you could — one idea at a time.</p>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <form method="post">
+      <div class="field-label">Your name</div>
+      <input type="text" name="name" placeholder="e.g. Kire Hajba" required autofocus>
+      <div class="field-label">Your team</div>
+      <input type="text" name="team" placeholder="e.g. Sales, Operations, Finance...">
+      <button class="submit-btn" type="submit">Start brainstorming →</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

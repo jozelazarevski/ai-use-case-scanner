@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}All Ideas — AI Needs Brainstorm{% endblock %}
+{% block extra_style %}
+  .overview-main { max-width: 1080px; margin: 0 auto; padding: 40px 32px 64px; }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 8px; }
+  .top-actions { display: flex; gap: 12px; }
+  .action-btn {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 18px; font-size: .95rem; font-weight: 500;
+    color: var(--text); text-decoration: none; display: inline-block; font-family: inherit; cursor: pointer;
+  }
+  .action-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
+  .team-block { margin-top: 36px; }
+  .team-block > h2 {
+    font-size: 1.3rem; padding-bottom: 10px; margin-bottom: 18px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .person-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    box-shadow: var(--shadow); padding: 24px 28px; margin-bottom: 20px;
+  }
+  .person-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .person-head h3 { font-size: 1.1rem; }
+  .person-head .meta { color: var(--muted); font-size: .88rem; }
+  .cat-group { margin: 12px 0; }
+  .cat-group .cat-name { font-size: .78rem; letter-spacing: .08em; font-weight: 700; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 6px; }
+  .cat-group ul { list-style: none; }
+  .cat-group li {
+    padding: 8px 12px; margin-bottom: 6px;
+    background: var(--card-soft); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent); border-radius: 8px;
+    font-size: .96rem;
+  }
+  .empty-state { color: var(--muted); font-style: italic; margin-top: 30px; }
+{% endblock %}
+{% block body %}
+<main class="overview-main">
+  <div class="top-bar">
+    <h1>All brainstormed ideas</h1>
+    <div class="top-actions no-print">
+      <a class="action-btn" href="{{ url_for('overview_csv') }}">⬇ Download CSV</a>
+      <button class="action-btn" onclick="window.print()">🖨 Print</button>
+      <a class="action-btn" href="{{ url_for('summary') }}">← My summary</a>
+    </div>
+  </div>
+  <div class="subtitle">{{ participant_count }} participant{{ 's' if participant_count != 1 }} · {{ total_ideas }} idea{{ 's' if total_ideas != 1 }} — use this to decide which AI agents and tools to build for which people.</div>
+
+  {% if not teams %}
+    <div class="empty-state">No submissions yet. Share the login page with your teams to get started.</div>
+  {% endif %}
+
+  {% for team, members in teams.items() %}
+    <div class="team-block">
+      <h2>{{ team }}</h2>
+      {% for m in members %}
+        <div class="person-card">
+          <div class="person-head">
+            <h3>{{ m.participant['name'] }}</h3>
+            <div class="meta">
+              {{ m.stats.total_ideas }} idea{{ 's' if m.stats.total_ideas != 1 }}
+              {%- if m.stats.robot_hours is not none %} · {{ m.stats.robot_hours }} hrs/week on robot tasks{% endif %}
+            </div>
+          </div>
+          {% for c in categories %}
+            {% if m.grouped[c.slug] %}
+              <div class="cat-group">
+                <div class="cat-name">{{ c.nav }}</div>
+                <ul>
+                  {% for item in m.grouped[c.slug] %}
+                    <li>{{ item.text }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</main>
+{% endblock %}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}AI Needs Brainstorm{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --card-soft: #fbfcfe;
+    --border: #e3e8f0;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --accent: #4f46e5;
+    --accent-soft: #eef2ff;
+    --accent-dark: #3730a3;
+    --highlight: #f59e0b;
+    --green: #059669;
+    --shadow: 0 1px 3px rgba(16, 24, 40, .06), 0 6px 18px rgba(16, 24, 40, .05);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  .layout { display: flex; min-height: 100vh; }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .sidebar .welcome { font-size: .95rem; color: var(--muted); margin-bottom: 2px; }
+  .sidebar .welcome strong { color: var(--accent); }
+  .sidebar .team-label { font-size: .8rem; color: var(--muted); margin-bottom: 4px; }
+  .sidebar .logout {
+    font-size: .85rem; color: var(--muted); text-decoration: none; margin-bottom: 22px;
+  }
+  .sidebar .logout:hover { color: var(--accent); }
+  .nav-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 13px 16px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: .98rem;
+    transition: background .15s, border-color .15s;
+  }
+  .nav-item:hover { background: var(--accent-soft); }
+  .nav-item.active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent-dark);
+    font-weight: 600;
+  }
+  .badge {
+    min-width: 26px; height: 26px; padding: 0 7px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-size: .8rem; font-weight: 600;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .badge.zero { background: #d8dee9; color: #5b6472; }
+  .nav-item.summary-link { margin-top: 14px; background: var(--accent); color: #fff; justify-content: center; font-weight: 600; }
+  .nav-item.summary-link:hover { background: var(--accent-dark); }
+
+  /* ---------- Main ---------- */
+  .main { flex: 1; padding: 40px 48px 64px; max-width: 1080px; }
+  h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: 8px; }
+  .subtitle { color: var(--muted); font-size: 1.05rem; margin-bottom: 6px; }
+  .hint { font-size: .98rem; margin-bottom: 22px; }
+  .hint strong { color: var(--accent); }
+
+  .examples {
+    border: 1.5px dashed var(--border);
+    background: var(--card-soft);
+    border-radius: 14px;
+    padding: 16px 22px;
+    margin-bottom: 26px;
+  }
+  .examples .label { font-size: .75rem; letter-spacing: .12em; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+  .examples div { color: var(--muted); padding: 2px 0; }
+
+  .section-label { font-size: .8rem; letter-spacing: .08em; font-weight: 700; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 12px; }
+
+  .idea-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 14px;
+  }
+  .idea-card .text { font-size: 1.02rem; }
+  .idea-card .time { color: var(--muted); font-size: .85rem; margin-top: 6px; }
+  .idea-card form { margin: 0; }
+  .idea-card .delete-btn {
+    background: none; border: none; color: #c2c9d6; font-size: 1.1rem;
+    cursor: pointer; padding: 4px; border-radius: 6px; line-height: 1;
+  }
+  .idea-card .delete-btn:hover { color: #dc2626; background: #fef2f2; }
+
+  .form-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-top: 28px;
+    box-shadow: var(--shadow);
+  }
+  .field-label { font-size: .8rem; letter-spacing: .08em; font-weight: 700; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 8px; }
+  textarea, input[type="text"] {
+    width: 100%;
+    background: var(--card-soft);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 20px;
+    resize: vertical;
+  }
+  textarea { min-height: 90px; }
+  textarea:focus, input[type="text"]:focus {
+    outline: none; border-color: var(--accent); background: #fff;
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .submit-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .submit-btn:hover { background: var(--accent-dark); }
+
+  @media (max-width: 860px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+    .main { padding: 28px 20px 48px; }
+  }
+  @media print {
+    .sidebar, .no-print { display: none !important; }
+    .main { padding: 0; max-width: none; }
+    body { background: #fff; }
+  }
+  {% block extra_style %}{% endblock %}
+</style>
+</head>
+<body>
+{% block body %}{% endblock %}
+</body>
+</html>

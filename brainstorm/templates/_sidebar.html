@@ -1,0 +1,16 @@
+<aside class="sidebar">
+  <div class="welcome">Welcome, <strong>{{ participant['name'] }}</strong></div>
+  {% if participant['team'] %}<div class="team-label">Team: {{ participant['team'] }}</div>{% endif %}
+  <a class="logout" href="{{ url_for('logout') }}">Logout</a>
+
+  {% for c in categories %}
+    <a class="nav-item {% if active == c.slug %}active{% endif %}" href="{{ url_for('category', slug=c.slug) }}">
+      <span>{{ c.nav }}</span>
+      <span class="badge {% if not counts[c.slug] %}zero{% endif %}">{{ counts[c.slug] }}</span>
+    </a>
+  {% endfor %}
+
+  <a class="nav-item summary-link {% if active == 'summary' %}active{% endif %}" href="{{ url_for('summary') }}">
+    My Idea Summary ✨
+  </a>
+</aside>
